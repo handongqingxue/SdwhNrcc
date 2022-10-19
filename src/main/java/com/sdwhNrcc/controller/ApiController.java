@@ -243,6 +243,11 @@ public class ApiController {
 		String areaCode=null;
 		String dataId=null;
 		switch (systemFlag) {
+		case Constant.WFPXHGYXGS:
+			systemName=Constant.SYSTEM_NAME_WFPXHGYXGS;
+			areaCode=Constant.AREA_CODE_WFPXHGYXGS;
+			dataId=Constant.DATA_ID_WFPXHGYXGS;
+			break;
 		case Constant.WFRZJXHYXGS:
 			systemName=Constant.SYSTEM_NAME_WFRZJXHYXGS;
 			areaCode=Constant.AREA_CODE_WFRZJXHYXGS;
@@ -252,6 +257,21 @@ public class ApiController {
 			systemName=Constant.SYSTEM_NAME_SDFLXCLKJYXGS;
 			areaCode=Constant.AREA_CODE_SDFLXCLKJYXGS;
 			dataId=Constant.DATA_ID_SDFLXCLKJYXGS;
+			break;
+		case Constant.ZBXQHGYXGS:
+			systemName=Constant.SYSTEM_NAME_ZBXQHGYXGS;
+			areaCode=Constant.AREA_CODE_ZBXQHGYXGS;
+			dataId=Constant.DATA_ID_ZBXQHGYXGS;
+			break;
+		case Constant.SDBFXCLYXGS:
+			systemName=Constant.SYSTEM_NAME_SDBFXCLYXGS;
+			areaCode=Constant.AREA_CODE_SDBFXCLYXGS;
+			dataId=Constant.DATA_ID_SDBFXCLYXGS;
+			break;
+		case Constant.SDLTXDKJYXGS:
+			systemName=Constant.SYSTEM_NAME_SDLTXDKJYXGS;
+			areaCode=Constant.AREA_CODE_SDLTXDKJYXGS;
+			dataId=Constant.DATA_ID_SDLTXDKJYXGS;
 			break;
 		}
 		bodyParamJO.put("systemName", systemName);
