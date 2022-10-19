@@ -243,10 +243,15 @@ public class ApiController {
 		String areaCode=null;
 		String dataId=null;
 		switch (systemFlag) {
-		case Constant.WEI_FANG:
-			systemName=Constant.SYSTEM_NAME_WEI_FANG;
-			areaCode=Constant.AREA_CODE_WEI_FANG;
-			dataId=Constant.DATA_ID_WEI_FANG;
+		case Constant.WFRZJXHYXGS:
+			systemName=Constant.SYSTEM_NAME_WFRZJXHYXGS;
+			areaCode=Constant.AREA_CODE_WFRZJXHYXGS;
+			dataId=Constant.DATA_ID_WFRZJXHYXGS;
+			break;
+		case Constant.SDFLXCLKJYXGS:
+			systemName=Constant.SYSTEM_NAME_SDFLXCLKJYXGS;
+			areaCode=Constant.AREA_CODE_SDFLXCLKJYXGS;
+			dataId=Constant.DATA_ID_SDFLXCLKJYXGS;
 			break;
 		}
 		bodyParamJO.put("systemName", systemName);

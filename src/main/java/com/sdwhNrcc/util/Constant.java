@@ -47,29 +47,29 @@ public class Constant {
 	/**
 	 * 项目名称
 	 */
-	public static final String SYSTEM_NAME_WEI_FANG="人员定位";
+	public static final String SYSTEM_NAME_WFRZJXHYXGS="人员定位";
 	/**
 	 * 9位企业编码
 	 */
-	public static final String AREA_CODE_WEI_FANG="370710560";
+	public static final String AREA_CODE_WFRZJXHYXGS="370710560";
 	/**
 	 * 统一社会信用代码
 	 */
-	public static final String DATA_ID_WEI_FANG="913707865728981511";
+	public static final String DATA_ID_WFRZJXHYXGS="913707865728981511";
 	//潍坊润中精细化工有限公司end
 	
 	//山东福林新材料科技有限公司(菏泽)start
 	/**
 	 * 项目名称
 	 */
-	public static final String SYSTEM_NAME_HE_ZE="信息化建设及人员定位系统";
+	public static final String SYSTEM_NAME_SDFLXCLKJYXGS="信息化建设及人员定位系统";
 	/**
 	 * 9位企业编码
 	 */
-	public static final String AREA_CODE_HE_ZE="371710271";
+	public static final String AREA_CODE_SDFLXCLKJYXGS="371710271";
 	/**
 	 * 统一社会信用代码
 	 */
-	public static final String DATA_ID_HE_ZE="91371700MA3P1UEYX9";
+	public static final String DATA_ID_SDFLXCLKJYXGS="91371700MA3P1UEYX9";
 	//山东福林新材料科技有限公司(菏泽)end
 }
