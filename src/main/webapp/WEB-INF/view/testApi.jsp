@@ -13,7 +13,8 @@
 var path='<%=basePath %>';
 var apiPath=path+"api/";
 $(function(){
-	login();
+	//login();
+	dataEmployeeInfo();
 });
 
 function login(){
@@ -32,8 +33,16 @@ function login(){
 	});
 	*/
 	
-	$.post(apiPath+"dataEmployeeInfo",
+	$.post(apiPath+"authLogin",
 		{username:"weifang_report_data",password:"Rnh5ajIwMjAh"},
+		function(){
+		
+		}
+	,"json");
+}
+
+function dataEmployeeInfo(){
+	$.post(apiPath+"dataEmployeeInfo",
 		function(){
 		
 		}
