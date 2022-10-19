@@ -12,6 +12,8 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
+var username='${requestScope.username}';
+var password='${requestScope.password}';
 $(function(){
 	//login();
 	dataEmployeeInfo();
@@ -34,7 +36,7 @@ function login(){
 	*/
 	
 	$.post(apiPath+"authLogin",
-		{username:"weifang_report_data",password:"Rnh5ajIwMjAh"},
+		{username:username,password:password},
 		function(){
 		
 		}

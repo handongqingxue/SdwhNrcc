@@ -31,10 +31,14 @@ public class ApiController {
 
 	private static final String ADDRESS_URL="http://"+Constant.REALM_NAME+":"+Constant.PORT;
 	public static final String MODULE_NAME="/api";
+	public static final int CITY_FLAG=1;
+	public static final int SYSTEM_FLAG=1;
 
 	@RequestMapping(value="/goTestApi")
-	public String goTestApi() {
+	public String goTestApi(HttpServletRequest request) {
 
+		switchCity(CITY_FLAG,request);
+		
 		return "/testApi";
 	}
 	
@@ -72,10 +76,7 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("systemName", Constant.SYSTEM_NAME);
-			bodyParamJO.put("areaCode", "371710271");
-			bodyParamJO.put("dataId", "91371700MA3P1UEYX9");
+			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
 			
@@ -135,10 +136,7 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("systemName", "信息化建设及人员定位系统");
-			bodyParamJO.put("areaCode", "371710271");
-			bodyParamJO.put("dataId", "91371700MA3P1UEYX9");
+			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
 
@@ -181,10 +179,7 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("systemName", "信息化建设及人员定位系统");
-			bodyParamJO.put("areaCode", "371710271");
-			bodyParamJO.put("dataId", "91371700MA3P1UEYX9");
+			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
 
@@ -223,6 +218,41 @@ public class ApiController {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	public void switchCity(int cityFlag,HttpServletRequest request) {
+		String username=null;
+		String password=null;
+		switch (cityFlag) {
+		case Constant.WEI_FANG:
+			username=Constant.USERNAME_WEI_FANG;
+			password=Constant.PASSWORD_WEI_FANG;
+			break;
+		case Constant.HE_ZE:
+			username=Constant.USERNAME_HE_ZE;
+			password=Constant.PASSWORD_HE_ZE;
+			break;
+		}
+		request.setAttribute("username", username);
+		request.setAttribute("password", password);
+	}
+	
+	public JSONObject switchSystem(int systemFlag) {
+		JSONObject bodyParamJO=new JSONObject();
+		String systemName=null;
+		String areaCode=null;
+		String dataId=null;
+		switch (systemFlag) {
+		case Constant.WEI_FANG:
+			systemName=Constant.SYSTEM_NAME_WEI_FANG;
+			areaCode=Constant.AREA_CODE_WEI_FANG;
+			dataId=Constant.DATA_ID_WEI_FANG;
+			break;
+		}
+		bodyParamJO.put("systemName", systemName);
+		bodyParamJO.put("areaCode", areaCode);
+		bodyParamJO.put("dataId", dataId);
+		return bodyParamJO;
 	}
 	
 	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String path, HttpServletRequest request)
