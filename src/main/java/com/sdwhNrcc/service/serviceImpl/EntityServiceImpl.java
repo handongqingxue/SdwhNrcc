@@ -33,4 +33,10 @@ public class EntityServiceImpl implements EntityService {
 		// TODO Auto-generated method stub
 		return entityDao.queryList();
 	}
+
+	@Override
+	public List<Entity> queryEIList() {
+		// TODO Auto-generated method stub
+		return entityDao.queryEIList();
+	}
 }

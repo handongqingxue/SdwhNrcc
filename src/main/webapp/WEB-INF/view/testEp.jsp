@@ -20,7 +20,7 @@ $(function(){
 	//getEntities();
 	//insertEntityData();
 	//insertDutyData();
-	insertTagData();
+	//insertTagData();
 });
 
 function login(){

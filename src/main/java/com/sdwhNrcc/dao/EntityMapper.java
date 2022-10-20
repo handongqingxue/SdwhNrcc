@@ -16,4 +16,6 @@ public interface EntityMapper {
 
 	int getCountById(@Param("id")Integer id);
 
+	List<Entity> queryEIList();
+
 }

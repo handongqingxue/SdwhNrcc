@@ -10,4 +10,10 @@ public interface EntityService {
 
 	List<Entity> queryList();
 
+	/**
+	 * 查询省平台所需的员工数据
+	 * @return
+	 */
+	List<Entity> queryEIList();
+
 }

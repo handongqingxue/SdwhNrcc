@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sdwhNrcc.entity.*;
+import com.sdwhNrcc.service.EntityService;
 import com.sdwhNrcc.util.*;
 
 @Controller
@@ -33,6 +36,9 @@ public class ApiController {
 	public static final String MODULE_NAME="/api";
 	public static final int CITY_FLAG=1;
 	public static final int SYSTEM_FLAG=1;
+	
+	@Autowired
+	private EntityService entityService;
 
 	@RequestMapping(value="/goTestApi")
 	public String goTestApi(HttpServletRequest request) {
@@ -72,7 +78,7 @@ public class ApiController {
 
 	@RequestMapping(value="/dataEmployeeInfo")
 	@ResponseBody
-	public Map<String, Object> dataEmployeeInfo(List<EmployeeInfo> eiList, HttpServletRequest request) {
+	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
@@ -94,6 +100,8 @@ public class ApiController {
 			dataParamJO.put("employee_type", "01");
 			dataParamJA.put(dataParamJO);
 			*/
+			
+			List<EmployeeInfo> eiList = convertEntityToEmployeeInfo();
 			int eiListSize = eiList.size();
 			for (int i = 0; i < eiListSize; i++) {
 				EmployeeInfo ei=eiList.get(i);
@@ -220,6 +228,32 @@ public class ApiController {
 		}
 	}
 	
+	public List<EmployeeInfo> convertEntityToEmployeeInfo() {
+		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
+		List<Entity> entityList=entityService.queryEIList();
+		for (Entity entity : entityList) {
+			EmployeeInfo ei=new EmployeeInfo();
+			ei.setId(entity.getId()+"");
+			ei.setPost_id("");
+			ei.setPost_name(entity.getPost());
+			ei.setDepart_id(entity.getDepartmentId()+"");
+			ei.setDepart_name("");
+			ei.setName(entity.getName());
+			ei.setSex((entity.getSex()==1?0:1)+"");
+			ei.setCard_no(entity.getUserId());
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
+			}
+			ei.setCompany_social_code(companySocialCode);
+			ei.setEmployee_type(entity.getDutyName());
+			eiList.add(ei);
+		}
+		return eiList;
+	}
+	
 	public void switchCity(int cityFlag,HttpServletRequest request) {
 		String username=null;
 		String password=null;
@@ -304,8 +338,8 @@ public class ApiController {
 			
 			System.out.println("token==="+token);
 			if(!StringUtils.isEmpty(token))
-				//connection.setRequestProperty("Authorization", "Bearer "+token);
-				connection.setRequestProperty("Authorization", "Bearer VqJ9q3VmAmYIkBqQV1csUAOmMJ5Mf6xWRiSyohbngZE=");
+				connection.setRequestProperty("Authorization", "Bearer "+token);
+			connection.setRequestProperty("Authorization", "Bearer sFHFsfDyHJPziGobVa/XxXigCO4cjKw9mlmwjF4JEVQ=");
 		}
 		connection.setRequestMethod("POST");//«Î«Ûpost∑Ω Ω
 		connection.setDoInput(true); 

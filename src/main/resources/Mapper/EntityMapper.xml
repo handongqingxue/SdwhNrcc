@@ -137,4 +137,7 @@
 	<select id="getCountById" resultType="java.lang.Integer">
 		select count(*) from entity where id=#{id}
 	</select>
+	<select id="queryEIList" resultType="com.sdwhNrcc.entity.Entity">
+		select e.*,d.`name` dutyName from entity e left join duty d on e.dutyId=d.id
+	</select>
 </mapper>

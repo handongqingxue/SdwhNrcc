@@ -69,6 +69,12 @@ public class Entity {
 	public void setDutyId(Integer dutyId) {
 		this.dutyId = dutyId;
 	}
+	public String getDutyName() {
+		return dutyName;
+	}
+	public void setDutyName(String dutyName) {
+		this.dutyName = dutyName;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -91,6 +97,7 @@ public class Entity {
 	private String phone;
 	private String name;
 	private Integer dutyId;
+	private String dutyName;
 	private Integer id;
 	private String age;
 }
