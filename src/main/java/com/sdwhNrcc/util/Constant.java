@@ -166,4 +166,10 @@ public class Constant {
 	 */
 	public static final String DATA_ID_SDLTXDKJYXGS="";
 	//山东蓝天消毒科技有限公司end
+	
+	
+	public static final String SERVICE_IP="124.70.38.226";
+	public static final String TENANT_ID="sc21090414";
+	public static final String USER_ID="test";
+	public static final String PASSWORD="test";
 }

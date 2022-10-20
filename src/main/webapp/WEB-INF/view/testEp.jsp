@@ -11,52 +11,29 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 var path='<%=basePath %>';
-var apiPath=path+"api/";
 var epPath=path+"ep/";
-var username='${requestScope.username}';
+var tenantId='${requestScope.tenantId}';
+var userId='${requestScope.userId}';
 var password='${requestScope.password}';
 $(function(){
-	//authLogin();
-	//dataEmployeeInfo();
+	//login();
+	getEntities();
 });
-
-function authLogin(){
-	/*
-	var params="{'username':'weifang_report_data','password':'Um5oNWFqSXdNakFo'}";
-	$.ajax({
-		url:apiPath+"login",
-		type:"post",
-		contentType:"application/json;charset-utf-8",
-		data:JSON.stringify(params),
-		dataType:"json",
-		async:false,
-		success:function(data){
-			alert(data);
-		}
-	});
-	*/
-	
-	$.post(apiPath+"authLogin",
-		{username:username,password:password},
-		function(){
-		
-		}
-	,"json");
-}
-
-function dataEmployeeInfo(){
-	$.post(apiPath+"dataEmployeeInfo",
-		function(){
-		
-		}
-	,"json");
-}
 
 function login(){
 	$.post(epPath+"login",
 		{tenantId:tenantId,userId:userId,password:password},
 		function(){
 		
+		}
+	,"json");
+}
+
+function getEntities(){
+	$.post(epPath+"getEntities",
+		{entityType:"staff"},
+		function(data){
+			console.log(data);
 		}
 	,"json");
 }
