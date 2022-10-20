@@ -17,7 +17,10 @@ var userId='${requestScope.userId}';
 var password='${requestScope.password}';
 $(function(){
 	//login();
-	getEntities();
+	//getEntities();
+	//insertEntityData();
+	//insertDutyData();
+	insertTagData();
 });
 
 function login(){
@@ -33,7 +36,39 @@ function getEntities(){
 	$.post(epPath+"getEntities",
 		{entityType:"staff"},
 		function(data){
-			console.log(data);
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.result);
+		}
+	,"json");
+}
+
+function insertEntityData(){
+	$.post(epPath+"insertEntityData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
+		}
+	,"json");
+}
+
+function insertDutyData(){
+	$.post(epPath+"insertDutyData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
+		}
+	,"json");
+}
+
+function insertTagData(){
+	$.post(epPath+"insertTagData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
 		}
 	,"json");
 }
