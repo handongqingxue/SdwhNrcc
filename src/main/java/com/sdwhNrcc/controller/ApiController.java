@@ -125,10 +125,10 @@ public class ApiController {
 			String code=resultJO.get("code").toString();
 			System.out.println("code==="+code);
 			String msg=resultJO.get("msg").toString();
-			JSONArray dataJA = resultJO.getJSONArray("data");
+			String data = resultJO.getString("data");
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
-			resultMap.put("data", dataJA);
+			resultMap.put("data", data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -235,9 +235,12 @@ public class ApiController {
 			EmployeeInfo ei=new EmployeeInfo();
 			ei.setId(entity.getId()+"");
 			ei.setPost_id("");
-			ei.setPost_name(entity.getPost());
+			String post = entity.getPost();
+			if(StringUtils.isEmpty(post))
+				post="δ֪";
+			ei.setPost_name(post);
 			ei.setDepart_id(entity.getDepartmentId()+"");
-			ei.setDepart_name("");
+			ei.setDepart_name("δ֪");
 			ei.setName(entity.getName());
 			ei.setSex((entity.getSex()==1?0:1)+"");
 			ei.setCard_no(entity.getUserId());
