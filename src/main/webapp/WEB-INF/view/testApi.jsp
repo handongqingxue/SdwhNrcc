@@ -17,7 +17,9 @@ var username='${requestScope.username}';
 var password='${requestScope.password}';
 $(function(){
 	//authLogin();
-	dataEmployeeInfo();
+	//dataEmployeeInfo();
+	//dataEmployeeLocations();
+	dataEmployeeAlarm();
 });
 
 function authLogin(){
@@ -46,6 +48,22 @@ function authLogin(){
 
 function dataEmployeeInfo(){
 	$.post(apiPath+"dataEmployeeInfo",
+		function(){
+		
+		}
+	,"json");
+}
+
+function dataEmployeeLocations(){
+	$.post(apiPath+"dataEmployeeLocations",
+		function(){
+		
+		}
+	,"json");
+}
+
+function dataEmployeeAlarm(){
+	$.post(apiPath+"dataEmployeeAlarm",
 		function(){
 		
 		}

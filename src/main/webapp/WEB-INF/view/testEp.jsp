@@ -21,6 +21,8 @@ $(function(){
 	//insertEntityData();
 	//insertDutyData();
 	//insertTagData();
+	//insertWarnRecordData();
+	//insertWarnTriggerData();
 });
 
 function login(){
@@ -65,6 +67,26 @@ function insertDutyData(){
 
 function insertTagData(){
 	$.post(epPath+"insertTagData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
+		}
+	,"json");
+}
+
+function insertWarnRecordData(){
+	$.post(epPath+"insertWarnRecordData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
+		}
+	,"json");
+}
+
+function insertWarnTriggerData(){
+	$.post(epPath+"insertWarnTriggerData",
 		function(data){
 			var status=data.status;
 			if(status=="ok")

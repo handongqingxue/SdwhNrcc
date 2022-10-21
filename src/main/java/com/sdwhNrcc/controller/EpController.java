@@ -47,6 +47,10 @@ public class EpController {
 	private DutyService dutyService;
 	@Autowired
 	private TagService tagService;
+	@Autowired
+	private WarnRecordService warnRecordService;
+	@Autowired
+	private WarnTriggerService warnTriggerService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -426,6 +430,87 @@ public class EpController {
 		}
 	}
 
+	/**
+	 * 2.7.1获取报警触发器列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getWarnTriggers")
+	@ResponseBody
+	public Map<String, Object> getWarnTriggers(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getWarnTriggers");
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnTriggers",request);
+			System.out.println("getWarnTriggers:resultJO==="+resultJO.toString());
+			/*
+			 {
+			 "result":[
+				 {"warnType":4,"name":"超速报警","id":-1,"enclosureId":null,"conditions":{"dutyIds":[2,-991],"maxSpeed":1000}},
+				 {"warnType":1,"name":"按键报警","id":1,"enclosureId":null,"conditions":{"areaIds":[2,3,4,5,6,1]}}
+			 ],
+			 "id":1,"jsonrpc":"2.0"}
+			 */
+			resultMap=JSON.parseObject(resultJO.toString(), Map.class);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	/**
+	 * 2.7.3报获取警记录
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getWarnRecords")
+	@ResponseBody
+	public Map<String, Object> getWarnRecords(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("jsonrpc", "2.0");
+			bodyParamJO.put("method", "getWarnRecords");
+			JSONObject paramJO=new JSONObject();
+			paramJO.put("triggerIds", "[1]");
+			paramJO.put("startTime", "1618267921076");
+			paramJO.put("endTime", "1718277921076");
+			bodyParamJO.put("params", paramJO);
+			bodyParamJO.put("id", 1);
+			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);
+			//System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
+			resultMap=JSON.parseObject(resultJO.toString());
+			/*
+			 {"result":[
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060088742,"x":39.26,"y":360.83,"z":0,"startTime":1605060088742,"id":3056,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060110380,"x":39.26,"y":360.83,"z":0,"startTime":1605060110380,"id":3057,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060128936,"x":39.26,"y":360.83,"z":0,"startTime":1605060128936,"id":3058,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":1,"absolute":false,"raiseTime":1605060149170,"x":39.26,"y":360.83,"z":0,"startTime":1605060149170,"id":3059,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":1,"absolute":false,"raiseTime":1605060170580,"x":39.26,"y":360.83,"z":0,"startTime":1605060170580,"id":3060,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060199076,"x":89.422,"y":331.935,"z":0,"startTime":1605060199076,"id":3061,"rootAreaId":1},
+			 {"tagId":"BTT32003917","warnType":1,"triggerId":1,"pid":"FUPY15028","sessionId":1740440342,"userId":"3917","keyCode":1,"uid":"BTT32003917","areaId":2,"absolute":false,"raiseTime":1605060209222,"x":116.498,"y":340.598,"z":0,"startTime":1605060209222,"id":3062,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188344346,"x":465.039,"y":181.861,"z":0,"startTime":1605188344346,"id":3145,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188354669,"x":465.172,"y":182.583,"z":0,"startTime":1605188354669,"id":3146,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188364805,"x":465.304,"y":183.314,"z":0,"startTime":1605188364805,"id":3147,"rootAreaId":1},
+			 {"tagId":"BTT32003610","warnType":1,"triggerId":1,"pid":null,"sessionId":810419356,"userId":"3610","keyCode":1,"uid":null,"areaId":2,"absolute":false,"raiseTime":1605188373845,"x":465.426,"y":184.049,"z":0,"startTime":1605188373845,"id":3148,"rootAreaId":1},
+			 */
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
 	@RequestMapping(value="/initEntityList")
 	@ResponseBody
 	public Map<String, Object> initEntityList() {
@@ -501,6 +586,46 @@ public class EpController {
 			resultMap.put("message", "初始化定位标签列表成功");
 		}
 		
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertWarnRecordData")
+	@ResponseBody
+	public Map<String, Object> insertWarnRecordData(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> wrrMap = getWarnRecords(request);
+		List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
+		System.out.println("==="+warnRecordList.size());
+		int count=warnRecordService.add(warnRecordList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化报警记录失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化报警记录成功");
+		}
+		return resultMap;
+	}
+
+	@RequestMapping(value="/insertWarnTriggerData")
+	@ResponseBody
+	public Map<String, Object> insertWarnTriggerData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		Map<String, Object> wtrMap = getWarnTriggers(request);
+		List<WarnTrigger> warnTriggerList = JSON.parseArray(wtrMap.get("result").toString(),WarnTrigger.class);
+		System.out.println("==="+warnTriggerList.size());
+		int count=warnTriggerService.add(warnTriggerList);
+		if(count==0) {
+			resultMap.put("status", "no");
+			resultMap.put("message", "初始化报警触发器失败");
+		}
+		else {
+			resultMap.put("status", "ok");
+			resultMap.put("message", "初始化报警触发器成功");
+		}
 		return resultMap;
 	}
 

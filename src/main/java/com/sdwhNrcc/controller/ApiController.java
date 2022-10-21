@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +45,8 @@ public class ApiController {
 	private EntityService entityService;
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private WarnRecordService warnRecordService;
 
 	@RequestMapping(value="/goTestApi")
 	public String goTestApi(HttpServletRequest request) {
@@ -69,7 +75,7 @@ public class ApiController {
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
 			resultMap.put("data", data);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -172,6 +178,7 @@ public class ApiController {
 			System.out.println("code==="+code);
 			String msg=resultJO.get("msg").toString();
 			String data = resultJO.getString("data");
+			System.out.println("data==="+data);
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
 			resultMap.put("data", data);
@@ -186,7 +193,7 @@ public class ApiController {
 
 	@RequestMapping(value="/dataEmployeeAlarm")
 	@ResponseBody
-	public Map<String, Object> dataEmployeeAlarm(List<EmployeeAlarm> eaList, HttpServletRequest request) {
+	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
@@ -194,6 +201,7 @@ public class ApiController {
 			
 			JSONArray dataParamJA=new JSONArray();
 
+			List<EmployeeAlarm> eaList = convertWarnRecordToEmployeeAlarm();
 			int eaListSize = eaList.size();
 			for (int i = 0; i < eaListSize; i++) {
 				EmployeeAlarm ea=eaList.get(i);
@@ -214,14 +222,15 @@ public class ApiController {
 			
 			bodyParamJO.put("data", dataParamJA);
 			
-			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/locations",request);
+			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
 			String code=resultJO.get("code").toString();
 			System.out.println("code==="+code);
 			String msg=resultJO.get("msg").toString();
-			JSONArray dataJA = resultJO.getJSONArray("data");
+			String data = resultJO.getString("data");
+			System.out.println("data==="+data);
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
-			resultMap.put("data", dataJA);
+			resultMap.put("data", data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -291,6 +300,33 @@ public class ApiController {
 		return elList;
 	}
 	
+	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm() {
+		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
+		List<WarnRecord> wrList=warnRecordService.queryEAList();
+		for (WarnRecord wr : wrList) {
+			EmployeeAlarm ea=new EmployeeAlarm();
+			ea.setId(wr.getId()+"");
+			ea.setTime(DateUtil.convertLongToString(wr.getStartTime()));
+			ea.setType("oneKeyAlarm:alarm");
+			ea.setArea_name("map");
+			ea.setName(wr.getEntityName());
+			ea.setCard_no(wr.getUserId());
+			
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
+			}
+			ea.setCompany_social_code(companySocialCode);
+			
+			ea.setLongitude(wr.getX()+"");
+			ea.setLatitude(wr.getY()+"");
+			eaList.add(ea);
+		}
+		return eaList;
+	}
+	
 	public void switchCity(int cityFlag,HttpServletRequest request) {
 		String username=null;
 		String password=null;
@@ -351,84 +387,90 @@ public class ApiController {
 		return bodyParamJO;
 	}
 	
-	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String path, HttpServletRequest request)
-			throws IOException {
-		StringBuffer sbf = new StringBuffer(); 
-		String strRead = null; 
-		URL url = new URL(serverURL+path); 
-		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
-		
-		//connection.setInstanceFollowRedirects(false); 
-		
-		HttpSession session = request.getSession();
-		if(!path.contains("auth/login")) {
-			String token = null;
-			Object LoginUserObj = session.getAttribute("loginUser");
-			//System.out.println("LoginUserObj==="+LoginUserObj);
-			if(LoginUserObj!=null) {
-				LoginUser loginUser = (LoginUser)LoginUserObj;
-				token = loginUser.getToken();
-			}
-			
-			//if(cookie==null)
-				//cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
-			
-			System.out.println("token==="+token);
-			if(!StringUtils.isEmpty(token))
-				connection.setRequestProperty("Authorization", "Bearer "+token);
-			connection.setRequestProperty("Authorization", "Bearer sFHFsfDyHJPziGobVa/XxXigCO4cjKw9mlmwjF4JEVQ=");
-		}
-		connection.setRequestMethod("POST");//请求post方式
-		connection.setDoInput(true); 
-		connection.setDoOutput(true); 
-		//header内的的参数在这里set    
-		//connection.setRequestProperty("key", "value");
-		connection.setRequestProperty("Content-Type", "application/json");
-		connection.connect(); 
-		
-		
-		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
-		//body参数放这里
-		String bodyParamStr = bodyParamJO.toString();
-		//System.out.println("bodyParamStr==="+bodyParamStr);
-		writer.write(bodyParamStr);
-		//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
-		writer.flush();
-		InputStream is = connection.getInputStream(); 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
-		while ((strRead = reader.readLine()) != null) { 
-			sbf.append(strRead); 
-			sbf.append("\r\n"); 
-		}
-		reader.close(); 
-		
-		connection.disconnect();
-		String result = sbf.toString();
-		//System.out.println("result==="+result);
+	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String path, HttpServletRequest request) {
 		JSONObject resultJO = null;
-		if(result.contains("DOCTYPE")) {
-			resultJO = new JSONObject();
-			resultJO.put("status", "no");
-		}
-		else if(result.contains("error")) {
-			resultJO = new JSONObject(result);
-			resultJO.put("status", "no");
-		}
-		else {
-			resultJO = new JSONObject(result);
-			resultJO.put("status", "ok");
+		try {
+			StringBuffer sbf = new StringBuffer(); 
+			String strRead = null; 
+			URL url = new URL(serverURL+path); 
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 			
-			if(path.contains("auth/login")) {
-				if(!checkTokenInSession(session)) {
-					JSONObject dataJO = resultJO.getJSONObject("data");
-					String token = dataJO.getString("token");
-					LoginUser loginUser=new LoginUser();
-					loginUser.setToken(token);
-					session.setAttribute("loginUser", loginUser);
+			//connection.setInstanceFollowRedirects(false); 
+			
+			HttpSession session = request.getSession();
+			if(!path.contains("auth/login")) {
+				String token = null;
+				Object LoginUserObj = session.getAttribute("loginUser");
+				//System.out.println("LoginUserObj==="+LoginUserObj);
+				if(LoginUserObj!=null) {
+					LoginUser loginUser = (LoginUser)LoginUserObj;
+					token = loginUser.getToken();
+				}
+				
+				//if(cookie==null)
+					//cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
+				
+				System.out.println("token==="+token);
+				if(!StringUtils.isEmpty(token))
+					connection.setRequestProperty("Authorization", "Bearer "+token);
+				connection.setRequestProperty("Authorization", "Bearer UhSHfbnUBDxAlTnk7jFGovvxAGKG/XxETyGYhUgpxQ0=");
+			}
+			connection.setRequestMethod("POST");//请求post方式
+			connection.setDoInput(true); 
+			connection.setDoOutput(true); 
+			//header内的的参数在这里set    
+			//connection.setRequestProperty("key", "value");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.connect(); 
+			
+			
+			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
+			//body参数放这里
+			String bodyParamStr = bodyParamJO.toString();
+			//System.out.println("bodyParamStr==="+bodyParamStr);
+			writer.write(bodyParamStr);
+			//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
+			writer.flush();
+			InputStream is = connection.getInputStream(); 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
+			while ((strRead = reader.readLine()) != null) { 
+				sbf.append(strRead); 
+				sbf.append("\r\n"); 
+			}
+			reader.close(); 
+			
+			connection.disconnect();
+			String result = sbf.toString();
+			//System.out.println("result==="+result);
+			if(result.contains("DOCTYPE")) {
+				resultJO = new JSONObject();
+				resultJO.put("status", "no");
+			}
+			else if(result.contains("error")) {
+				resultJO = new JSONObject(result);
+				resultJO.put("status", "no");
+			}
+			else {
+				resultJO = new JSONObject(result);
+				resultJO.put("status", "ok");
+				
+				if(path.contains("auth/login")) {
+					if(!checkTokenInSession(session)) {
+						JSONObject dataJO = resultJO.getJSONObject("data");
+						String token = dataJO.getString("token");
+						LoginUser loginUser=new LoginUser();
+						loginUser.setToken(token);
+						session.setAttribute("loginUser", loginUser);
+					}
 				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return resultJO;
+		finally {
+			return resultJO;
+		}
 	}
 	
 	public boolean checkTokenInSession(HttpSession session) {
