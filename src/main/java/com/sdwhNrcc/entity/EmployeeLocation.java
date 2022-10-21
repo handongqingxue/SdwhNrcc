@@ -1,6 +1,10 @@
 package com.sdwhNrcc.entity;
 
 public class EmployeeLocation {
+	
+	public static final String SPORT="0";
+	public static final String WARN="1";
+	public static final String SLEEP="2";
 
 	private String company_social_code;
 	public String getCompany_social_code() {

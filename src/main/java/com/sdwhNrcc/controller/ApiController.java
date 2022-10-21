@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sdwhNrcc.entity.*;
-import com.sdwhNrcc.service.EntityService;
+import com.sdwhNrcc.service.*;
 import com.sdwhNrcc.util.*;
 
 @Controller
@@ -39,6 +39,8 @@ public class ApiController {
 	
 	@Autowired
 	private EntityService entityService;
+	@Autowired
+	private LocationService locationService;
 
 	@RequestMapping(value="/goTestApi")
 	public String goTestApi(HttpServletRequest request) {
@@ -140,7 +142,7 @@ public class ApiController {
 
 	@RequestMapping(value="/dataEmployeeLocations")
 	@ResponseBody
-	public Map<String, Object> dataEmployeeLocations(List<EmployeeLocation> elList, HttpServletRequest request) {
+	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
@@ -148,6 +150,7 @@ public class ApiController {
 			
 			JSONArray dataParamJA=new JSONArray();
 
+			List<EmployeeLocation> elList = convertLocationToEmployeeLocation();
 			int elListSize = elList.size();
 			for (int i = 0; i < elListSize; i++) {
 				EmployeeLocation el=elList.get(i);
@@ -168,10 +171,10 @@ public class ApiController {
 			String code=resultJO.get("code").toString();
 			System.out.println("code==="+code);
 			String msg=resultJO.get("msg").toString();
-			JSONArray dataJA = resultJO.getJSONArray("data");
+			String data = resultJO.getString("data");
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
-			resultMap.put("data", dataJA);
+			resultMap.put("data", data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -255,6 +258,37 @@ public class ApiController {
 			eiList.add(ei);
 		}
 		return eiList;
+	}
+	
+	public List<EmployeeLocation> convertLocationToEmployeeLocation() {
+		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
+		List<Location> locationList=locationService.queryELList();
+		for (Location location : locationList) {
+			EmployeeLocation el=new EmployeeLocation();
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
+			}
+			el.setCompany_social_code(companySocialCode);
+			el.setFloor_no(location.getFloor()+"");
+			el.setCard_no(location.getUserId());
+			el.setTime_stamp(DateUtil.convertLongToString(location.getLocationTime()));
+			
+			Float speed = location.getSpeed();
+			String status=null;
+			if(speed==0)
+				status=EmployeeLocation.SLEEP;
+			else
+				status=EmployeeLocation.SPORT;
+			el.setStatus(status);
+			
+			el.setLongitude(location.getLongitude()+"");
+			el.setLatitude(location.getLatitude()+"");
+			elList.add(el);
+		}
+		return elList;
 	}
 	
 	public void switchCity(int cityFlag,HttpServletRequest request) {
@@ -414,4 +448,5 @@ public class ApiController {
 			}
 		}
 	}
+	
 }
