@@ -59,6 +59,18 @@ public class ApiController {
 		return "/testApi";
 	}
 	
+	@RequestMapping(value="/goSyncDBManager")
+	public String goSyncDBManager() {
+
+		return "/syncDBManager";
+	}
+	
+	@RequestMapping(value="/goSyncDBRun")
+	public String goSyncDBRun() {
+
+		return "/syncDBRun";
+	}
+	
 	@RequestMapping(value="/authLogin")
 	@ResponseBody
 	public Map<String, Object> authLogin(String username, String password, HttpServletRequest request) {
@@ -143,15 +155,18 @@ public class ApiController {
 			String status=resultJO.get("status").toString();
 			if("ok".equals(status)) {
 				String code=resultJO.get("code").toString();
-				System.out.println("code==="+code);
 				String msg=resultJO.get("msg").toString();
 				String data = resultJO.getString("data");
+				System.out.println("code==="+code);
+				System.out.println("msg==="+msg);
+				System.out.println("data==="+data);
 				resultMap.put("code", code);
 				resultMap.put("msg", msg);
 				resultMap.put("data", data);
 			}
 			else {
 				boolean success=reAuthLogin(request);
+				System.out.println("success==="+success);
 				if(success) {
 					Thread.sleep(1000*60);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ1∑÷÷”∫Û‘Ÿ÷¥––
 					dataEmployeeInfo(request);

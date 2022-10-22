@@ -587,19 +587,35 @@ public class EpController {
 	public Map<String, Object> insertDutyData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> drMap = getDutys(request);
-		List<Duty> dutyList = JSON.parseArray(drMap.get("result").toString(),Duty.class);
-		int count=dutyService.add(dutyList);
-		if(count==0) {
-			resultMap.put("status", "no");
-			resultMap.put("message", "初始化员工职务列表失败");
+		try {
+			Map<String, Object> drMap = getDutys(request);
+			String status = drMap.get("status").toString();
+			if("ok".equals(status)) {
+				List<Duty> dutyList = JSON.parseArray(drMap.get("result").toString(),Duty.class);
+				int count=dutyService.add(dutyList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化员工职务列表失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化员工职务列表成功");
+				}
+			}
+			else {
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertDutyData(request);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			resultMap.put("status", "ok");
-			resultMap.put("message", "初始化员工职务列表成功");
+		finally {
+			return resultMap;
 		}
-		
-		return resultMap;
 	}
 
 	@RequestMapping(value="/insertTagData")
@@ -607,39 +623,72 @@ public class EpController {
 	public Map<String, Object> insertTagData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> trMap = getTags(request);
-		List<Tag> tagList = JSON.parseArray(trMap.get("result").toString(),Tag.class);
-		int count=tagService.add(tagList);
-		if(count==0) {
-			resultMap.put("status", "no");
-			resultMap.put("message", "初始化定位标签列表失败");
+		try {
+			Map<String, Object> trMap = getTags(request);
+			String status = trMap.get("status").toString();
+			if("ok".equals(status)) {
+				List<Tag> tagList = JSON.parseArray(trMap.get("result").toString(),Tag.class);
+				int count=tagService.add(tagList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化定位标签列表失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化定位标签列表成功");
+				}
+			}
+			else {
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertTagData(request);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			resultMap.put("status", "ok");
-			resultMap.put("message", "初始化定位标签列表成功");
+		finally {
+			return resultMap;
 		}
-		
-		return resultMap;
 	}
 
 	@RequestMapping(value="/insertWarnRecordData")
 	@ResponseBody
 	public Map<String, Object> insertWarnRecordData(HttpServletRequest request) {
-		
+
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> wrrMap = getWarnRecords(request);
-		List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
-		System.out.println("==="+warnRecordList.size());
-		int count=warnRecordService.add(warnRecordList);
-		if(count==0) {
-			resultMap.put("status", "no");
-			resultMap.put("message", "初始化报警记录失败");
+		try {
+			Map<String, Object> wrrMap = getWarnRecords(request);
+			String status = wrrMap.get("status").toString();
+			if("ok".equals(status)) {
+				List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
+				System.out.println("==="+warnRecordList.size());
+				int count=warnRecordService.add(warnRecordList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化报警记录失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化报警记录成功");
+				}
+			}
+			else {
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertWarnRecordData(request);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			resultMap.put("status", "ok");
-			resultMap.put("message", "初始化报警记录成功");
+		finally {
+			return resultMap;
 		}
-		return resultMap;
 	}
 
 	@RequestMapping(value="/insertWarnTriggerData")
@@ -647,19 +696,36 @@ public class EpController {
 	public Map<String, Object> insertWarnTriggerData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> wtrMap = getWarnTriggers(request);
-		List<WarnTrigger> warnTriggerList = JSON.parseArray(wtrMap.get("result").toString(),WarnTrigger.class);
-		System.out.println("==="+warnTriggerList.size());
-		int count=warnTriggerService.add(warnTriggerList);
-		if(count==0) {
-			resultMap.put("status", "no");
-			resultMap.put("message", "初始化报警触发器失败");
+		try {
+			Map<String, Object> wtrMap = getWarnTriggers(request);
+			String status = wtrMap.get("status").toString();
+			if("ok".equals(status)) {
+				List<WarnTrigger> warnTriggerList = JSON.parseArray(wtrMap.get("result").toString(),WarnTrigger.class);
+				System.out.println("==="+warnTriggerList.size());
+				int count=warnTriggerService.add(warnTriggerList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化报警触发器失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化报警触发器成功");
+				}
+			}
+			else {
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertWarnTriggerData(request);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			resultMap.put("status", "ok");
-			resultMap.put("message", "初始化报警触发器成功");
+		finally {
+			return resultMap;
 		}
-		return resultMap;
 	}
 
 	@RequestMapping(value="/exit")
