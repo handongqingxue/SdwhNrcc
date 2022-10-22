@@ -9,6 +9,8 @@ public interface WarnRecordService {
 
 	int add(List<WarnRecord> warnRecordList);
 
-	List<WarnRecord> queryEAList();
+	List<WarnRecord> queryEAList(int sync);
+
+	int syncByIds(String syncIds);
 
 }

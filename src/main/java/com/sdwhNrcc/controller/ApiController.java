@@ -255,6 +255,7 @@ public class ApiController {
 			
 			JSONArray dataParamJA=new JSONArray();
 
+			StringBuilder syncIdsSB=new StringBuilder();
 			List<EmployeeAlarm> eaList = convertWarnRecordToEmployeeAlarm();
 			int eaListSize = eaList.size();
 			for (int i = 0; i < eaListSize; i++) {
@@ -262,7 +263,10 @@ public class ApiController {
 					break;
 				EmployeeAlarm ea=eaList.get(i);
 				JSONObject dataParamJO=new JSONObject();
-				dataParamJO.put("id", ea.getId());
+				String id = ea.getId();
+				syncIdsSB.append(",");
+				syncIdsSB.append(id);
+				dataParamJO.put("id", id);
 				dataParamJO.put("time", ea.getTime());
 				dataParamJO.put("type", ea.getType());
 				dataParamJO.put("area_name", ea.getArea_name());
@@ -284,6 +288,13 @@ public class ApiController {
 			String msg=resultJO.get("msg").toString();
 			String data = resultJO.getString("data");
 			System.out.println("data==="+data);
+			
+			if("200".equals(code)) {
+				String syncIds = syncIdsSB.toString().substring(1);
+				System.out.println("syncIds==="+syncIds);
+				warnRecordService.syncByIds(syncIds);
+			}
+			
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
 			resultMap.put("data", data);
@@ -358,7 +369,7 @@ public class ApiController {
 	
 	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm() {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
-		List<WarnRecord> wrList=warnRecordService.queryEAList();
+		List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC);
 		for (WarnRecord wr : wrList) {
 			EmployeeAlarm ea=new EmployeeAlarm();
 			ea.setId(wr.getId()+"");
@@ -507,6 +518,7 @@ public class ApiController {
 				resultJO.put("status", "no");
 			}
 			else {
+				System.out.println("result==="+result);
 				resultJO = new JSONObject(result);
 				resultJO.put("status", "ok");
 				

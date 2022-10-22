@@ -12,14 +12,18 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
+var epPath=path+"ep/";
 var interval="60000";
 $(function(){
-	//makeSync();
+	makeSync();
+	/*
 	setInterval(function(){
 		console.log("11111111");
 		dataEmployeeLocations();
+		insertWarnRecordData();
 		dataEmployeeAlarm();
 	},interval);
+	*/
 });
 
 function makeSync(){
@@ -42,6 +46,16 @@ function dataEmployeeAlarm(){
 	$.post(apiPath+"dataEmployeeAlarm",
 		function(){
 		
+		}
+	,"json");
+}
+
+function insertWarnRecordData(){
+	$.post(epPath+"insertWarnRecordData",
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
 		}
 	,"json");
 }

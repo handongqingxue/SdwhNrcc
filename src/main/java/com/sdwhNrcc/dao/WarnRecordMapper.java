@@ -13,6 +13,8 @@ public interface WarnRecordMapper {
 
 	int getCountById(@Param("id")Integer id);
 
-	List<WarnRecord> queryEAList();
+	List<WarnRecord> queryEAList(@Param("sync")int sync);
+
+	int syncByIds(List<String> idList);
 
 }

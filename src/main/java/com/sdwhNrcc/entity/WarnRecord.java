@@ -2,6 +2,9 @@ package com.sdwhNrcc.entity;
 
 public class WarnRecord {
 
+	public static final int UNSYNC=0;
+	public static final int SYNCED=1;
+	
 	private String tagId;
 	private Integer warnType;
 	private Integer triggerId;
@@ -27,6 +30,7 @@ public class WarnRecord {
 	private String areaName;
 	private String xAxisDataLabel;
 	private Integer warnCount;
+	private Boolean sync;
 	public String getTagId() {
 		return tagId;
 	}
@@ -176,5 +180,11 @@ public class WarnRecord {
 	}
 	public void setWarnCount(Integer warnCount) {
 		this.warnCount = warnCount;
+	}
+	public Boolean getSync() {
+		return sync;
+	}
+	public void setSync(Boolean sync) {
+		this.sync = sync;
 	}
 }

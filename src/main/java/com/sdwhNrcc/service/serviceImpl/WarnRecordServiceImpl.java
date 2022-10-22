@@ -1,5 +1,6 @@
 package com.sdwhNrcc.service.serviceImpl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +38,16 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 	}
 
 	@Override
-	public List<WarnRecord> queryEAList() {
+	public List<WarnRecord> queryEAList(int sync) {
 		// TODO Auto-generated method stub
-		return warnRecordDao.queryEAList();
+		return warnRecordDao.queryEAList(sync);
+	}
+
+	@Override
+	public int syncByIds(String syncIds) {
+		// TODO Auto-generated method stub
+		List<String> idList = Arrays.asList(syncIds.split(","));
+		return warnRecordDao.syncByIds(idList);
 	}
 
 }
