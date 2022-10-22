@@ -216,6 +216,22 @@ public class EpController {
 			return resultMap;
 		}
 	}
+	
+	public boolean reLogin(HttpServletRequest request) {
+		switchEnterprise(EP_FLAG,request);
+		String tenantId = request.getAttribute("tenantId").toString();
+		String userId = request.getAttribute("userId").toString();
+		String password = request.getAttribute("password").toString();
+		System.out.println("tenantId==="+tenantId);
+		System.out.println("userId==="+userId);
+		System.out.println("password==="+password);
+		Map<String, Object> resultMap = login(tenantId,userId,password,request);
+		String status = resultMap.get("status").toString();
+		if("ok".equals(status))
+			return true;
+		else
+			return false;
+	}
 
 	/**
 	 * 2.2.5获取定位标签列表
@@ -535,18 +551,35 @@ public class EpController {
 	public Map<String, Object> insertEntityData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		Map<String, Object> erMap = getEntities("staff", request);
-		List<Entity> entityList = JSON.parseArray(erMap.get("result").toString(),Entity.class);
-		int count=entityService.add(entityList);
-		if(count==0) {
-			resultMap.put("status", "no");
-			resultMap.put("message", "初始化实体信息失败");
+		try {
+			Map<String, Object> erMap = getEntities("staff", request);
+			String status = erMap.get("status").toString();
+			if("ok".equals(status)) {
+				List<Entity> entityList = JSON.parseArray(erMap.get("result").toString(),Entity.class);
+				int count=entityService.add(entityList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化实体信息失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化实体信息成功");
+				}
+			}
+			else {
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertEntityData(request);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			resultMap.put("status", "ok");
-			resultMap.put("message", "初始化实体信息成功");
+		finally {
+			return resultMap;
 		}
-		return resultMap;
 	}
 
 	@RequestMapping(value="/insertDutyData")
@@ -786,6 +819,9 @@ public class EpController {
 				 System.out.println("key==="+value);
 				 EpLoginUser epLoginUser=new EpLoginUser();
 				 epLoginUser.setCookie(value);
+				 epLoginUser.setUserId(TEST_USER_Id);
+				 epLoginUserService.add(epLoginUser);
+				 
 				 session.setAttribute("epLoginUser", epLoginUser);
 			}
 		}

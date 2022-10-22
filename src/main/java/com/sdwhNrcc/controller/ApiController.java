@@ -152,8 +152,10 @@ public class ApiController {
 			}
 			else {
 				boolean success=reAuthLogin(request);
-				if(success)
+				if(success) {
+					Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
 					dataEmployeeInfo(request);
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -164,6 +166,11 @@ public class ApiController {
 		}
 	}
 	
+	/**
+	 * 重新登录
+	 * @param request
+	 * @return
+	 */
 	public boolean reAuthLogin(HttpServletRequest request) {
 		switchCity(CITY_FLAG,request);
 		String username = request.getAttribute("username").toString();

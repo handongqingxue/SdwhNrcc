@@ -18,7 +18,7 @@ var password='${requestScope.password}';
 $(function(){
 	//login();
 	//getEntities();
-	//insertEntityData();
+	insertEntityData();
 	//insertDutyData();
 	//insertTagData();
 	//insertWarnRecordData();
