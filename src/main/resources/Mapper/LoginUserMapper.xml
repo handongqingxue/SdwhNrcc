@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.LoginUserMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.LoginUser">
+ 		insert into login_user
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="token!=null">
+ 				token,
+ 			</if>
+ 			<if test="username!=null">
+ 				username,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="token!=null">
+ 				#{token},
+ 			</if>
+ 			<if test="username!=null">
+ 				#{username},
+ 			</if>
+		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.LoginUser">
+		update login_user set
+		<trim suffixOverrides=",">
+			<if test="token!=null">
+				token=#{token},
+			</if>
+		</trim>
+		where username=#{username}
+	</update>
+	<select id="getTokenByUsername" resultType="java.lang.String">
+		select token from login_user where username=#{username}
+	</select>
+	<select id="getCountByUsername" resultType="java.lang.Integer">
+		select count(*) from login_user where username=#{username}
+	</select>
+</mapper>

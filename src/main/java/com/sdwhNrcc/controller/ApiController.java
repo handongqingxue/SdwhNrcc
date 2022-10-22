@@ -38,6 +38,7 @@ public class ApiController {
 
 	private static final String ADDRESS_URL="http://"+Constant.REALM_NAME+":"+Constant.PORT;
 	public static final String MODULE_NAME="/api";
+	public static final String TEST_USERNAME="weifang_report_data";
 	public static final int CITY_FLAG=1;
 	public static final int SYSTEM_FLAG=1;
 	
@@ -47,6 +48,8 @@ public class ApiController {
 	private LocationService locationService;
 	@Autowired
 	private WarnRecordService warnRecordService;
+	@Autowired
+	private LoginUserService loginUserService;
 
 	@RequestMapping(value="/goTestApi")
 	public String goTestApi(HttpServletRequest request) {
@@ -71,7 +74,12 @@ public class ApiController {
 			String code=resultJO.get("code").toString();
 			System.out.println("==="+code);
 			String msg=resultJO.get("msg").toString();
+			
 			JSONObject data = resultJO.getJSONObject("data");
+			String token = data.getString("token");
+			LoginUser lu=new LoginUser(token,username);
+			loginUserService.add(lu);
+			
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
 			resultMap.put("data", data);
@@ -112,6 +120,8 @@ public class ApiController {
 			List<EmployeeInfo> eiList = convertEntityToEmployeeInfo();
 			int eiListSize = eiList.size();
 			for (int i = 0; i < eiListSize; i++) {
+				if(i==1)
+					break;
 				EmployeeInfo ei=eiList.get(i);
 				JSONObject dataParamJO=new JSONObject();
 				dataParamJO.put("id", ei.getId());
@@ -130,13 +140,21 @@ public class ApiController {
 			bodyParamJO.put("data", dataParamJA);
 			
 			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/info",request);
-			String code=resultJO.get("code").toString();
-			System.out.println("code==="+code);
-			String msg=resultJO.get("msg").toString();
-			String data = resultJO.getString("data");
-			resultMap.put("code", code);
-			resultMap.put("msg", msg);
-			resultMap.put("data", data);
+			String status=resultJO.get("status").toString();
+			if("ok".equals(status)) {
+				String code=resultJO.get("code").toString();
+				System.out.println("code==="+code);
+				String msg=resultJO.get("msg").toString();
+				String data = resultJO.getString("data");
+				resultMap.put("code", code);
+				resultMap.put("msg", msg);
+				resultMap.put("data", data);
+			}
+			else {
+				boolean success=reAuthLogin(request);
+				if(success)
+					dataEmployeeInfo(request);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,6 +162,20 @@ public class ApiController {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	public boolean reAuthLogin(HttpServletRequest request) {
+		switchCity(CITY_FLAG,request);
+		String username = request.getAttribute("username").toString();
+		String password = request.getAttribute("password").toString();
+		System.out.println("username==="+username);
+		System.out.println("password==="+password);
+		Map<String, Object> resultMap = authLogin(username,password,request);
+		String code = resultMap.get("code").toString();
+		if("200".equals(code))
+			return true;
+		else
+			return false;
 	}
 
 	@RequestMapping(value="/dataEmployeeLocations")
@@ -204,6 +236,8 @@ public class ApiController {
 			List<EmployeeAlarm> eaList = convertWarnRecordToEmployeeAlarm();
 			int eaListSize = eaList.size();
 			for (int i = 0; i < eaListSize; i++) {
+				if(i==5)
+					break;
 				EmployeeAlarm ea=eaList.get(i);
 				JSONObject dataParamJO=new JSONObject();
 				dataParamJO.put("id", ea.getId());
@@ -407,13 +441,13 @@ public class ApiController {
 					token = loginUser.getToken();
 				}
 				
-				//if(cookie==null)
-					//cookie = loginUserService.getCookieByUserId(TEST_USER_Id);
+				if(token==null)
+					token = loginUserService.getTokenByUsername(TEST_USERNAME);
 				
 				System.out.println("token==="+token);
 				if(!StringUtils.isEmpty(token))
 					connection.setRequestProperty("Authorization", "Bearer "+token);
-				connection.setRequestProperty("Authorization", "Bearer UhSHfbnUBDxAlTnk7jFGovvxAGKG/XxETyGYhUgpxQ0=");
+				//connection.setRequestProperty("Authorization", "Bearer UhSHfbnUBDxAlTnk7jFGovvxAGKG/XxETyGYhUgpxQ0=");
 			}
 			connection.setRequestMethod("POST");//ÇëÇópost·½Ê½
 			connection.setDoInput(true); 
@@ -466,6 +500,8 @@ public class ApiController {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			resultJO = new JSONObject();
+			resultJO.put("status", "no");
 			e.printStackTrace();
 		}
 		finally {

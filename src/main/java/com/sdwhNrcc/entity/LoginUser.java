@@ -4,6 +4,14 @@ public class LoginUser {
 
 	private String token;
 	private String username;
+	public LoginUser() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public LoginUser(String token, String username) {
+		this.token = token;
+		this.username = username;
+	}
 	public String getToken() {
 		return token;
 	}
