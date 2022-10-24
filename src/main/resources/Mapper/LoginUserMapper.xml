@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sdwhNrcc.dao.LoginUserMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.LoginUser">
+<mapper namespace="com.sdwhNrcc.dao.sdwh.LoginUserMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.sdwh.LoginUser">
  		insert into login_user
  		<trim prefix="(" suffix=")" suffixOverrides=",">
  			<if test="token!=null">
@@ -23,7 +23,7 @@
  			</if>
 		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.LoginUser">
+	<update id="edit" parameterType="com.sdwhNrcc.entity.sdwh.LoginUser">
 		update login_user set
 		<trim suffixOverrides=",">
 			<if test="token!=null">

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v1_3.EpLoginUserMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.EpLoginUser">
+ 		insert into ep_login_user
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="cookie!=null">
+ 				cookie,
+ 			</if>
+ 			<if test="userId!=null">
+ 				userId,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="cookie!=null">
+ 				#{cookie},
+ 			</if>
+ 			<if test="userId!=null">
+ 				#{userId},
+ 			</if>
+		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.EpLoginUser">
+		update ep_login_user set
+		<trim suffixOverrides=",">
+			<if test="cookie!=null">
+				cookie=#{cookie},
+			</if>
+		</trim>
+		where userId=#{userId}
+	</update>
+	<select id="getCookieByUserId" resultType="java.lang.String">
+		select cookie from ep_login_user where userId=#{userId}
+	</select>
+	<select id="getCountByUserId" resultType="java.lang.Integer">
+		select count(*) from ep_login_user where userId=#{userId}
+	</select>
+</mapper>

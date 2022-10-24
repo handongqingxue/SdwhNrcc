@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v1_3.WarnRecordMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.WarnRecord">
+ 		insert into warn_record
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="warnType!=null">
+ 				warnType,
+ 			</if>
+ 			<if test="triggerId!=null">
+ 				triggerId,
+ 			</if>
+ 			<if test="pid!=null">
+ 				pid,
+ 			</if>
+ 			<if test="sessionId!=null">
+ 				sessionId,
+ 			</if>
+ 			<if test="userId!=null">
+ 				userId,
+ 			</if>
+ 			<if test="keyCode!=null">
+ 				keyCode,
+ 			</if>
+ 			<if test="uid!=null">
+ 				uid,
+ 			</if>
+ 			<if test="areaId!=null">
+ 				areaId,
+ 			</if>
+ 			<if test="absolute!=null">
+ 				absolute,
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				raiseTime,
+ 			</if>
+ 			<if test="raiseTimeYMD!=null">
+ 				raiseTimeYMD,
+ 			</if>
+ 			<if test="x!=null">
+ 				x,
+ 			</if>
+ 			<if test="y!=null">
+ 				y,
+ 			</if>
+ 			<if test="z!=null">
+ 				z,
+ 			</if>
+ 			<if test="startTime!=null">
+ 				startTime,
+ 			</if>
+ 			<if test="startTimeYMD!=null">
+ 				startTimeYMD,
+ 			</if>
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="rootAreaId!=null">
+ 				rootAreaId,
+ 			</if>
+ 				sync
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="warnType!=null">
+ 				#{warnType},
+ 			</if>
+ 			<if test="triggerId!=null">
+ 				#{triggerId},
+ 			</if>
+ 			<if test="pid!=null">
+ 				#{pid},
+ 			</if>
+ 			<if test="sessionId!=null">
+ 				#{sessionId},
+ 			</if>
+ 			<if test="userId!=null">
+ 				#{userId},
+ 			</if>
+ 			<if test="keyCode!=null">
+ 				#{keyCode},
+ 			</if>
+ 			<if test="uid!=null">
+ 				#{uid},
+ 			</if>
+ 			<if test="areaId!=null">
+ 				#{areaId},
+ 			</if>
+ 			<if test="absolute!=null">
+ 				#{absolute},
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				#{raiseTime},
+ 			</if>
+ 			<if test="raiseTimeYMD!=null">
+ 				#{raiseTimeYMD},
+ 			</if>
+ 			<if test="x!=null">
+ 				#{x},
+ 			</if>
+ 			<if test="y!=null">
+ 				#{y},
+ 			</if>
+ 			<if test="z!=null">
+ 				#{z},
+ 			</if>
+ 			<if test="startTime!=null">
+ 				#{startTime},
+ 			</if>
+ 			<if test="startTimeYMD!=null">
+ 				#{startTimeYMD},
+ 			</if>
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="rootAreaId!=null">
+ 				#{rootAreaId},
+ 			</if>
+ 				0
+ 		</trim>
+ 	</insert>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from warn_record where id=#{id}
+	</select>
+	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v1_3.WarnRecord">
+		select wr.*,wt.`name` triggerName,e.`name` entityName from warn_record wr left join warn_trigger wt on wr.triggerId=wt.id left join entity e on wr.uid=e.tagId where sync=#{sync}
+	</select>
+	<update id="syncByIds">
+		update warn_record set sync=${@com.sdwhNrcc.entity.WarnRecord@SYNCED} where 1=1
+		<foreach collection="list" item="id" open=" and cast(id as char) in(" separator="," close=")">
+		#{id}
+		</foreach>
+	</update>
+</mapper>

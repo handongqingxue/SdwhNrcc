@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v1_3.DutyMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.Duty">
+ 		insert into duty
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="entityType!=null">
+ 				entityType,
+ 			</if>
+ 			<if test="onlineIcon!=null">
+ 				onlineIcon,
+ 			</if>
+ 			<if test="name!=null">
+ 				name,
+ 			</if>
+ 			<if test="offlineIcon!=null">
+ 				offlineIcon,
+ 			</if>
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="cnEntityType!=null">
+ 				cnEntityType,
+ 			</if>
+ 			<if test="onlineColor!=null">
+ 				onlineColor,
+ 			</if>
+ 			<if test="key!=null">
+ 				`key`,
+ 			</if>
+ 			<if test="offlineColor!=null">
+ 				offlineColor,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="entityType!=null">
+ 				#{entityType},
+ 			</if>
+ 			<if test="onlineIcon!=null">
+ 				#{onlineIcon},
+ 			</if>
+ 			<if test="name!=null">
+ 				#{name},
+ 			</if>
+ 			<if test="offlineIcon!=null">
+ 				#{offlineIcon},
+ 			</if>
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="cnEntityType!=null">
+ 				#{cnEntityType},
+ 			</if>
+ 			<if test="onlineColor!=null">
+ 				#{onlineColor},
+ 			</if>
+ 			<if test="key!=null">
+ 				#{key},
+ 			</if>
+ 			<if test="offlineColor!=null">
+ 				#{offlineColor},
+ 			</if>
+		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.Duty">
+		update duty set
+		<trim suffixOverrides=",">
+			<if test="entityType!=null">
+				entityType=#{entityType},
+			</if>
+			<if test="onlineIcon!=null">
+				onlineIcon=#{onlineIcon},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="offlineIcon!=null">
+				offlineIcon=#{offlineIcon},
+			</if>
+			<if test="cnEntityType!=null">
+				cnEntityType=#{cnEntityType},
+			</if>
+			<if test="onlineColor!=null">
+				onlineColor=#{onlineColor},
+			</if>
+			<if test="key!=null">
+				`key`=#{key},
+			</if>
+			<if test="offlineColor!=null">
+				offlineColor=#{offlineColor},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from duty where id=#{id}
+	</select>
+	<select id="summaryOnlineDuty" resultType="java.util.Map">
+		select d.name,count(*) onLineCount from location l,entity e,duty d where l.uid=e.tagId and e.dutyId=d.id and l.`out`=0 GROUP BY d.name
+	</select>
+</mapper>

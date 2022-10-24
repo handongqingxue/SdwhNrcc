@@ -12,7 +12,7 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
-var epPath=path+"ep/";
+var epV1_3Path=path+"epV1_3/";
 var interval="60000";
 $(function(){
 	//makeSync();
@@ -49,7 +49,7 @@ function dataEmployeeAlarm(){
 }
 
 function insertWarnRecordData(){
-	$.post(epPath+"insertWarnRecordData",
+	$.post(epV1_3Path+"insertWarnRecordData",
 		function(data){
 			var status=data.status;
 			if(status=="ok")
