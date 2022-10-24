@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.rabbitmq.client.Channel;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -19,10 +20,11 @@ public class ServerReceiver {
 	
 	@RabbitHandler
 	@RabbitListener(queues="tenant_msg_F4A1D30F_sc22050664")
-	public void process(Message message) {
+	public void process(String msg,Channel channel,Message message) {
 		
-		String str = new String(message.getBody());
+		//String str = new String(message.getBody());
 		//JSON.parseObject();
-		System.out.println("str==="+str);
+		//System.out.println("str==="+str);
+		System.out.println("11111111111111111");
 	}
 }
