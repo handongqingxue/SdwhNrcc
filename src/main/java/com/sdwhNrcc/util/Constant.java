@@ -8,6 +8,9 @@ public class Constant {
 	public static final int WEI_FANG=1;
 	public static final int HE_ZE=2;
 	
+	public static final String EP_SERVICE_IP_STR="serviceIp";
+	public static final String EP_SERVICE_PORT_STR="servicePort";
+	
 	
 	/**
 	 * 潍坊润中精细化工有限公司
@@ -135,6 +138,27 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_WFRZJXHYXGS="913707865728981511";
+
+	/**
+	 * 服务器ip
+	 */
+	public static final String SERVICE_IP_WFRZJXHYXGS="124.70.38.226";
+	/**
+	 * 服务器端口
+	 */
+	public static final int SERVICE_PORT_WFRZJXHYXGS=8081;
+	/**
+	 * 租户id
+	 */
+	public static final String TENANT_ID_WFRZJXHYXGS="sc21090414";
+	/**
+	 * 用户id
+	 */
+	public static final String USER_ID_WFRZJXHYXGS="test";
+	/**
+	 * 密码
+	 */
+	public static final String PASSWORD_WFRZJXHYXGS="test";
 	//潍坊润中精细化工有限公司end
 	
 	//昌邑市瑞海生物科技有限公司start
@@ -150,6 +174,10 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_CYSRHSWKJYXGS="91370786050925490G";
+	
+	public static final String TENANT_ID_CYSRHSWKJYXGS="sc21100449";
+	public static final String USER_ID_CYSRHSWKJYXGS="admin";
+	public static final String PASSWORD_CYSRHSWKJYXGS="123";
 	//昌邑市瑞海生物科技有限公司end
 	
 	//山东蓝天消毒科技有限公司start
@@ -168,9 +196,6 @@ public class Constant {
 	//山东蓝天消毒科技有限公司end
 	
 	
-	public static final String SERVICE_IP="124.70.38.226";
-	public static final String TENANT_ID="sc21090414";
-	public static final String USER_ID="test";
-	public static final String PASSWORD="test";
+	
 	
 }

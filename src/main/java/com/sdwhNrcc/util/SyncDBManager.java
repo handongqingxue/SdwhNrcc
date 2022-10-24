@@ -24,7 +24,7 @@ public class SyncDBManager {
                           此时要在 第一次执行定时任务的时间加一天，以便此任务在下个时间点执行。如果不加一天，任务会立即执行。
         **/ 
 		if(date.before(new Date())){
-			//date=DateUtil.dayOper(DateUtil.getDate(new Date(), "yyyy-MM-dd"),1);
+			date=DateUtil.dayOper(DateUtil.getDate(new Date(), "yyyy-MM-dd"),1);
 		}
 		Timer timer = new Timer();
 		timer.schedule(new SyncDBTask(), date, PERIOD_DAY);

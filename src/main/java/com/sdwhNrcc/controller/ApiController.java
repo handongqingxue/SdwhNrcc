@@ -474,8 +474,11 @@ public class ApiController {
 					token = loginUser.getToken();
 				}
 				
-				if(token==null)
-					token = loginUserService.getTokenByUsername(TEST_USERNAME);
+				if(token==null) {
+					Object usernameObj = request.getAttribute("username");
+					if(usernameObj!=null)
+						token = loginUserService.getTokenByUsername(usernameObj.toString());
+				}
 				
 				System.out.println("token==="+token);
 				if(!StringUtils.isEmpty(token))

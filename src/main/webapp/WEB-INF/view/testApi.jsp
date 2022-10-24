@@ -17,7 +17,7 @@ var username='${requestScope.username}';
 var password='${requestScope.password}';
 $(function(){
 	//authLogin();
-	dataEmployeeInfo();
+	//dataEmployeeInfo();
 	//dataEmployeeLocations();
 	//dataEmployeeAlarm();
 });

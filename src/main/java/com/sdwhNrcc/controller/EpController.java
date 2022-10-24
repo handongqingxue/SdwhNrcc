@@ -33,8 +33,9 @@ import com.sdwhNrcc.entity.*;
 @RequestMapping(EpController.MODULE_NAME)
 public class EpController {
 
-	private static final String PUBLIC_URL="http://"+Constant.SERVICE_IP+":8081/position/public/embeded.smd";
-	private static final String SERVICE_URL="http://"+Constant.SERVICE_IP+":8081/position/service/embeded.smd";
+	//private static final String PUBLIC_URL="http://"+Constant.SERVICE_IP+":8081/position/public/embeded.smd";
+	private static final String PUBLIC_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/public/embeded.smd";
+	private static final String SERVICE_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/service/embeded.smd";
 	public static final String MODULE_NAME="/ep";
 	public static final String TEST_USER_Id="test";
 	public static final int EP_FLAG=1;
@@ -62,16 +63,22 @@ public class EpController {
 	}
 	
 	public void switchEnterprise(int epFlag,HttpServletRequest request) {
+		String serviceId=null;
+		int servicePort=0;
 		String tenantId=null;
 		String userId=null;
 		String password=null;
 		switch (epFlag) {
 		case Constant.WFRZJXHYXGS:
-			tenantId=Constant.TENANT_ID;
-			userId=Constant.USER_ID;
-			password=Constant.PASSWORD;
+			serviceId=Constant.SERVICE_IP_WFRZJXHYXGS;
+			servicePort=Constant.SERVICE_PORT_WFRZJXHYXGS;
+			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
+			userId=Constant.USER_ID_WFRZJXHYXGS;
+			password=Constant.PASSWORD_WFRZJXHYXGS;
 			break;
 		}
+		request.setAttribute("serviceId", serviceId);
+		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("userId", userId);
 		request.setAttribute("password", password);
@@ -764,7 +771,9 @@ public class EpController {
 			throws IOException {
 		StringBuffer sbf = new StringBuffer(); 
 		String strRead = null; 
-		URL url = new URL(serverURL); 
+		String serviceIp = request.getAttribute("serviceIp").toString();
+		String servicePort = request.getAttribute("servicePort").toString();
+		URL url = new URL(serverURL.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp).replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort));
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
 		//connection.setInstanceFollowRedirects(false); 
@@ -781,8 +790,11 @@ public class EpController {
 				cookie = epLoginUser.getCookie();
 			}
 			
-			if(cookie==null)
-				cookie = epLoginUserService.getCookieByUserId(TEST_USER_Id);
+			if(cookie==null) {
+				Object userIdObj = request.getAttribute("userId");
+				if(userIdObj!=null)
+					cookie = epLoginUserService.getCookieByUserId(userIdObj.toString());
+			}
 				
 			if(!StringUtils.isEmpty(cookie))
 				connection.setRequestProperty("Cookie", cookie);

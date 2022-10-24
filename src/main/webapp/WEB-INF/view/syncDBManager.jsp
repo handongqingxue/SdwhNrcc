@@ -15,15 +15,13 @@ var apiPath=path+"api/";
 var epPath=path+"ep/";
 var interval="60000";
 $(function(){
-	makeSync();
-	/*
+	//makeSync();
 	setInterval(function(){
 		console.log("11111111");
 		dataEmployeeLocations();
 		insertWarnRecordData();
 		dataEmployeeAlarm();
 	},interval);
-	*/
 });
 
 function makeSync(){
