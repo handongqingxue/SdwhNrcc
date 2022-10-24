@@ -206,6 +206,7 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
+			switchCity(CITY_FLAG,request);
 			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
@@ -228,14 +229,21 @@ public class ApiController {
 			bodyParamJO.put("data", dataParamJA);
 			
 			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/locations",request);
-			String code=resultJO.get("code").toString();
-			System.out.println("code==="+code);
-			String msg=resultJO.get("msg").toString();
-			String data = resultJO.getString("data");
-			System.out.println("data==="+data);
-			resultMap.put("code", code);
-			resultMap.put("msg", msg);
-			resultMap.put("data", data);
+			String status=resultJO.get("status").toString();
+			if("ok".equals(status)) {
+				String code=resultJO.get("code").toString();
+				System.out.println("code==="+code);
+				String msg=resultJO.get("msg").toString();
+				String data = resultJO.getString("data");
+				System.out.println("data==="+data);
+				resultMap.put("code", code);
+				resultMap.put("msg", msg);
+				resultMap.put("data", data);
+			}
+			else {
+				boolean success=reAuthLogin(request);
+				System.out.println("success==="+success);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -283,21 +291,28 @@ public class ApiController {
 			bodyParamJO.put("data", dataParamJA);
 			
 			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
-			String code=resultJO.get("code").toString();
-			System.out.println("code==="+code);
-			String msg=resultJO.get("msg").toString();
-			String data = resultJO.getString("data");
-			System.out.println("data==="+data);
-			
-			if("200".equals(code)) {
-				String syncIds = syncIdsSB.toString().substring(1);
-				System.out.println("syncIds==="+syncIds);
-				warnRecordService.syncByIds(syncIds);
+			String status=resultJO.get("status").toString();
+			if("ok".equals(status)) {
+				String code=resultJO.get("code").toString();
+				System.out.println("code==="+code);
+				String msg=resultJO.get("msg").toString();
+				String data = resultJO.getString("data");
+				System.out.println("data==="+data);
+				
+				if("200".equals(code)) {
+					String syncIds = syncIdsSB.toString().substring(1);
+					System.out.println("syncIds==="+syncIds);
+					warnRecordService.syncByIds(syncIds);
+				}
+				
+				resultMap.put("code", code);
+				resultMap.put("msg", msg);
+				resultMap.put("data", data);
 			}
-			
-			resultMap.put("code", code);
-			resultMap.put("msg", msg);
-			resultMap.put("data", data);
+			else {
+				boolean success=reAuthLogin(request);
+				System.out.println("success==="+success);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -537,6 +552,7 @@ public class ApiController {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println("Exception.....");
 			resultJO = new JSONObject();
 			resultJO.put("status", "no");
 			e.printStackTrace();

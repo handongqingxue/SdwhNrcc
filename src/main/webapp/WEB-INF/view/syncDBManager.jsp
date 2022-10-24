@@ -16,12 +16,12 @@ var epPath=path+"ep/";
 var interval="60000";
 $(function(){
 	//makeSync();
-	setInterval(function(){
-		console.log("11111111");
+	//setInterval(function(){
+		//console.log("11111111");
 		dataEmployeeLocations();
-		insertWarnRecordData();
-		dataEmployeeAlarm();
-	},interval);
+		//insertWarnRecordData();
+		//dataEmployeeAlarm();
+	//},interval);
 });
 
 function makeSync(){
