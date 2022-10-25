@@ -78,6 +78,30 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_WFPXHGYXGS="91370786MA3BX6981P";
+	/**
+	 * 服务器ip
+	 */
+	public static final String SERVICE_IP_WFPXHGYXGS="222.173.86.130";
+	/**
+	 * 服务器端口
+	 */
+	public static final int SERVICE_PORT_WFPXHGYXGS=90;
+	/**
+	 * 租户id
+	 */
+	public static final String TENANT_ID_WFPXHGYXGS="sc22050664";
+	/**
+	 * 用户id
+	 */
+	public static final String USER_ID_WFPXHGYXGS="pxhg";
+	/**
+	 * 密码
+	 */
+	public static final String PASSWORD_WFPXHGYXGS="pxhg";
+	/**
+	 * 密钥
+	 */
+	public static final String CLIENT_SECRET_WFPXHGYXGS="F4A1D30F";
 	//潍坊普鑫化工有限公司end
 	
 	//山东福林新材料科技有限公司(菏泽)start

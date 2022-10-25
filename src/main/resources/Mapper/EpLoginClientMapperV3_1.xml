@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.EpLoginClientMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.EpLoginClient">
+ 		insert into ep_login_client
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="access_token!=null">
+ 				access_token,
+ 			</if>
+ 			<if test="client_id!=null">
+ 				client_id,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="access_token!=null">
+ 				#{access_token},
+ 			</if>
+ 			<if test="client_id!=null">
+ 				#{client_id},
+ 			</if>
+		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.v3_1.EpLoginClient">
+		update ep_login_client set
+		<trim suffixOverrides=",">
+			<if test="access_token!=null">
+				access_token=#{access_token},
+			</if>
+		</trim>
+		where client_id=#{client_id}
+	</update>
+	<select id="getTokenByClientId" resultType="java.lang.String">
+		select access_token from ep_login_client where client_id=#{client_id}
+	</select>
+	<select id="getCountByClientId" resultType="java.lang.Integer">
+		select count(*) from ep_login_client where client_id=#{client_id}
+	</select>
+</mapper>

@@ -11,7 +11,7 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 var path='<%=basePath %>';
-var epPath=path+"ep/";
+var epPath=path+"epV1_3/";
 var tenantId='${requestScope.tenantId}';
 var userId='${requestScope.userId}';
 var password='${requestScope.password}';

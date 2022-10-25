@@ -59,7 +59,7 @@ public class EpV1_3Controller {
 		//https://blog.csdn.net/m0_57493148/article/details/124030242
 		switchEnterprise(EP_FLAG,request);
 
-		return "/testEp";
+		return "/testEpV1_3";
 	}
 	
 	public void switchEnterprise(int epFlag,HttpServletRequest request) {

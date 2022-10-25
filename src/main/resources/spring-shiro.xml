@@ -25,7 +25,8 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/api/*=anon
-				/ep/*=anon
+				/epV1_3/*=anon
+				/epV3_1/*=anon
 				/api/syncDBManager/*=anon
 				/resource/**=anon
 				/**=authc
