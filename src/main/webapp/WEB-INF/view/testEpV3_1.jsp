@@ -19,12 +19,22 @@ var userId='${requestScope.userId}';
 var password='${requestScope.password}';
 var clientSecret='${requestScope.clientSecret}';
 $(function(){
-	oauthToken();
+	//oauthToken();
+	apiStaffDataList();
 });
 
 function oauthToken(){
 	$.post(epPath+"oauthToken",
 		{serviceIp:serviceIp,servicePort:servicePort,clientId:tenantId,clientSecret:clientSecret},
+		function(){
+		
+		}
+	,"json");
+}
+
+function apiStaffDataList(){
+	$.post(epPath+"apiStaffDataList",
+		{serviceIp:serviceIp,servicePort:servicePort,tenantId:tenantId},
 		function(){
 		
 		}

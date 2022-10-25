@@ -12,13 +12,15 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var epPath=path+"epV1_3/";
+var serviceIp='${requestScope.serviceIp}';
+var servicePort='${requestScope.servicePort}';
 var tenantId='${requestScope.tenantId}';
 var userId='${requestScope.userId}';
 var password='${requestScope.password}';
 $(function(){
 	//login();
-	//getEntities();
-	insertEntityData();
+	getEntities();
+	//insertEntityData();
 	//insertDutyData();
 	//insertTagData();
 	//insertWarnRecordData();
@@ -36,7 +38,7 @@ function login(){
 
 function getEntities(){
 	$.post(epPath+"getEntities",
-		{entityType:"staff"},
+		{serviceIp:serviceIp,servicePort:servicePort,userId:userId,entityType:"staff"},
 		function(data){
 			var status=data.status;
 			if(status=="ok")

@@ -63,21 +63,22 @@ public class EpV1_3Controller {
 	}
 	
 	public void switchEnterprise(int epFlag,HttpServletRequest request) {
-		String serviceId=null;
+		String serviceIp=null;
 		int servicePort=0;
 		String tenantId=null;
 		String userId=null;
 		String password=null;
 		switch (epFlag) {
 		case Constant.WFRZJXHYXGS:
-			serviceId=Constant.SERVICE_IP_WFRZJXHYXGS;
+			serviceIp=Constant.SERVICE_IP_WFRZJXHYXGS;
 			servicePort=Constant.SERVICE_PORT_WFRZJXHYXGS;
 			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
 			userId=Constant.USER_ID_WFRZJXHYXGS;
 			password=Constant.PASSWORD_WFRZJXHYXGS;
 			break;
 		}
-		request.setAttribute("serviceId", serviceId);
+		System.out.println("serviceIp==="+serviceIp);
+		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("userId", userId);
@@ -771,8 +772,8 @@ public class EpV1_3Controller {
 			throws IOException {
 		StringBuffer sbf = new StringBuffer(); 
 		String strRead = null; 
-		String serviceIp = request.getAttribute("serviceIp").toString();
-		String servicePort = request.getAttribute("servicePort").toString();
+		String serviceIp = request.getParameter("serviceIp");
+		String servicePort = request.getParameter("servicePort");
 		URL url = new URL(serverURL.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp).replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort));
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
@@ -791,9 +792,9 @@ public class EpV1_3Controller {
 			}
 			
 			if(cookie==null) {
-				Object userIdObj = request.getAttribute("userId");
-				if(userIdObj!=null)
-					cookie = epLoginUserService.getCookieByUserId(userIdObj.toString());
+				String userId = request.getParameter("userId");
+				if(userId!=null)
+					cookie = epLoginUserService.getCookieByUserId(userId);
 			}
 				
 			if(!StringUtils.isEmpty(cookie))

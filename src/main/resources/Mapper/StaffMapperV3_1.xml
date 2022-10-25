@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.StaffMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.Staff">
+ 		insert into staff
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="id!=null">
+ 				id,
+ 			</if>
+ 			<if test="name!=null">
+ 				name,
+ 			</if>
+ 			<if test="sex!=null">
+ 				sex,
+ 			</if>
+ 			<if test="phone!=null">
+ 				phone,
+ 			</if>
+ 			<if test="photo!=null">
+ 				photo,
+ 			</if>
+ 			<if test="jobNumber!=null">
+ 				jobNumber,
+ 			</if>
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="post!=null">
+ 				post,
+ 			</if>
+ 			<if test="station!=null">
+ 				station,
+ 			</if>
+ 			<if test="entityIconId!=null">
+ 				entityIconId,
+ 			</if>
+ 			<if test="deptId!=null">
+ 				deptId,
+ 			</if>
+ 			<if test="orgId!=null">
+ 				orgId,
+ 			</if>
+ 			<if test="type!=null">
+ 				type,
+ 			</if>
+ 			<if test="deleted!=null">
+ 				deleted,
+ 			</if>
+ 			<if test="remark!=null">
+ 				remark,
+ 			</if>
+ 			<if test="fileId!=null">
+ 				fileId,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="id!=null">
+ 				#{id},
+ 			</if>
+ 			<if test="name!=null">
+ 				#{name},
+ 			</if>
+ 			<if test="sex!=null">
+ 				#{sex},
+ 			</if>
+ 			<if test="phone!=null">
+ 				#{phone},
+ 			</if>
+ 			<if test="photo!=null">
+ 				#{photo},
+ 			</if>
+ 			<if test="jobNumber!=null">
+ 				#{jobNumber},
+ 			</if>
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="post!=null">
+ 				#{post},
+ 			</if>
+ 			<if test="station!=null">
+ 				#{station},
+ 			</if>
+ 			<if test="entityIconId!=null">
+ 				#{entityIconId},
+ 			</if>
+ 			<if test="deptId!=null">
+ 				#{deptId},
+ 			</if>
+ 			<if test="orgId!=null">
+ 				#{orgId},
+ 			</if>
+ 			<if test="type!=null">
+ 				#{type},
+ 			</if>
+ 			<if test="deleted!=null">
+ 				#{deleted},
+ 			</if>
+ 			<if test="remark!=null">
+ 				#{remark},
+ 			</if>
+ 			<if test="fileId!=null">
+ 				#{fileId},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.v3_1.Staff">
+		update staff set
+		<trim suffixOverrides=",">
+ 			<if test="name!=null">
+ 				name=#{name},
+ 			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="phone!=null">
+				phone=#{phone},
+			</if>
+			<if test="photo!=null">
+				photo=#{photo},
+			</if>
+			<if test="jobNumber!=null">
+				jobNumber=#{jobNumber},
+			</if>
+			<if test="tagId!=null">
+				tagId=#{tagId},
+			</if>
+			<if test="post!=null">
+				post=#{post},
+			</if>
+			<if test="station!=null">
+				station=#{station},
+			</if>
+			<if test="security!=null">
+				security=#{security},
+			</if>
+			<if test="entityIconId!=null">
+				entityIconId=#{entityIconId},
+			</if>
+ 			<if test="deptId!=null">
+ 				deptId=#{deptId},
+ 			</if>
+ 			<if test="orgId!=null">
+ 				orgId=#{orgId},
+ 			</if>
+ 			<if test="type!=null">
+ 				type=#{type},
+ 			</if>
+ 			<if test="deleted!=null">
+ 				deleted=#{deleted},
+ 			</if>
+ 			<if test="remark!=null">
+ 				remark=#{remark},
+ 			</if>
+ 			<if test="fileId!=null">
+ 				fileId=#{fileId},
+ 			</if>
+		</trim>
+		where id=#{id}
+	</update>
+ 	<select id="queryList" resultType="com.sdwhNrcc.entity.v3_1.Staff">
+ 		select * from staff where 1=1 and tagId is not null order by name
+ 	</select>
+	<select id="getCountById" resultType="java.lang.Integer">
+		select count(*) from staff where id=#{id}
+	</select>
+	<select id="queryEIList" resultType="com.sdwhNrcc.entity.v3_1.Staff">
+		select * from staff
+	</select>
+</mapper>

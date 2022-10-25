@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.sdwhNrcc.entity.sdwh.LoginUser;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.v3_1.*;
@@ -45,17 +46,28 @@ public class EpV3_1Controller {
 		return "/testEpV3_1";
 	}
 	
+	/**
+	 * 2.1 获取token
+	 * @param serviceIp
+	 * @param servicePort
+	 * @param clientId
+	 * @param clientSecret
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/oauthToken")
 	@ResponseBody
-	public Map<String, Object> oauthToken(String serviceIp,String servicePort,String clientId, String clientSecret, HttpServletRequest request) {
+	public Map<String, Object> oauthToken(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
 			JSONObject bodyParamJO=new JSONObject();
 			
 			String apiMethod="oauth/token";
+			String clientId = request.getParameter("clientId");
+			String clientSecret = request.getParameter("clientSecret");
 			String params="?client_id="+clientId+"&grant_type=client_credentials&client_secret="+clientSecret;
-			resultJO = requestApi(serviceIp,servicePort,apiMethod,params,bodyParamJO,"GET",request);
+			resultJO = requestApi(apiMethod,params,bodyParamJO,"GET",request);
 				
 			String status=resultJO.get("status").toString();
 			String access_token=resultJO.get("access_token").toString();
@@ -66,6 +78,29 @@ public class EpV3_1Controller {
 			epLoginClientService.add(elc);
 			
 			resultMap.put("access_token", access_token);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	@RequestMapping(value="/apiStaffDataList")
+	@ResponseBody
+	public Map<String, Object> apiStaffDataList(HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject resultJO = null;
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("type", 1);
+			bodyParamJO.put("orgId", 100);
+			
+			String apiMethod="api/staff/dataList";
+			String params="";
+			resultJO = requestApi(apiMethod,params,bodyParamJO,"POST",request);
+			resultMap=JSON.parseObject(resultJO.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,11 +135,13 @@ public class EpV3_1Controller {
 		request.setAttribute("clientSecret", clientSecret);
 	}
 	
-	public JSONObject requestApi(String serviceIp, String servicePort, String apiMethod, String params, JSONObject bodyParamJO, String requestMethod, HttpServletRequest request)
+	public JSONObject requestApi(String apiMethod, String params, JSONObject bodyParamJO, String requestMethod, HttpServletRequest request)
 			throws IOException {
 		StringBuffer sbf = new StringBuffer(); 
 		String strRead = null; 
 		String serverUrl=ADDRESS_URL+apiMethod+params;
+		String serviceIp = request.getParameter("serviceIp");
+		String servicePort = request.getParameter("servicePort");
 		URL url = new URL(serverUrl.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp).replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort));
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
@@ -120,13 +157,13 @@ public class EpV3_1Controller {
 			}
 			
 			if(access_token==null) {
-				Object client_idObj = request.getAttribute("client_id");
-				if(client_idObj!=null)
-					access_token = epLoginClientService.getTokenByClientId(client_idObj.toString());
+				String client_id = request.getParameter("tenantId");
+				if(client_id!=null)
+					access_token = epLoginClientService.getTokenByClientId(client_id);
 			}
 				
 			if(!StringUtils.isEmpty(access_token))
-				connection.setRequestProperty("access_token", access_token);
+				connection.setRequestProperty("Authorization", "Bearer "+access_token);
 		}
 		connection.setRequestMethod(requestMethod);//请求方式
 		connection.setDoInput(true); 
