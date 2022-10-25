@@ -20,7 +20,8 @@ var password='${requestScope.password}';
 var clientSecret='${requestScope.clientSecret}';
 $(function(){
 	//oauthToken();
-	apiStaffDataList();
+	//apiStaffDataList();
+	insertStaffData();
 });
 
 function oauthToken(){
@@ -34,6 +35,15 @@ function oauthToken(){
 
 function apiStaffDataList(){
 	$.post(epPath+"apiStaffDataList",
+		{serviceIp:serviceIp,servicePort:servicePort,tenantId:tenantId},
+		function(){
+		
+		}
+	,"json");
+}
+
+function insertStaffData(){
+	$.post(epPath+"insertStaffData",
 		{serviceIp:serviceIp,servicePort:servicePort,tenantId:tenantId},
 		function(){
 		

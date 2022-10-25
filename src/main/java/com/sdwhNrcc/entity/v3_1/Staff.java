@@ -51,6 +51,12 @@ public class Staff {
 	public void setPost(String post) {
 		this.post = post;
 	}
+	public String getStation() {
+		return station;
+	}
+	public void setStation(String station) {
+		this.station = station;
+	}
 	public String getSecurity() {
 		return security;
 	}
@@ -106,6 +112,7 @@ public class Staff {
 	private String jobNumber;
 	private String tagId;
 	private String post;
+	private String station;
 	private String security;
 	private Integer entityIconId;
 	private Integer deptId;

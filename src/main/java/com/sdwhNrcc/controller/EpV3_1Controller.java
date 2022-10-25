@@ -8,12 +8,14 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.sdwhNrcc.entity.sdwh.LoginUser;
+import com.sdwhNrcc.entity.v1_3.Entity;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
@@ -36,6 +39,8 @@ public class EpV3_1Controller {
 	
 	@Autowired
 	private EpLoginClientService epLoginClientService;
+	@Autowired
+	private StaffService staffService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -101,6 +106,52 @@ public class EpV3_1Controller {
 			String params="";
 			resultJO = requestApi(apiMethod,params,bodyParamJO,"POST",request);
 			resultMap=JSON.parseObject(resultJO.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+	
+	@RequestMapping(value="/insertStaffData")
+	@ResponseBody
+	public Map<String, Object> insertStaffData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			Map<String, Object> staffListMap = apiStaffDataList(request);
+			String status = staffListMap.get("status").toString();
+			if("ok".equals(status)) {
+				Object dataObj = staffListMap.get("data");
+				com.alibaba.fastjson.JSONObject dataJO = null;
+				com.alibaba.fastjson.JSONArray recordJA = null;
+				if(dataObj!=null) {
+					dataJO=(com.alibaba.fastjson.JSONObject)dataObj;
+					recordJA = dataJO.getJSONArray("records");
+					
+				}
+				List<Staff> staffList = JSON.parseArray(recordJA.toString(),Staff.class);
+				int count=staffService.add(staffList);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化员工信息失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化员工信息成功");
+				}
+			}
+			else {
+				/*
+				boolean success=reLogin(request);
+				if(success) {
+					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
+					insertStaffData(request);
+				}
+				*/
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
