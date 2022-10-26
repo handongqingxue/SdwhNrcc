@@ -77,6 +77,7 @@ public class ServerReceiver {
         		}
         	}
         	else {
+        		System.out.println("获取推送信息。。。");
 				ConnectionFactory factory = new ConnectionFactory();
 	
 				//factory.setHost("222.173.86.130");

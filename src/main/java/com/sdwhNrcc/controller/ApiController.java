@@ -51,6 +51,8 @@ public class ApiController {
 	@Autowired
 	private LocationService locationService;
 	@Autowired
+	private PositionService positionService;
+	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
 	private StaffService staffService;
@@ -227,7 +229,15 @@ public class ApiController {
 			
 			JSONArray dataParamJA=new JSONArray();
 
-			List<EmployeeLocation> elList = convertLocationToEmployeeLocation();
+			List<EmployeeLocation> elList = null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				elList = convertLocationToEmployeeLocation();
+				break;
+			case Constant.WFPXHGYXGS:
+				elList = convertPositionToEmployeeLocation();
+				break;
+			}
 			int elListSize = elList.size();
 			for (int i = 0; i < elListSize; i++) {
 				EmployeeLocation el=elList.get(i);
@@ -429,6 +439,37 @@ public class ApiController {
 			
 			el.setLongitude(location.getLongitude()+"");
 			el.setLatitude(location.getLatitude()+"");
+			elList.add(el);
+		}
+		return elList;
+	}
+	
+	public List<EmployeeLocation> convertPositionToEmployeeLocation() {
+		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
+		List<Position> positionList=positionService.queryELList();
+		for (Position position : positionList) {
+			EmployeeLocation el=new EmployeeLocation();
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFPXHGYXGS:
+				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
+				break;
+			}
+			el.setCompany_social_code(companySocialCode);
+			el.setFloor_no(position.getFloor()+"");
+			el.setCard_no(position.getTagId());
+			el.setTime_stamp(DateUtil.convertLongToString(position.getLocationTime()));
+			
+			Float speed = position.getSpeed();
+			String status=null;
+			if(speed==0)
+				status=EmployeeLocation.SLEEP;
+			else
+				status=EmployeeLocation.SPORT;
+			el.setStatus(status);
+			
+			el.setLongitude(position.getLongitude()+"");
+			el.setLatitude(position.getLatitude()+"");
 			elList.add(el);
 		}
 		return elList;
