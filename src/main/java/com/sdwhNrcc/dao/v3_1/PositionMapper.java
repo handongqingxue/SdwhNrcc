@@ -12,7 +12,7 @@ public interface PositionMapper {
 
 	int edit(Position position);
 
-	int getCountByUid(@Param("uid")String uid);
+	int getCountByTagId(@Param("tagId")String tagId);
 
 	List<Position> queryELList();
 }

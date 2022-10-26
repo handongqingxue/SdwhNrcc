@@ -20,6 +20,7 @@ $(function(){
 	//dataEmployeeInfo();
 	//dataEmployeeLocations();
 	//dataEmployeeAlarm();
+	receiveMessage();
 });
 
 function authLogin(){
@@ -73,6 +74,14 @@ function dataEmployeeAlarm(){
 function login(){
 	$.post(epPath+"login",
 		{tenantId:tenantId,userId:userId,password:password},
+		function(){
+		
+		}
+	,"json");
+}
+
+function receiveMessage(){
+	$.post(apiPath+"serverReceiver/receiveMessage",
 		function(){
 		
 		}

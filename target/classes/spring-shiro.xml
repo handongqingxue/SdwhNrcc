@@ -28,6 +28,7 @@
 				/epV1_3/*=anon
 				/epV3_1/*=anon
 				/api/syncDBManager/*=anon
+				/api/serverReceiver/*=anon
 				/resource/**=anon
 				/**=authc
 			</value>

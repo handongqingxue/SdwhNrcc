@@ -21,6 +21,9 @@
  			<if test="beacons!=null">
  				beacons,
  			</if>
+ 			<if test="entityType!=null">
+ 				entityType,
+ 			</if>
  			<if test="inDoor!=null">
  				inDoor,
  			</if>
@@ -39,11 +42,17 @@
  			<if test="out!=null">
  				`out`,
  			</if>
+ 			<if test="rootAreaId!=null">
+ 				rootAreaId,
+ 			</if>
  			<if test="silent!=null">
  				silent,
  			</if>
  			<if test="speed!=null">
  				speed,
+ 			</if>
+ 			<if test="stateTime!=null">
+ 				stateTime,
  			</if>
  			<if test="tagId!=null">
  				tagId,
@@ -81,6 +90,9 @@
  			<if test="beacons!=null">
  				#{beacons},
  			</if>
+ 			<if test="entityType!=null">
+ 				#{entityType},
+ 			</if>
  			<if test="inDoor!=null">
  				#{inDoor},
  			</if>
@@ -99,11 +111,17 @@
  			<if test="out!=null">
  				#{out},
  			</if>
+ 			<if test="rootAreaId!=null">
+ 				#{rootAreaId},
+ 			</if>
  			<if test="silent!=null">
  				#{silent},
  			</if>
  			<if test="speed!=null">
  				#{speed},
+ 			</if>
+ 			<if test="stateTime!=null">
+ 				#{stateTime},
  			</if>
  			<if test="tagId!=null">
  				#{tagId},
@@ -143,6 +161,9 @@
 			<if test="beacons!=null">
 				beacons=#{beacons},
 			</if>
+			<if test="entityType!=null">
+				entityType=#{entityType},
+			</if>
 			<if test="inDoor!=null">
 				inDoor=#{inDoor},
 			</if>
@@ -155,15 +176,29 @@
 			<if test="latitude!=null">
 				latitude=#{latitude},
 			</if>
-			
-			<if test="speed!=null">
-				speed=#{speed},
+			<if test="locationTime!=null">
+				locationTime=#{locationTime},
 			</if>
 			<if test="out!=null">
 				`out`=#{out},
 			</if>
-			<if test="altitude!=null">
-				altitude=#{altitude},
+			<if test="rootAreaId!=null">
+				rootAreaId=#{rootAreaId},
+			</if>
+			<if test="silent!=null">
+				`silent`=#{silent},
+			</if>
+			<if test="speed!=null">
+				speed=#{speed},
+			</if>
+			<if test="stateTime!=null">
+				stateTime=#{stateTime},
+			</if>
+			<if test="volt!=null">
+				volt=#{volt},
+			</if>
+			<if test="voltUnit!=null">
+				voltUnit=#{voltUnit},
 			</if>
 			<if test="x!=null">
 				x=#{x},
@@ -175,10 +210,10 @@
 				z=#{z},
 			</if>
 		</trim>
-		where uid=#{uid}
+		where tagId=#{tagId}
 	</update>
-	<select id="getCountByUid" resultType="java.lang.Integer">
-		select count(*) from location where uid=#{uid}
+	<select id="getCountByTagId" resultType="java.lang.Integer">
+		select count(*) from position where tagId=#{tagId}
 	</select>
 	<select id="queryELList" resultType="com.sdwhNrcc.entity.v3_1.Position">
 		select l.*,t.userId from location l left join tag t on l.uid=t.id

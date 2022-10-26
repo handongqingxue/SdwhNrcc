@@ -15,16 +15,16 @@ public class Position {
 	public void setAltitude(Float altitude) {
 		this.altitude = altitude;
 	}
-	public String getAreaId() {
+	public Integer getAreaId() {
 		return areaId;
 	}
-	public void setAreaId(String areaId) {
+	public void setAreaId(Integer areaId) {
 		this.areaId = areaId;
 	}
-	public String getFloor() {
+	public Integer getFloor() {
 		return floor;
 	}
-	public void setFloor(String floor) {
+	public void setFloor(Integer floor) {
 		this.floor = floor;
 	}
 	public String getBeacons() {
@@ -33,10 +33,16 @@ public class Position {
 	public void setBeacons(String beacons) {
 		this.beacons = beacons;
 	}
-	public Integer getInDoor() {
+	public String getEntityType() {
+		return entityType;
+	}
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
+	}
+	public Long getInDoor() {
 		return inDoor;
 	}
-	public void setInDoor(Integer inDoor) {
+	public void setInDoor(Long inDoor) {
 		this.inDoor = inDoor;
 	}
 	public Integer getLabInTime() {
@@ -63,23 +69,35 @@ public class Position {
 	public void setLocationTime(Integer locationTime) {
 		this.locationTime = locationTime;
 	}
-	public String getOut() {
+	public Boolean getOut() {
 		return out;
 	}
-	public void setOut(String out) {
+	public void setOut(Boolean out) {
 		this.out = out;
 	}
-	public String getSilent() {
+	public Integer getRootAreaId() {
+		return rootAreaId;
+	}
+	public void setRootAreaId(Integer rootAreaId) {
+		this.rootAreaId = rootAreaId;
+	}
+	public Boolean getSilent() {
 		return silent;
 	}
-	public void setSilent(String silent) {
+	public void setSilent(Boolean silent) {
 		this.silent = silent;
 	}
-	public String getSpeed() {
+	public Float getSpeed() {
 		return speed;
 	}
-	public void setSpeed(String speed) {
+	public void setSpeed(Float speed) {
 		this.speed = speed;
+	}
+	public Integer getStateTime() {
+		return stateTime;
+	}
+	public void setStateTime(Integer stateTime) {
+		this.stateTime = stateTime;
 	}
 	public String getTagId() {
 		return tagId;
@@ -87,10 +105,10 @@ public class Position {
 	public void setTagId(String tagId) {
 		this.tagId = tagId;
 	}
-	public String getVolt() {
+	public Integer getVolt() {
 		return volt;
 	}
-	public void setVolt(String volt) {
+	public void setVolt(Integer volt) {
 		this.volt = volt;
 	}
 	public String getVoltUnit() {
@@ -99,40 +117,43 @@ public class Position {
 	public void setVoltUnit(String voltUnit) {
 		this.voltUnit = voltUnit;
 	}
-	public String getX() {
+	public Float getX() {
 		return x;
 	}
-	public void setX(String x) {
+	public void setX(Float x) {
 		this.x = x;
 	}
-	public String getY() {
+	public Float getY() {
 		return y;
 	}
-	public void setY(String y) {
+	public void setY(Float y) {
 		this.y = y;
 	}
-	public String getZ() {
+	public Float getZ() {
 		return z;
 	}
-	public void setZ(String z) {
+	public void setZ(Float z) {
 		this.z = z;
 	}
 	private Float altitude;
-	private String areaId;
-	private String floor;
+	private Integer areaId;
+	private Integer floor;
 	private String beacons;
-	private Integer inDoor;
+	private String entityType;
+	private Long inDoor;
 	private Integer labInTime;
 	private Float longitude;
 	private Float latitude;
 	private Integer locationTime;
-	private String out;
-	private String silent;
-	private String speed;
+	private Boolean out;
+	private Integer rootAreaId;
+	private Boolean silent;
+	private Float speed;
+	private Integer stateTime;
 	private String tagId;
-	private String volt;
+	private Integer volt;
 	private String voltUnit;
-	private String x;
-	private String y;
-	private String z;
+	private Float x;
+	private Float y;
+	private Float z;
 }
