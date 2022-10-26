@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.PositionMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.Position">
+ 		insert into position
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="absolute!=null">
+ 				absolute,
+ 			</if>
+ 			<if test="altitude!=null">
+ 				altitude,
+ 			</if>
+ 			<if test="areaId!=null">
+ 				areaId,
+ 			</if>
+ 			<if test="floor!=null">
+ 				floor,
+ 			</if>
+ 			<if test="beacons!=null">
+ 				beacons,
+ 			</if>
+ 			<if test="inDoor!=null">
+ 				inDoor,
+ 			</if>
+ 			<if test="labInTime!=null">
+ 				labInTime,
+ 			</if>
+ 			<if test="longitude!=null">
+ 				longitude,
+ 			</if>
+ 			<if test="latitude!=null">
+ 				latitude,
+ 			</if>
+ 			<if test="locationTime!=null">
+ 				locationTime,
+ 			</if>
+ 			<if test="out!=null">
+ 				`out`,
+ 			</if>
+ 			<if test="silent!=null">
+ 				silent,
+ 			</if>
+ 			<if test="speed!=null">
+ 				speed,
+ 			</if>
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="volt!=null">
+ 				volt,
+ 			</if>
+ 			<if test="voltUnit!=null">
+ 				voltUnit,
+ 			</if>
+ 			<if test="x!=null">
+ 				x,
+ 			</if>
+ 			<if test="y!=null">
+ 				y,
+ 			</if>
+ 			<if test="z!=null">
+ 				z,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="absolute!=null">
+ 				#{absolute},
+ 			</if>
+ 			<if test="altitude!=null">
+ 				#{altitude},
+ 			</if>
+ 			<if test="areaId!=null">
+ 				#{areaId},
+ 			</if>
+ 			<if test="floor!=null">
+ 				#{floor},
+ 			</if>
+ 			<if test="beacons!=null">
+ 				#{beacons},
+ 			</if>
+ 			<if test="inDoor!=null">
+ 				#{inDoor},
+ 			</if>
+ 			<if test="labInTime!=null">
+ 				#{labInTime},
+ 			</if>
+ 			<if test="longitude!=null">
+ 				#{longitude},
+ 			</if>
+ 			<if test="latitude!=null">
+ 				#{latitude},
+ 			</if>
+ 			<if test="locationTime!=null">
+ 				#{locationTime},
+ 			</if>
+ 			<if test="out!=null">
+ 				#{out},
+ 			</if>
+ 			<if test="silent!=null">
+ 				#{silent},
+ 			</if>
+ 			<if test="speed!=null">
+ 				#{speed},
+ 			</if>
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="volt!=null">
+ 				#{volt},
+ 			</if>
+ 			<if test="voltUnit!=null">
+ 				#{voltUnit},
+ 			</if>
+ 			<if test="x!=null">
+ 				#{x},
+ 			</if>
+ 			<if test="y!=null">
+ 				#{y},
+ 			</if>
+ 			<if test="z!=null">
+ 				#{z},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<update id="edit" parameterType="com.sdwhNrcc.entity.v3_1.Position">
+		update position set
+		<trim suffixOverrides=",">
+			<if test="absolute!=null">
+				absolute=#{absolute},
+			</if>
+			<if test="altitude!=null">
+				altitude=#{altitude},
+			</if>
+			<if test="areaId!=null">
+				areaId=#{areaId},
+			</if>
+			<if test="floor!=null">
+				floor=#{floor},
+			</if>
+			<if test="beacons!=null">
+				beacons=#{beacons},
+			</if>
+			<if test="inDoor!=null">
+				inDoor=#{inDoor},
+			</if>
+			<if test="labInTime!=null">
+				labInTime=#{labInTime},
+			</if>
+			<if test="longitude!=null">
+				longitude=#{longitude},
+			</if>
+			<if test="latitude!=null">
+				latitude=#{latitude},
+			</if>
+			
+			<if test="speed!=null">
+				speed=#{speed},
+			</if>
+			<if test="out!=null">
+				`out`=#{out},
+			</if>
+			<if test="altitude!=null">
+				altitude=#{altitude},
+			</if>
+			<if test="x!=null">
+				x=#{x},
+			</if>
+			<if test="y!=null">
+				y=#{y},
+			</if>
+			<if test="z!=null">
+				z=#{z},
+			</if>
+		</trim>
+		where uid=#{uid}
+	</update>
+	<select id="getCountByUid" resultType="java.lang.Integer">
+		select count(*) from location where uid=#{uid}
+	</select>
+	<select id="queryELList" resultType="com.sdwhNrcc.entity.v3_1.Position">
+		select l.*,t.userId from location l left join tag t on l.uid=t.id
+	</select>
+</mapper>

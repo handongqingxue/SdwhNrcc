@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.sdwhNrcc.entity.v1_3.Location;
+import com.sdwhNrcc.entity.v3_1.*;
 
 public interface PositionMapper {
 
-	int add(Location location);
+	int add(Position position);
 
-	int edit(Location location);
+	int edit(Position position);
 
 	int getCountByUid(@Param("uid")String uid);
 
-	List<Location> queryELList();
+	List<Position> queryELList();
 }
