@@ -24,9 +24,9 @@ function dataEmployeeInfo(){
 		}
 	,"json");
 	
-	window.opener=null;
-	window.open(' ', '_self', ' ');
-	window.close();
+	//window.opener=null;
+	//window.open(' ', '_self', ' ');
+	//window.close();
 }
 /*
 $.post(phonePath+"insertWarnRecordData",

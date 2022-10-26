@@ -28,13 +28,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sdwhNrcc.entity.sdwh.EmployeeAlarm;
-import com.sdwhNrcc.entity.sdwh.EmployeeInfo;
-import com.sdwhNrcc.entity.sdwh.EmployeeLocation;
-import com.sdwhNrcc.entity.sdwh.LoginUser;
+import com.sdwhNrcc.entity.sdwh.*;
 import com.sdwhNrcc.entity.v1_3.*;
-import com.sdwhNrcc.service.sdwh.LoginUserService;
+import com.sdwhNrcc.entity.v3_1.*;
+import com.sdwhNrcc.service.sdwh.*;
 import com.sdwhNrcc.service.v1_3.*;
+import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.*;
 
 @Controller
@@ -45,7 +44,7 @@ public class ApiController {
 	public static final String MODULE_NAME="/api";
 	public static final String TEST_USERNAME="weifang_report_data";
 	public static final int CITY_FLAG=1;
-	public static final int SYSTEM_FLAG=1;
+	public static final int SYSTEM_FLAG=3;
 	
 	@Autowired
 	private EntityService entityService;
@@ -53,6 +52,8 @@ public class ApiController {
 	private LocationService locationService;
 	@Autowired
 	private WarnRecordService warnRecordService;
+	@Autowired
+	private StaffService staffService;
 	@Autowired
 	private LoginUserService loginUserService;
 
@@ -73,6 +74,8 @@ public class ApiController {
 	@RequestMapping(value="/goSyncDBRun")
 	public String goSyncDBRun() {
 
+		//localhost:8080/SdwhNrcc/api/goSyncDBRun
+		
 		return "/syncDBRun";
 	}
 	
@@ -134,7 +137,15 @@ public class ApiController {
 			dataParamJA.put(dataParamJO);
 			*/
 			
-			List<EmployeeInfo> eiList = convertEntityToEmployeeInfo();
+			List<EmployeeInfo> eiList = null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				eiList = convertEntityToEmployeeInfo();
+				break;
+			case Constant.WFPXHGYXGS:
+				eiList = convertStaffToEmployeeInfo();
+				break;
+			}
 			int eiListSize = eiList.size();
 			for (int i = 0; i < eiListSize; i++) {
 				if(i==1)
@@ -351,6 +362,42 @@ public class ApiController {
 			}
 			ei.setCompany_social_code(companySocialCode);
 			ei.setEmployee_type(entity.getDutyName());
+			eiList.add(ei);
+		}
+		return eiList;
+	}
+	
+	public List<EmployeeInfo> convertStaffToEmployeeInfo() {
+		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
+		List<Staff> staffList=staffService.queryEIList();
+		for (Staff staff : staffList) {
+			EmployeeInfo ei=new EmployeeInfo();
+			ei.setId(staff.getId()+"");
+			ei.setPost_id("");
+			String post = staff.getPost();
+			if(StringUtils.isEmpty(post))
+				post="未知";
+			ei.setPost_name(post);
+			ei.setDepart_id(staff.getDeptId()+"");
+			ei.setDepart_name("未知");
+			ei.setName(staff.getName());
+			ei.setSex((staff.getSex()==1?0:1)+"");
+			ei.setCard_no(staff.getJobNumber());
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
+			}
+			ei.setCompany_social_code(companySocialCode);
+			String employeeType=null;
+			int type=staff.getType();
+			switch (type) {
+			case Staff.NEI_BU_YUAN_GONG:
+				employeeType="内部员工";
+				break;
+			}
+			ei.setEmployee_type(employeeType);
 			eiList.add(ei);
 		}
 		return eiList;

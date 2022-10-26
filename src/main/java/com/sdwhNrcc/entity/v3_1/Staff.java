@@ -2,6 +2,8 @@ package com.sdwhNrcc.entity.v3_1;
 
 public class Staff {
 
+	public static final int NEI_BU_YUAN_GONG=1;
+	
 	private Integer id;
 	public Integer getId() {
 		return id;
