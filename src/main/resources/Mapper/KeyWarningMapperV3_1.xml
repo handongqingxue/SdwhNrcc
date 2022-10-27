@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.KeyWarningMapper">
+ 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.KeyWarning">
+ 		insert into key_warning
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				tagId,
+ 			</if>
+ 			<if test="entityId!=null">
+ 				entityId,
+ 			</if>
+ 			<if test="areaId!=null">
+ 				areaId,
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				raiseTime,
+ 			</if>
+ 			<if test="raiseTimeYMD!=null">
+ 				raiseTimeYMD,
+ 			</if>
+ 			<if test="x!=null">
+ 				x,
+ 			</if>
+ 			<if test="y!=null">
+ 				y,
+ 			</if>
+ 			<if test="z!=null">
+ 				z,
+ 			</if>
+ 			<if test="floor!=null">
+ 				floor,
+ 			</if>
+ 				sync
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="tagId!=null">
+ 				#{tagId},
+ 			</if>
+ 			<if test="entityId!=null">
+ 				#{entityId},
+ 			</if>
+ 			<if test="areaId!=null">
+ 				#{areaId},
+ 			</if>
+ 			<if test="raiseTime!=null">
+ 				#{raiseTime},
+ 			</if>
+ 			<if test="raiseTimeYMD!=null">
+ 				#{raiseTimeYMD},
+ 			</if>
+ 			<if test="x!=null">
+ 				#{x},
+ 			</if>
+ 			<if test="y!=null">
+ 				#{y},
+ 			</if>
+ 			<if test="z!=null">
+ 				#{z},
+ 			</if>
+ 			<if test="floor!=null">
+ 				#{floor},
+ 			</if>
+ 				0
+ 		</trim>
+ 	</insert>
+	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v3_1.KeyWarning">
+		select kw.*,s.`name` entityName from key_warning kw left join staff s on kw.tagId=s.tagId where sync=#{sync}
+	</select>
+	<update id="syncByIds">
+		update key_warning set sync=${@com.sdwhNrcc.entity.v3_1.KeyWarning@SYNCED} where 1=1
+		<foreach collection="list" item="id" open=" and cast(id as char) in(" separator="," close=")">
+		#{id}
+		</foreach>
+	</update>
+</mapper>

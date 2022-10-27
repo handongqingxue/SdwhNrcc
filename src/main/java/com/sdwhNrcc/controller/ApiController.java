@@ -59,6 +59,20 @@ public class ApiController {
 	@Autowired
 	private LoginUserService loginUserService;
 
+	//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
+
+	@RequestMapping(value="/goPage")
+	public String goPage(HttpServletRequest request) {
+		String url = null;
+		String page = request.getParameter("page");
+		if("testApi".equals(page)){
+			switchCity(CITY_FLAG,request);
+			url="/testApi";
+		}
+		return url;
+	}
+	
+	/*
 	@RequestMapping(value="/goTestApi")
 	public String goTestApi(HttpServletRequest request) {
 
@@ -66,6 +80,7 @@ public class ApiController {
 		
 		return "/testApi";
 	}
+	*/
 	
 	@RequestMapping(value="/goSyncDBManager")
 	public String goSyncDBManager() {

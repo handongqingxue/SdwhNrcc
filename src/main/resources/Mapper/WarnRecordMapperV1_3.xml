@@ -134,7 +134,7 @@
 		select wr.*,wt.`name` triggerName,e.`name` entityName from warn_record wr left join warn_trigger wt on wr.triggerId=wt.id left join entity e on wr.uid=e.tagId where sync=#{sync}
 	</select>
 	<update id="syncByIds">
-		update warn_record set sync=${@com.sdwhNrcc.entity.WarnRecord@SYNCED} where 1=1
+		update warn_record set sync=${@com.sdwhNrcc.entity.v1_3.WarnRecord@SYNCED} where 1=1
 		<foreach collection="list" item="id" open=" and cast(id as char) in(" separator="," close=")">
 		#{id}
 		</foreach>

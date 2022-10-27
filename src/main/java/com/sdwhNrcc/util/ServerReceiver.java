@@ -37,11 +37,13 @@ public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
 	public static final String MODULE_NAME="/api/serverReceiver";
-	//private static final boolean IS_TEST=true;
-	private static final boolean IS_TEST=false;
+	private static final boolean IS_TEST=true;
+	//private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;
+	@Autowired
+	private KeyWarningService keyWarningService;
 	
 	/**
 	 * 这个接收推送消息的方法只能在和发送消息是同一个项目的情况下使用，现在咱项目接收的是真源项目那边发送的消息，这个方法暂时不用了
@@ -68,13 +70,18 @@ public class ServerReceiver {
 		
         try {
         	if(IS_TEST) {
-        		String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
-                com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
+        		//String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
+        		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT38206876\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
+        		com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
         		String method = bodyJO.getString("method");
         		if("position".equals(method)) {
         			JSONObject paramsJO = bodyJO.getJSONObject("params");
         			insertPositionData(paramsJO);
         		}
+				else if("keyWarning".equals(method)) {
+					JSONObject paramsJO = bodyJO.getJSONObject("params");
+					insertKeyWarningData(paramsJO);
+				}
         	}
         	else {
         		System.out.println("获取推送信息。。。");
@@ -109,6 +116,10 @@ public class ServerReceiver {
 						if("position".equals(method)) {
 							JSONObject paramsJO = bodyJO.getJSONObject("params");
 							insertPositionData(paramsJO);
+						}
+						else if("keyWarning".equals(method)) {
+							JSONObject paramsJO = bodyJO.getJSONObject("params");
+							insertKeyWarningData(paramsJO);
 						}
 				    }
 				});
@@ -177,6 +188,42 @@ public class ServerReceiver {
 			position.setZ(z);
 			
 			positionService.add(position);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	@RequestMapping(value="/insertKeyWarningData")
+	@ResponseBody
+	public Map<String, Object> insertKeyWarningData(JSONObject paramsJO) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			String tagId = paramsJO.getString("tagId");
+			Integer entityId = paramsJO.getInteger("entityId");
+			Integer areaId = paramsJO.getInteger("areaId");
+			Long raiseTime = paramsJO.getLong("raiseTime");
+			Float x = paramsJO.getFloat("x");
+			Float y = paramsJO.getFloat("y");
+			Float z = paramsJO.getFloat("z");
+			Integer floor = paramsJO.getInteger("floor");
+			
+			KeyWarning keyWarning=new KeyWarning();
+			keyWarning.setTagId(tagId);
+			keyWarning.setEntityId(entityId);
+			keyWarning.setAreaId(areaId);
+			keyWarning.setRaiseTime(raiseTime);
+			keyWarning.setX(x);
+			keyWarning.setY(y);
+			keyWarning.setZ(z);
+			keyWarning.setFloor(floor);
+			
+			keyWarningService.add(keyWarning);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
