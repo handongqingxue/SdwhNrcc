@@ -17,12 +17,12 @@ var interval="60000";
 $(function(){
 	//makeSync();
 	receiveMessage();
-	//setInterval(function(){
+	setInterval(function(){
 		console.log("11111111");
 		dataEmployeeLocations();
 		//insertWarnRecordData();
 		dataEmployeeAlarm();
-	//},interval);
+	},interval);
 });
 
 function makeSync(){
