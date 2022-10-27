@@ -135,6 +135,12 @@ public class Position {
 	public void setZ(Float z) {
 		this.z = z;
 	}
+	public String getJobNumber() {
+		return jobNumber;
+	}
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
+	}
 	private Float altitude;
 	private Integer areaId;
 	private Integer floor;
@@ -156,4 +162,5 @@ public class Position {
 	private Float x;
 	private Float y;
 	private Float z;
+	private String jobNumber;
 }

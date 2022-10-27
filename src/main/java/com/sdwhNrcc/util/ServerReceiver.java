@@ -37,8 +37,8 @@ public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
 	public static final String MODULE_NAME="/api/serverReceiver";
-	private static final boolean IS_TEST=true;
-	//private static final boolean IS_TEST=false;
+	//private static final boolean IS_TEST=true;
+	private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;
@@ -88,10 +88,10 @@ public class ServerReceiver {
 				ConnectionFactory factory = new ConnectionFactory();
 	
 				//factory.setHost("222.173.86.130");
-				factory.setHost("127.0.0.1");
-				factory.setPort(5672);
-				factory.setUsername("admin");
-				factory.setPassword("admin");
+				factory.setHost(Constant.CONN_FACTORY_HOST);
+				factory.setPort(Constant.CONN_FACTORY_PORT);
+				factory.setUsername(Constant.CONN_FACTORY_USERNAME);
+				factory.setPassword(Constant.CONN_FACTORY_PASSWORD);
 	      
 	
 				// 2.创建连接

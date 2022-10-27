@@ -55,19 +55,24 @@ public class ApiController {
 	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
+	private KeyWarningService keyWarningService;
+	@Autowired
 	private StaffService staffService;
 	@Autowired
 	private LoginUserService loginUserService;
 
-	//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
-
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
 			switchCity(CITY_FLAG,request);
 			url="/testApi";
+		}
+		else if("syncDBManager".equals(page)){
+			url="/syncDBManager";
 		}
 		return url;
 	}
@@ -80,13 +85,13 @@ public class ApiController {
 		
 		return "/testApi";
 	}
-	*/
 	
 	@RequestMapping(value="/goSyncDBManager")
 	public String goSyncDBManager() {
 
 		return "/syncDBManager";
 	}
+	*/
 	
 	@RequestMapping(value="/goSyncDBRun")
 	public String goSyncDBRun() {
@@ -127,6 +132,25 @@ public class ApiController {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	/**
+	 * 重新登录
+	 * @param request
+	 * @return
+	 */
+	public boolean reAuthLogin(HttpServletRequest request) {
+		switchCity(CITY_FLAG,request);
+		String username = request.getAttribute("username").toString();
+		String password = request.getAttribute("password").toString();
+		System.out.println("username==="+username);
+		System.out.println("password==="+password);
+		Map<String, Object> resultMap = authLogin(username,password,request);
+		String code = resultMap.get("code").toString();
+		if("200".equals(code))
+			return true;
+		else
+			return false;
 	}
 
 	@RequestMapping(value="/dataEmployeeInfo")
@@ -213,25 +237,6 @@ public class ApiController {
 			return resultMap;
 		}
 	}
-	
-	/**
-	 * 重新登录
-	 * @param request
-	 * @return
-	 */
-	public boolean reAuthLogin(HttpServletRequest request) {
-		switchCity(CITY_FLAG,request);
-		String username = request.getAttribute("username").toString();
-		String password = request.getAttribute("password").toString();
-		System.out.println("username==="+username);
-		System.out.println("password==="+password);
-		Map<String, Object> resultMap = authLogin(username,password,request);
-		String code = resultMap.get("code").toString();
-		if("200".equals(code))
-			return true;
-		else
-			return false;
-	}
 
 	@RequestMapping(value="/dataEmployeeLocations")
 	@ResponseBody
@@ -239,7 +244,7 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
-			switchCity(CITY_FLAG,request);
+			//switchCity(CITY_FLAG,request);
 			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
@@ -300,16 +305,23 @@ public class ApiController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
 			
 			JSONArray dataParamJA=new JSONArray();
 
 			StringBuilder syncIdsSB=new StringBuilder();
-			List<EmployeeAlarm> eaList = convertWarnRecordToEmployeeAlarm();
+			List<EmployeeAlarm> eaList = null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFRZJXHYXGS:
+				eaList = convertWarnRecordToEmployeeAlarm();
+				break;
+			case Constant.WFPXHGYXGS:
+				eaList = convertKeyWarningToEmployeeAlarm();
+				break;
+			}
 			int eaListSize = eaList.size();
 			for (int i = 0; i < eaListSize; i++) {
-				if(i==5)
-					break;
+				//if(i==5)
+					//break;
 				EmployeeAlarm ea=eaList.get(i);
 				JSONObject dataParamJO=new JSONObject();
 				String id = ea.getId();
@@ -328,31 +340,41 @@ public class ApiController {
 				dataParamJO.put("latitude", ea.getLatitude());
 				dataParamJA.put(dataParamJO);
 			}
-			
-			bodyParamJO.put("data", dataParamJA);
-			
-			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
-			String status=resultJO.get("status").toString();
-			if("ok".equals(status)) {
-				String code=resultJO.get("code").toString();
-				System.out.println("code==="+code);
-				String msg=resultJO.get("msg").toString();
-				String data = resultJO.getString("data");
-				System.out.println("data==="+data);
+
+			if(eaListSize>0) {
+				JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
+				bodyParamJO.put("data", dataParamJA);
 				
-				if("200".equals(code)) {
-					String syncIds = syncIdsSB.toString().substring(1);
-					System.out.println("syncIds==="+syncIds);
-					warnRecordService.syncByIds(syncIds);
+				resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
+				String status=resultJO.get("status").toString();
+				if("ok".equals(status)) {
+					String code=resultJO.get("code").toString();
+					System.out.println("code==="+code);
+					String msg=resultJO.get("msg").toString();
+					String data = resultJO.getString("data");
+					System.out.println("data==="+data);
+					
+					if("200".equals(code)) {
+						String syncIds = syncIdsSB.toString().substring(1);
+						System.out.println("syncIds==="+syncIds);
+						switch (SYSTEM_FLAG) {
+						case Constant.WFRZJXHYXGS:
+							warnRecordService.syncByIds(syncIds);
+							break;
+						case Constant.WFPXHGYXGS:
+							keyWarningService.syncByIds(syncIds);
+							break;
+						}
+					}
+					
+					resultMap.put("code", code);
+					resultMap.put("msg", msg);
+					resultMap.put("data", data);
 				}
-				
-				resultMap.put("code", code);
-				resultMap.put("msg", msg);
-				resultMap.put("data", data);
-			}
-			else {
-				boolean success=reAuthLogin(request);
-				System.out.println("success==="+success);
+				else {
+					boolean success=reAuthLogin(request);
+					System.out.println("success==="+success);
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -472,7 +494,7 @@ public class ApiController {
 			}
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
-			el.setCard_no(position.getTagId());
+			el.setCard_no(position.getJobNumber());
 			el.setTime_stamp(DateUtil.convertLongToString(position.getLocationTime()));
 			
 			Float speed = position.getSpeed();
@@ -512,6 +534,33 @@ public class ApiController {
 			
 			ea.setLongitude(wr.getX()+"");
 			ea.setLatitude(wr.getY()+"");
+			eaList.add(ea);
+		}
+		return eaList;
+	}
+	
+	public List<EmployeeAlarm> convertKeyWarningToEmployeeAlarm() {
+		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
+		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC);
+		for (KeyWarning kw : kwList) {
+			EmployeeAlarm ea=new EmployeeAlarm();
+			ea.setId(kw.getId()+"");
+			ea.setTime(kw.getRaiseTimeYMD());
+			ea.setType("oneKeyAlarm:alarm");
+			ea.setArea_name("map");
+			ea.setName(kw.getEntityName());
+			ea.setCard_no(kw.getJobNumber());
+			
+			String companySocialCode=null;
+			switch (SYSTEM_FLAG) {
+			case Constant.WFPXHGYXGS:
+				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
+				break;
+			}
+			ea.setCompany_social_code(companySocialCode);
+			
+			ea.setLongitude(kw.getX()+"");
+			ea.setLatitude(kw.getY()+"");
 			eaList.add(ea);
 		}
 		return eaList;
@@ -589,6 +638,8 @@ public class ApiController {
 			
 			HttpSession session = request.getSession();
 			if(!path.contains("auth/login")) {
+				switchCity(CITY_FLAG,request);
+				
 				String token = null;
 				Object LoginUserObj = session.getAttribute("loginUser");
 				//System.out.println("LoginUserObj==="+LoginUserObj);

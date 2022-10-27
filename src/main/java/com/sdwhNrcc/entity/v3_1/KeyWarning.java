@@ -78,6 +78,12 @@ public class KeyWarning {
 	public void setSync(Boolean sync) {
 		this.sync = sync;
 	}
+	public String getJobNumber() {
+		return jobNumber;
+	}
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
+	}
 	private String tagId;
 	private Integer entityId;
 	private String entityName;
@@ -89,4 +95,5 @@ public class KeyWarning {
 	private Float z;
 	private Integer floor;
 	private Boolean sync;
+	private String jobNumber;
 }

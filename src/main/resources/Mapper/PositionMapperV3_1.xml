@@ -216,6 +216,6 @@
 		select count(*) from position where tagId=#{tagId}
 	</select>
 	<select id="queryELList" resultType="com.sdwhNrcc.entity.v3_1.Position">
-		select l.*,t.userId from location l left join tag t on l.uid=t.id
+		select p.*,s.jobNumber from position p left join staff s on p.tagId=s.tagId
 	</select>
 </mapper>

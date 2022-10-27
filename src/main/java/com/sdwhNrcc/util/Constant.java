@@ -11,6 +11,11 @@ public class Constant {
 	public static final String EP_SERVICE_IP_STR="serviceIp";
 	public static final String EP_SERVICE_PORT_STR="servicePort";
 	
+	public static final String CONN_FACTORY_HOST="127.0.0.1";
+	public static final int CONN_FACTORY_PORT=5672;
+	public static final String CONN_FACTORY_USERNAME="admin";
+	public static final String CONN_FACTORY_PASSWORD="admin";
+	
 	
 	/**
 	 * 潍坊润中精细化工有限公司

@@ -16,11 +16,12 @@ var epV1_3Path=path+"epV1_3/";
 var interval="60000";
 $(function(){
 	//makeSync();
+	receiveMessage();
 	//setInterval(function(){
-		//console.log("11111111");
+		console.log("11111111");
 		dataEmployeeLocations();
 		//insertWarnRecordData();
-		//dataEmployeeAlarm();
+		dataEmployeeAlarm();
 	//},interval);
 });
 
@@ -54,6 +55,14 @@ function insertWarnRecordData(){
 			var status=data.status;
 			if(status=="ok")
 				console.log(data.message);
+		}
+	,"json");
+}
+
+function receiveMessage(){
+	$.post(apiPath+"serverReceiver/receiveMessage",
+		function(){
+		
 		}
 	,"json");
 }

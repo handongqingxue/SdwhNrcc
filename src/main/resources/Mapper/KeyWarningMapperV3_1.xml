@@ -68,7 +68,7 @@
  		</trim>
  	</insert>
 	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v3_1.KeyWarning">
-		select kw.*,s.`name` entityName from key_warning kw left join staff s on kw.tagId=s.tagId where sync=#{sync}
+		select kw.*,s.`name` entityName,s.jobNumber from key_warning kw left join staff s on kw.tagId=s.tagId where sync=#{sync}
 	</select>
 	<update id="syncByIds">
 		update key_warning set sync=${@com.sdwhNrcc.entity.v3_1.KeyWarning@SYNCED} where 1=1
