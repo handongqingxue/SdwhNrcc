@@ -576,10 +576,13 @@ public class EpV1_3Controller {
 			}
 			else {
 				boolean success=reLogin(request);
+				System.out.println("success==="+success);
+				/*
 				if(success) {
 					Thread.sleep(1000*10);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ10√Î∫Û‘Ÿ÷¥––
 					insertEntityData(request);
 				}
+				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

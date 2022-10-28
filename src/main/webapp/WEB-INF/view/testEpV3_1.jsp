@@ -21,7 +21,7 @@ var clientSecret='${requestScope.clientSecret}';
 $(function(){
 	//oauthToken();
 	//apiStaffDataList();
-	//insertStaffData();
+	insertStaffData();
 });
 
 function oauthToken(){

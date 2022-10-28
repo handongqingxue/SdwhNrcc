@@ -10,6 +10,8 @@ public class Constant {
 	
 	public static final String EP_SERVICE_IP_STR="serviceIp";
 	public static final String EP_SERVICE_PORT_STR="servicePort";
+	public static final String EP_CLIENT_ID_STR="clientId";
+	public static final String EP_CLIENT_SECRET_STR="clientSecret";
 	
 	public static final String CONN_FACTORY_HOST="127.0.0.1";
 	public static final int CONN_FACTORY_PORT=5672;
@@ -69,6 +71,26 @@ public class Constant {
 	public static final String PASSWORD_HE_ZE="Rnh5ajIwMjAh";
 	//菏泽地区登录账号end
 	
+
+	/**
+	 * 润中服务器ip
+	 */
+	public static final String SERVICE_IP_WFRZJXHYXGS="124.70.38.226";
+	/**
+	 * 润中服务器端口
+	 */
+	public static final int SERVICE_PORT_WFRZJXHYXGS=8081;
+	
+	/**
+	 * 普鑫服务器ip
+	 */
+	public static final String SERVICE_IP_PX="222.173.86.130";
+	/**
+	 * 普鑫服务器端口
+	 */
+	public static final int SERVICE_PORT_PX=90;
+	
+	
 	
 	//潍坊普鑫化工有限公司start
 	/**
@@ -83,14 +105,6 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_WFPXHGYXGS="91370786MA3BX6981P";
-	/**
-	 * 服务器ip
-	 */
-	public static final String SERVICE_IP_WFPXHGYXGS="222.173.86.130";
-	/**
-	 * 服务器端口
-	 */
-	public static final int SERVICE_PORT_WFPXHGYXGS=90;
 	/**
 	 * 租户id
 	 */
@@ -107,6 +121,10 @@ public class Constant {
 	 * 密钥
 	 */
 	public static final String CLIENT_SECRET_WFPXHGYXGS="F4A1D30F";
+	/**
+	 * 数据库名
+	 */
+	public static final String DATABASE_NAME_WFPXHGYXGS="sdwh_nrcc_wfpxhgyxgs";
 	//潍坊普鑫化工有限公司end
 	
 	//山东福林新材料科技有限公司(菏泽)start
@@ -167,15 +185,6 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_WFRZJXHYXGS="913707865728981511";
-
-	/**
-	 * 服务器ip
-	 */
-	public static final String SERVICE_IP_WFRZJXHYXGS="124.70.38.226";
-	/**
-	 * 服务器端口
-	 */
-	public static final int SERVICE_PORT_WFRZJXHYXGS=8081;
 	/**
 	 * 租户id
 	 */

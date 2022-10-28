@@ -131,7 +131,7 @@
 		select count(*) from warn_record where id=#{id}
 	</select>
 	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v1_3.WarnRecord">
-		select wr.*,wt.`name` triggerName,e.`name` entityName from warn_record wr left join warn_trigger wt on wr.triggerId=wt.id left join entity e on wr.uid=e.tagId where sync=#{sync}
+		select wr.*,wt.`name` triggerName,e.`name` entityName from sdwh_nrcc_wfrzjxhyxgs.warn_record wr left join sdwh_nrcc_wfrzjxhyxgs.warn_trigger wt on wr.triggerId=wt.id left join sdwh_nrcc_wfrzjxhyxgs.entity e on wr.uid=e.tagId where sync=#{sync}
 	</select>
 	<update id="syncByIds">
 		update warn_record set sync=${@com.sdwhNrcc.entity.v1_3.WarnRecord@SYNCED} where 1=1

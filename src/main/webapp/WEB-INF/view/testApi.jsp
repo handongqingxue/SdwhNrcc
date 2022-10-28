@@ -20,7 +20,7 @@ $(function(){
 	//dataEmployeeInfo();
 	//dataEmployeeLocations();
 	//dataEmployeeAlarm();
-	receiveMessage();
+	//receiveMessage();
 });
 
 function authLogin(){

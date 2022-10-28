@@ -69,6 +69,10 @@ public class ApiController {
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
 			switchCity(CITY_FLAG,request);
+			
+			List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC);
+			System.out.println("size==="+wrList.size());
+			
 			url="/testApi";
 		}
 		else if("syncDBManager".equals(page)){
