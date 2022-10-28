@@ -182,13 +182,14 @@ public class ApiController {
 			dataParamJA.put(dataParamJO);
 			*/
 			
+			String databaseName = request.getAttribute("databaseName").toString();
 			List<EmployeeInfo> eiList = null;
 			switch (SYSTEM_FLAG) {
 			case Constant.WFRZJXHYXGS:
 				eiList = convertEntityToEmployeeInfo();
 				break;
 			case Constant.WFPXHGYXGS:
-				eiList = convertStaffToEmployeeInfo();
+				eiList = convertStaffToEmployeeInfo(databaseName);
 				break;
 			}
 			int eiListSize = eiList.size();
@@ -418,9 +419,9 @@ public class ApiController {
 		return eiList;
 	}
 	
-	public List<EmployeeInfo> convertStaffToEmployeeInfo() {
+	public List<EmployeeInfo> convertStaffToEmployeeInfo(String databaseName) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
-		List<Staff> staffList=staffService.queryEIList();
+		List<Staff> staffList=staffService.queryEIList(databaseName);
 		for (Staff staff : staffList) {
 			EmployeeInfo ei=new EmployeeInfo();
 			ei.setId(staff.getId()+"");

@@ -3,171 +3,171 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v3_1.StaffMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.Staff">
- 		insert into staff
+ 	<insert id="add">
+ 		insert into ${databaseName}.staff
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="id!=null">
+ 			<if test="staff.id!=null">
  				id,
  			</if>
- 			<if test="name!=null">
+ 			<if test="staff.name!=null">
  				name,
  			</if>
- 			<if test="sex!=null">
+ 			<if test="staff.sex!=null">
  				sex,
  			</if>
- 			<if test="phone!=null">
+ 			<if test="staff.phone!=null">
  				phone,
  			</if>
- 			<if test="photo!=null">
+ 			<if test="staff.photo!=null">
  				photo,
  			</if>
- 			<if test="jobNumber!=null">
+ 			<if test="staff.jobNumber!=null">
  				jobNumber,
  			</if>
- 			<if test="tagId!=null">
+ 			<if test="staff.tagId!=null">
  				tagId,
  			</if>
- 			<if test="post!=null">
+ 			<if test="staff.post!=null">
  				post,
  			</if>
- 			<if test="station!=null">
+ 			<if test="staff.station!=null">
  				station,
  			</if>
- 			<if test="entityIconId!=null">
+ 			<if test="staff.entityIconId!=null">
  				entityIconId,
  			</if>
- 			<if test="deptId!=null">
+ 			<if test="staff.deptId!=null">
  				deptId,
  			</if>
- 			<if test="orgId!=null">
+ 			<if test="staff.orgId!=null">
  				orgId,
  			</if>
- 			<if test="type!=null">
+ 			<if test="staff.type!=null">
  				type,
  			</if>
- 			<if test="deleted!=null">
+ 			<if test="staff.deleted!=null">
  				deleted,
  			</if>
- 			<if test="remark!=null">
+ 			<if test="staff.remark!=null">
  				remark,
  			</if>
- 			<if test="fileId!=null">
+ 			<if test="staff.fileId!=null">
  				fileId,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="id!=null">
- 				#{id},
+ 			<if test="staff.id!=null">
+ 				#{staff.id},
  			</if>
- 			<if test="name!=null">
- 				#{name},
+ 			<if test="staff.name!=null">
+ 				#{staff.name},
  			</if>
- 			<if test="sex!=null">
- 				#{sex},
+ 			<if test="staff.sex!=null">
+ 				#{staff.sex},
  			</if>
- 			<if test="phone!=null">
- 				#{phone},
+ 			<if test="staff.phone!=null">
+ 				#{staff.phone},
  			</if>
- 			<if test="photo!=null">
- 				#{photo},
+ 			<if test="staff.photo!=null">
+ 				#{staff.photo},
  			</if>
- 			<if test="jobNumber!=null">
- 				#{jobNumber},
+ 			<if test="staff.jobNumber!=null">
+ 				#{staff.jobNumber},
  			</if>
- 			<if test="tagId!=null">
- 				#{tagId},
+ 			<if test="staff.tagId!=null">
+ 				#{staff.tagId},
  			</if>
- 			<if test="post!=null">
- 				#{post},
+ 			<if test="staff.post!=null">
+ 				#{staff.post},
  			</if>
- 			<if test="station!=null">
- 				#{station},
+ 			<if test="staff.station!=null">
+ 				#{staff.station},
  			</if>
- 			<if test="entityIconId!=null">
- 				#{entityIconId},
+ 			<if test="staff.entityIconId!=null">
+ 				#{staff.entityIconId},
  			</if>
- 			<if test="deptId!=null">
- 				#{deptId},
+ 			<if test="staff.deptId!=null">
+ 				#{staff.deptId},
  			</if>
- 			<if test="orgId!=null">
- 				#{orgId},
+ 			<if test="staff.orgId!=null">
+ 				#{staff.orgId},
  			</if>
- 			<if test="type!=null">
- 				#{type},
+ 			<if test="staff.type!=null">
+ 				#{staff.type},
  			</if>
- 			<if test="deleted!=null">
- 				#{deleted},
+ 			<if test="staff.deleted!=null">
+ 				#{staff.deleted},
  			</if>
- 			<if test="remark!=null">
- 				#{remark},
+ 			<if test="staff.remark!=null">
+ 				#{staff.remark},
  			</if>
- 			<if test="fileId!=null">
- 				#{fileId},
+ 			<if test="staff.fileId!=null">
+ 				#{staff.fileId},
  			</if>
  		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v3_1.Staff">
-		update staff set
+	<update id="edit">
+		update ${databaseName}.staff set
 		<trim suffixOverrides=",">
- 			<if test="name!=null">
- 				name=#{name},
+ 			<if test="staff.name!=null">
+ 				name=#{staff.name},
  			</if>
-			<if test="sex!=null">
-				sex=#{sex},
+			<if test="staff.sex!=null">
+				sex=#{staff.sex},
 			</if>
-			<if test="phone!=null">
-				phone=#{phone},
+			<if test="staff.phone!=null">
+				phone=#{staff.phone},
 			</if>
-			<if test="photo!=null">
-				photo=#{photo},
+			<if test="staff.photo!=null">
+				photo=#{staff.photo},
 			</if>
-			<if test="jobNumber!=null">
-				jobNumber=#{jobNumber},
+			<if test="staff.jobNumber!=null">
+				jobNumber=#{staff.jobNumber},
 			</if>
-			<if test="tagId!=null">
-				tagId=#{tagId},
+			<if test="staff.tagId!=null">
+				tagId=#{staff.tagId},
 			</if>
-			<if test="post!=null">
-				post=#{post},
+			<if test="staff.post!=null">
+				post=#{staff.post},
 			</if>
-			<if test="station!=null">
-				station=#{station},
+			<if test="staff.station!=null">
+				station=#{staff.station},
 			</if>
-			<if test="security!=null">
-				security=#{security},
+			<if test="staff.security!=null">
+				security=#{staff.security},
 			</if>
-			<if test="entityIconId!=null">
-				entityIconId=#{entityIconId},
+			<if test="staff.entityIconId!=null">
+				entityIconId=#{staff.entityIconId},
 			</if>
- 			<if test="deptId!=null">
- 				deptId=#{deptId},
+ 			<if test="staff.deptId!=null">
+ 				deptId=#{staff.deptId},
  			</if>
- 			<if test="orgId!=null">
- 				orgId=#{orgId},
+ 			<if test="staff.orgId!=null">
+ 				orgId=#{staff.orgId},
  			</if>
- 			<if test="type!=null">
- 				type=#{type},
+ 			<if test="staff.type!=null">
+ 				type=#{staff.type},
  			</if>
- 			<if test="deleted!=null">
- 				deleted=#{deleted},
+ 			<if test="staff.deleted!=null">
+ 				deleted=#{staff.deleted},
  			</if>
- 			<if test="remark!=null">
- 				remark=#{remark},
+ 			<if test="staff.remark!=null">
+ 				remark=#{staff.remark},
  			</if>
- 			<if test="fileId!=null">
- 				fileId=#{fileId},
+ 			<if test="staff.fileId!=null">
+ 				fileId=#{staff.fileId},
  			</if>
 		</trim>
-		where id=#{id}
+		where id=#{staff.id}
 	</update>
  	<select id="queryList" resultType="com.sdwhNrcc.entity.v3_1.Staff">
- 		select * from staff where 1=1 and tagId is not null order by name
+ 		select * from ${databaseName}.staff where 1=1 and tagId is not null order by name
  	</select>
 	<select id="getCountById" resultType="java.lang.Integer">
-		select count(*) from staff where id=#{id}
+		select count(*) from ${databaseName}.staff where id=#{id}
 	</select>
 	<select id="queryEIList" resultType="com.sdwhNrcc.entity.v3_1.Staff">
-		select * from staff
+		select * from ${databaseName}.staff
 	</select>
 </mapper>

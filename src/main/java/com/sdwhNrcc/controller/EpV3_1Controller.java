@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.sdwhNrcc.entity.sdwh.LoginUser;
-import com.sdwhNrcc.entity.v1_3.Entity;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
@@ -39,8 +37,7 @@ public class EpV3_1Controller {
 
 	private static final String ADDRESS_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/positionApi/";
 	public static final String MODULE_NAME="/epV3_1";
-	public static final int EP_FLAG=3;
-	
+
 	@Autowired
 	private EpLoginClientService epLoginClientService;
 	@Autowired
@@ -51,8 +48,24 @@ public class EpV3_1Controller {
 
 		//https://blog.csdn.net/m0_57493148/article/details/124030242
 		//http://localhost:8080/SdwhNrcc/epV3_1/goTestEp
+		//http://localhost:8080/SdwhNrcc/epV3_1/goPage?page=pxhgSync
 
 		return "/testEpV3_1";
+	}
+
+	@RequestMapping(value="/goPage")
+	public String goPage(HttpServletRequest request) {
+		String url = null;
+		String page = request.getParameter("page");
+		if("testEp".equals(page)){
+			String epFlag = request.getParameter("epFlag");
+			request.setAttribute("epFlag", epFlag);
+			url="/testEpV3_1";
+		}
+		else if("pxhgSync".equals(page)){
+			url="redirect:goPage?page=testEp&epFlag="+Constant.WFPXHGYXGS;
+		}
+		return url;
 	}
 	
 	/**
@@ -144,6 +157,9 @@ public class EpV3_1Controller {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			int epFlag = Integer.valueOf(request.getParameter("epFlag"));
+			System.out.println("epFlag==="+epFlag);
+			request.setAttribute("epFlag", epFlag);
 			Map<String, Object> staffListMap = apiStaffDataList(request);
 			String status = staffListMap.get("status").toString();
 			if("ok".equals(status)) {
@@ -156,7 +172,8 @@ public class EpV3_1Controller {
 					
 				}
 				List<Staff> staffList = JSON.parseArray(recordJA.toString(),Staff.class);
-				int count=staffService.add(staffList);
+				String databaseName = request.getAttribute("databaseName").toString();
+				int count=staffService.add(staffList,databaseName);
 				if(count==0) {
 					resultMap.put("status", "no");
 					resultMap.put("message", "初始化员工信息失败");
@@ -185,25 +202,30 @@ public class EpV3_1Controller {
 		}
 	}
 	
-	public void switchService(int epFlag,HttpServletRequest request) {
+	public void switchService(HttpServletRequest request) {
 		String serviceIp=null;
 		int servicePort=0;
 		String tenantId=null;
+		String databaseName=null;
+		int epFlag=Integer.valueOf(request.getAttribute("epFlag").toString());
 		switch (epFlag) {
 		case Constant.WFPXHGYXGS:
 			serviceIp=Constant.SERVICE_IP_PX;
 			servicePort=Constant.SERVICE_PORT_PX;
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
+			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
 			break;
 		}
 		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("tenantId", tenantId);
+		request.setAttribute("databaseName", databaseName);
 	}
 	
-	public void switchTenant(int epFlag,HttpServletRequest request) {
+	public void switchTenant(HttpServletRequest request) {
 		String tenantId=null;
 		String clientSecret=null;
+		int epFlag=Integer.valueOf(request.getAttribute("epFlag").toString());
 		switch (epFlag) {
 		case Constant.WFPXHGYXGS:
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
@@ -218,7 +240,7 @@ public class EpV3_1Controller {
 		
 		JSONObject resultJO = null;
 		try {
-			switchService(EP_FLAG,request);
+			switchService(request);
 			
 			StringBuffer sbf = new StringBuffer(); 
 			String strRead = null; 
@@ -229,7 +251,7 @@ public class EpV3_1Controller {
 			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp);
 			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort);
 			if(apiMethod.contains("oauth/token")) {
-				switchTenant(EP_FLAG,request);
+				switchTenant(request);
 				String clientId = request.getAttribute("tenantId").toString();
 				String clientSecret = request.getAttribute("clientSecret").toString();
 				serverUrl=serverUrl.replaceAll(Constant.EP_CLIENT_ID_STR, clientId);

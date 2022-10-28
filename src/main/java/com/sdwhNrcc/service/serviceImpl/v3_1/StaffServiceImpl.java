@@ -16,27 +16,27 @@ public class StaffServiceImpl implements StaffService {
 	private StaffMapper staffDao;
 
 	@Override
-	public int add(List<Staff> staffList) {
+	public int add(List<Staff> staffList, String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (Staff staff : staffList) {
-			if(staffDao.getCountById(staff.getId())==0)
-				count+=staffDao.add(staff);
+			if(staffDao.getCountById(staff.getId(),databaseName)==0)
+				count+=staffDao.add(staff, databaseName);
 			else
-				count+=staffDao.edit(staff);
+				count+=staffDao.edit(staff, databaseName);
 		}
 		return count;
 	}
 
 	@Override
-	public List<Staff> queryList() {
+	public List<Staff> queryList(String databaseName) {
 		// TODO Auto-generated method stub
-		return staffDao.queryList();
+		return staffDao.queryList(databaseName);
 	}
 
 	@Override
-	public List<Staff> queryEIList() {
+	public List<Staff> queryEIList(String databaseName) {
 		// TODO Auto-generated method stub
-		return staffDao.queryEIList();
+		return staffDao.queryEIList(databaseName);
 	}
 }

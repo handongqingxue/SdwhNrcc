@@ -8,13 +8,13 @@ import com.sdwhNrcc.entity.v3_1.*;
 
 public interface StaffMapper {
 
-	int add(Staff staff);
+	int add(@Param("staff")Staff staff, @Param("databaseName")String databaseName);
 
-	int edit(Staff staff);
+	int edit(@Param("staff")Staff staff, @Param("databaseName")String databaseName);
 
-	List<Staff> queryList();
+	List<Staff> queryList(@Param("databaseName")String databaseName);
 
-	int getCountById(@Param("id")Integer id);
+	int getCountById(@Param("id")Integer id, @Param("databaseName")String databaseName);
 
-	List<Staff> queryEIList();
+	List<Staff> queryEIList(@Param("databaseName")String databaseName);
 }

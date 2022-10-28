@@ -18,6 +18,7 @@ var tenantId='${requestScope.tenantId}';
 var userId='${requestScope.userId}';
 var password='${requestScope.password}';
 var clientSecret='${requestScope.clientSecret}';
+var epFlag='${requestScope.epFlag}';
 $(function(){
 	//oauthToken();
 	//apiStaffDataList();
@@ -43,8 +44,9 @@ function apiStaffDataList(){
 }
 
 function insertStaffData(){
+	alert(epFlag)
 	$.post(epPath+"insertStaffData",
-		{serviceIp:serviceIp,servicePort:servicePort,tenantId:tenantId},
+		{epFlag:epFlag},
 		function(){
 		
 		}
