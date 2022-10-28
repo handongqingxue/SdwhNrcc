@@ -3,219 +3,219 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v3_1.PositionMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.Position">
- 		insert into position
+ 	<insert id="add">
+ 		insert into ${databaseName}.position
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="absolute!=null">
+ 			<if test="position.absolute!=null">
  				absolute,
  			</if>
- 			<if test="altitude!=null">
+ 			<if test="position.altitude!=null">
  				altitude,
  			</if>
- 			<if test="areaId!=null">
+ 			<if test="position.areaId!=null">
  				areaId,
  			</if>
- 			<if test="floor!=null">
+ 			<if test="position.floor!=null">
  				floor,
  			</if>
- 			<if test="beacons!=null">
+ 			<if test="position.beacons!=null">
  				beacons,
  			</if>
- 			<if test="entityType!=null">
+ 			<if test="position.entityType!=null">
  				entityType,
  			</if>
- 			<if test="inDoor!=null">
+ 			<if test="position.inDoor!=null">
  				inDoor,
  			</if>
- 			<if test="labInTime!=null">
+ 			<if test="position.labInTime!=null">
  				labInTime,
  			</if>
- 			<if test="longitude!=null">
+ 			<if test="position.longitude!=null">
  				longitude,
  			</if>
- 			<if test="latitude!=null">
+ 			<if test="position.latitude!=null">
  				latitude,
  			</if>
- 			<if test="locationTime!=null">
+ 			<if test="position.locationTime!=null">
  				locationTime,
  			</if>
- 			<if test="out!=null">
+ 			<if test="position.out!=null">
  				`out`,
  			</if>
- 			<if test="rootAreaId!=null">
+ 			<if test="position.rootAreaId!=null">
  				rootAreaId,
  			</if>
- 			<if test="silent!=null">
+ 			<if test="position.silent!=null">
  				silent,
  			</if>
- 			<if test="speed!=null">
+ 			<if test="position.speed!=null">
  				speed,
  			</if>
- 			<if test="stateTime!=null">
+ 			<if test="position.stateTime!=null">
  				stateTime,
  			</if>
- 			<if test="tagId!=null">
+ 			<if test="position.tagId!=null">
  				tagId,
  			</if>
- 			<if test="volt!=null">
+ 			<if test="position.volt!=null">
  				volt,
  			</if>
- 			<if test="voltUnit!=null">
+ 			<if test="position.voltUnit!=null">
  				voltUnit,
  			</if>
- 			<if test="x!=null">
+ 			<if test="position.x!=null">
  				x,
  			</if>
- 			<if test="y!=null">
+ 			<if test="position.y!=null">
  				y,
  			</if>
- 			<if test="z!=null">
+ 			<if test="position.z!=null">
  				z,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="absolute!=null">
- 				#{absolute},
+ 			<if test="position.absolute!=null">
+ 				#{position.absolute},
  			</if>
- 			<if test="altitude!=null">
- 				#{altitude},
+ 			<if test="position.altitude!=null">
+ 				#{position.altitude},
  			</if>
- 			<if test="areaId!=null">
- 				#{areaId},
+ 			<if test="position.areaId!=null">
+ 				#{position.areaId},
  			</if>
- 			<if test="floor!=null">
- 				#{floor},
+ 			<if test="position.floor!=null">
+ 				#{position.floor},
  			</if>
- 			<if test="beacons!=null">
- 				#{beacons},
+ 			<if test="position.beacons!=null">
+ 				#{position.beacons},
  			</if>
- 			<if test="entityType!=null">
- 				#{entityType},
+ 			<if test="position.entityType!=null">
+ 				#{position.entityType},
  			</if>
- 			<if test="inDoor!=null">
- 				#{inDoor},
+ 			<if test="position.inDoor!=null">
+ 				#{position.inDoor},
  			</if>
- 			<if test="labInTime!=null">
- 				#{labInTime},
+ 			<if test="position.labInTime!=null">
+ 				#{position.labInTime},
  			</if>
- 			<if test="longitude!=null">
- 				#{longitude},
+ 			<if test="position.longitude!=null">
+ 				#{position.longitude},
  			</if>
- 			<if test="latitude!=null">
- 				#{latitude},
+ 			<if test="position.latitude!=null">
+ 				#{position.latitude},
  			</if>
- 			<if test="locationTime!=null">
- 				#{locationTime},
+ 			<if test="position.locationTime!=null">
+ 				#{position.locationTime},
  			</if>
- 			<if test="out!=null">
- 				#{out},
+ 			<if test="position.out!=null">
+ 				#{position.out},
  			</if>
- 			<if test="rootAreaId!=null">
- 				#{rootAreaId},
+ 			<if test="position.rootAreaId!=null">
+ 				#{position.rootAreaId},
  			</if>
- 			<if test="silent!=null">
- 				#{silent},
+ 			<if test="position.silent!=null">
+ 				#{position.silent},
  			</if>
- 			<if test="speed!=null">
- 				#{speed},
+ 			<if test="position.speed!=null">
+ 				#{position.speed},
  			</if>
- 			<if test="stateTime!=null">
- 				#{stateTime},
+ 			<if test="position.stateTime!=null">
+ 				#{position.stateTime},
  			</if>
- 			<if test="tagId!=null">
- 				#{tagId},
+ 			<if test="position.tagId!=null">
+ 				#{position.tagId},
  			</if>
- 			<if test="volt!=null">
- 				#{volt},
+ 			<if test="position.volt!=null">
+ 				#{position.volt},
  			</if>
- 			<if test="voltUnit!=null">
- 				#{voltUnit},
+ 			<if test="position.voltUnit!=null">
+ 				#{position.voltUnit},
  			</if>
- 			<if test="x!=null">
- 				#{x},
+ 			<if test="position.x!=null">
+ 				#{position.x},
  			</if>
- 			<if test="y!=null">
- 				#{y},
+ 			<if test="position.y!=null">
+ 				#{position.y},
  			</if>
- 			<if test="z!=null">
- 				#{z},
+ 			<if test="position.z!=null">
+ 				#{position.z},
  			</if>
  		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v3_1.Position">
-		update position set
+	<update id="edit">
+		update ${databaseName}.position set
 		<trim suffixOverrides=",">
-			<if test="absolute!=null">
-				absolute=#{absolute},
+			<if test="position.absolute!=null">
+				absolute=#{position.absolute},
 			</if>
-			<if test="altitude!=null">
-				altitude=#{altitude},
+			<if test="position.altitude!=null">
+				altitude=#{position.altitude},
 			</if>
-			<if test="areaId!=null">
-				areaId=#{areaId},
+			<if test="position.areaId!=null">
+				areaId=#{position.areaId},
 			</if>
-			<if test="floor!=null">
-				floor=#{floor},
+			<if test="position.floor!=null">
+				floor=#{position.floor},
 			</if>
-			<if test="beacons!=null">
-				beacons=#{beacons},
+			<if test="position.beacons!=null">
+				beacons=#{position.beacons},
 			</if>
-			<if test="entityType!=null">
-				entityType=#{entityType},
+			<if test="position.entityType!=null">
+				entityType=#{position.entityType},
 			</if>
-			<if test="inDoor!=null">
-				inDoor=#{inDoor},
+			<if test="position.inDoor!=null">
+				inDoor=#{position.inDoor},
 			</if>
-			<if test="labInTime!=null">
-				labInTime=#{labInTime},
+			<if test="position.labInTime!=null">
+				labInTime=#{position.labInTime},
 			</if>
-			<if test="longitude!=null">
-				longitude=#{longitude},
+			<if test="position.longitude!=null">
+				longitude=#{position.longitude},
 			</if>
-			<if test="latitude!=null">
-				latitude=#{latitude},
+			<if test="position.latitude!=null">
+				latitude=#{position.latitude},
 			</if>
-			<if test="locationTime!=null">
-				locationTime=#{locationTime},
+			<if test="position.locationTime!=null">
+				locationTime=#{position.locationTime},
 			</if>
-			<if test="out!=null">
-				`out`=#{out},
+			<if test="position.out!=null">
+				`out`=#{position.out},
 			</if>
-			<if test="rootAreaId!=null">
-				rootAreaId=#{rootAreaId},
+			<if test="position.rootAreaId!=null">
+				rootAreaId=#{position.rootAreaId},
 			</if>
-			<if test="silent!=null">
-				`silent`=#{silent},
+			<if test="position.silent!=null">
+				`silent`=#{position.silent},
 			</if>
-			<if test="speed!=null">
-				speed=#{speed},
+			<if test="position.speed!=null">
+				speed=#{position.speed},
 			</if>
-			<if test="stateTime!=null">
-				stateTime=#{stateTime},
+			<if test="position.stateTime!=null">
+				stateTime=#{position.stateTime},
 			</if>
-			<if test="volt!=null">
-				volt=#{volt},
+			<if test="position.volt!=null">
+				volt=#{position.volt},
 			</if>
-			<if test="voltUnit!=null">
-				voltUnit=#{voltUnit},
+			<if test="position.voltUnit!=null">
+				voltUnit=#{position.voltUnit},
 			</if>
-			<if test="x!=null">
-				x=#{x},
+			<if test="position.x!=null">
+				x=#{position.x},
 			</if>
-			<if test="y!=null">
-				y=#{y},
+			<if test="position.y!=null">
+				y=#{position.y},
 			</if>
-			<if test="z!=null">
-				z=#{z},
+			<if test="position.z!=null">
+				z=#{position.z},
 			</if>
 		</trim>
-		where tagId=#{tagId}
+		where tagId=#{position.tagId}
 	</update>
 	<select id="getCountByTagId" resultType="java.lang.Integer">
-		select count(*) from position where tagId=#{tagId}
+		select count(*) from ${databaseName}.position where tagId=#{tagId}
 	</select>
 	<select id="queryELList" resultType="com.sdwhNrcc.entity.v3_1.Position">
-		select p.*,s.jobNumber from position p left join staff s on p.tagId=s.tagId
+		select p.*,s.jobNumber from ${databaseName}.position p left join ${databaseName}.staff s on p.tagId=s.tagId
 	</select>
 </mapper>

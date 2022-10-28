@@ -44,7 +44,6 @@ public class ApiController {
 	public static final String MODULE_NAME="/api";
 	public static final String TEST_USERNAME="weifang_report_data";
 	public static final int CITY_FLAG=1;
-	public static final int SYSTEM_FLAG=3;
 	
 	@Autowired
 	private EntityService entityService;
@@ -65,6 +64,7 @@ public class ApiController {
 	public String goPage(HttpServletRequest request) {
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSync
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
@@ -76,7 +76,12 @@ public class ApiController {
 			url="/testApi";
 		}
 		else if("syncDBManager".equals(page)){
+			String systemFlag = request.getParameter("systemFlag");
+			request.setAttribute("systemFlag", systemFlag);
 			url="/syncDBManager";
+		}
+		else if("pxhgSync".equals(page)){
+			url="redirect:goPage?page=syncDBManager&systemFlag="+Constant.WFPXHGYXGS;
 		}
 		return url;
 	}
@@ -126,6 +131,13 @@ public class ApiController {
 			LoginUser lu=new LoginUser(token,username);
 			loginUserService.add(lu);
 			
+			HttpSession session = request.getSession();
+			Object loginUserObj = session.getAttribute("loginUser");
+			if(loginUserObj!=null) {
+				LoginUser loginUser = (LoginUser)loginUserObj;
+				loginUser.setToken(token);
+			}
+			
 			resultMap.put("code", code);
 			resultMap.put("msg", msg);
 			resultMap.put("data", data);
@@ -162,8 +174,10 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
+			System.out.println("systemFlag==="+systemFlag);
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
+			JSONObject bodyParamJO=switchSystem(systemFlag);
 			
 			JSONArray dataParamJA=new JSONArray();
 			
@@ -184,12 +198,12 @@ public class ApiController {
 			
 			String databaseName = request.getAttribute("databaseName").toString();
 			List<EmployeeInfo> eiList = null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
-				eiList = convertEntityToEmployeeInfo();
+				eiList = convertEntityToEmployeeInfo(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
-				eiList = convertStaffToEmployeeInfo(databaseName);
+				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
 			int eiListSize = eiList.size();
@@ -229,10 +243,12 @@ public class ApiController {
 			else {
 				boolean success=reAuthLogin(request);
 				System.out.println("success==="+success);
+				/*
 				if(success) {
 					Thread.sleep(1000*60);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ1∑÷÷”∫Û‘Ÿ÷¥––
 					dataEmployeeInfo(request);
 				}
+				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -248,19 +264,24 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
+			System.out.println("systemFlag==="+systemFlag);
+			request.setAttribute("systemFlag", systemFlag);
 			JSONObject resultJO = null;
 			//switchCity(CITY_FLAG,request);
-			JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
+			JSONObject bodyParamJO=switchSystem(systemFlag);
+			switchDatabase(request);
 			
 			JSONArray dataParamJA=new JSONArray();
 
 			List<EmployeeLocation> elList = null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
-				elList = convertLocationToEmployeeLocation();
+				elList = convertLocationToEmployeeLocation(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
-				elList = convertPositionToEmployeeLocation();
+				String databaseName = request.getAttribute("databaseName").toString();
+				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
 			int elListSize = elList.size();
@@ -309,18 +330,23 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
+			System.out.println("systemFlag==="+systemFlag);
+			request.setAttribute("systemFlag", systemFlag);
+			switchDatabase(request);
 			JSONObject resultJO = null;
 			
 			JSONArray dataParamJA=new JSONArray();
 
 			StringBuilder syncIdsSB=new StringBuilder();
 			List<EmployeeAlarm> eaList = null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
-				eaList = convertWarnRecordToEmployeeAlarm();
+				eaList = convertWarnRecordToEmployeeAlarm(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
-				eaList = convertKeyWarningToEmployeeAlarm();
+				String databaseName = request.getAttribute("databaseName").toString();
+				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
 			int eaListSize = eaList.size();
@@ -347,7 +373,7 @@ public class ApiController {
 			}
 
 			if(eaListSize>0) {
-				JSONObject bodyParamJO=switchSystem(SYSTEM_FLAG);
+				JSONObject bodyParamJO=switchSystem(systemFlag);
 				bodyParamJO.put("data", dataParamJA);
 				
 				resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
@@ -362,12 +388,13 @@ public class ApiController {
 					if("200".equals(code)) {
 						String syncIds = syncIdsSB.toString().substring(1);
 						System.out.println("syncIds==="+syncIds);
-						switch (SYSTEM_FLAG) {
+						switch (systemFlag) {
 						case Constant.WFRZJXHYXGS:
 							warnRecordService.syncByIds(syncIds);
 							break;
 						case Constant.WFPXHGYXGS:
-							keyWarningService.syncByIds(syncIds);
+							String databaseName = request.getAttribute("databaseName").toString();
+							keyWarningService.syncByIds(syncIds,databaseName);
 							break;
 						}
 					}
@@ -390,7 +417,7 @@ public class ApiController {
 		}
 	}
 	
-	public List<EmployeeInfo> convertEntityToEmployeeInfo() {
+	public List<EmployeeInfo> convertEntityToEmployeeInfo(int systemFlag) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
 		List<Entity> entityList=entityService.queryEIList();
 		for (Entity entity : entityList) {
@@ -407,7 +434,7 @@ public class ApiController {
 			ei.setSex((entity.getSex()==1?0:1)+"");
 			ei.setCard_no(entity.getUserId());
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
 				break;
@@ -419,7 +446,7 @@ public class ApiController {
 		return eiList;
 	}
 	
-	public List<EmployeeInfo> convertStaffToEmployeeInfo(String databaseName) {
+	public List<EmployeeInfo> convertStaffToEmployeeInfo(int systemFlag,String databaseName) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
 		List<Staff> staffList=staffService.queryEIList(databaseName);
 		for (Staff staff : staffList) {
@@ -436,7 +463,7 @@ public class ApiController {
 			ei.setSex((staff.getSex()==1?0:1)+"");
 			ei.setCard_no(staff.getJobNumber());
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
 				break;
@@ -455,13 +482,13 @@ public class ApiController {
 		return eiList;
 	}
 	
-	public List<EmployeeLocation> convertLocationToEmployeeLocation() {
+	public List<EmployeeLocation> convertLocationToEmployeeLocation(int systemFlag) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Location> locationList=locationService.queryELList();
 		for (Location location : locationList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
 				break;
@@ -486,13 +513,13 @@ public class ApiController {
 		return elList;
 	}
 	
-	public List<EmployeeLocation> convertPositionToEmployeeLocation() {
+	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
-		List<Position> positionList=positionService.queryELList();
+		List<Position> positionList=positionService.queryELList(databaseName);
 		for (Position position : positionList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
@@ -517,7 +544,7 @@ public class ApiController {
 		return elList;
 	}
 	
-	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm() {
+	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm(int systemFlag) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
 		List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC);
 		for (WarnRecord wr : wrList) {
@@ -530,7 +557,7 @@ public class ApiController {
 			ea.setCard_no(wr.getUserId());
 			
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
 				break;
@@ -544,9 +571,9 @@ public class ApiController {
 		return eaList;
 	}
 	
-	public List<EmployeeAlarm> convertKeyWarningToEmployeeAlarm() {
+	public List<EmployeeAlarm> convertKeyWarningToEmployeeAlarm(int systemFlag,String databaseName) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
-		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC);
+		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC,databaseName);
 		for (KeyWarning kw : kwList) {
 			EmployeeAlarm ea=new EmployeeAlarm();
 			ea.setId(kw.getId()+"");
@@ -557,7 +584,7 @@ public class ApiController {
 			ea.setCard_no(kw.getJobNumber());
 			
 			String companySocialCode=null;
-			switch (SYSTEM_FLAG) {
+			switch (systemFlag) {
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
@@ -629,6 +656,17 @@ public class ApiController {
 		bodyParamJO.put("areaCode", areaCode);
 		bodyParamJO.put("dataId", dataId);
 		return bodyParamJO;
+	}
+	
+	public void switchDatabase(HttpServletRequest request) {
+		String databaseName=null;
+		int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
+		switch (systemFlag) {
+		case Constant.WFPXHGYXGS:
+			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
+			break;
+		}
+		request.setAttribute("databaseName", databaseName);
 	}
 	
 	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String path, HttpServletRequest request) {

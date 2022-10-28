@@ -3,76 +3,76 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v3_1.KeyWarningMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v3_1.KeyWarning">
- 		insert into key_warning
+ 	<insert id="add">
+ 		insert into ${databaseName}.key_warning
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
+ 			<if test="keyWarning.tagId!=null">
  				tagId,
  			</if>
- 			<if test="entityId!=null">
+ 			<if test="keyWarning.entityId!=null">
  				entityId,
  			</if>
- 			<if test="areaId!=null">
+ 			<if test="keyWarning.areaId!=null">
  				areaId,
  			</if>
- 			<if test="raiseTime!=null">
+ 			<if test="keyWarning.raiseTime!=null">
  				raiseTime,
  			</if>
- 			<if test="raiseTimeYMD!=null">
+ 			<if test="keyWarning.raiseTimeYMD!=null">
  				raiseTimeYMD,
  			</if>
- 			<if test="x!=null">
+ 			<if test="keyWarning.x!=null">
  				x,
  			</if>
- 			<if test="y!=null">
+ 			<if test="keyWarning.y!=null">
  				y,
  			</if>
- 			<if test="z!=null">
+ 			<if test="keyWarning.z!=null">
  				z,
  			</if>
- 			<if test="floor!=null">
+ 			<if test="keyWarning.floor!=null">
  				floor,
  			</if>
  				sync
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
- 				#{tagId},
+ 			<if test="keyWarning.tagId!=null">
+ 				#{keyWarning.tagId},
  			</if>
- 			<if test="entityId!=null">
- 				#{entityId},
+ 			<if test="keyWarning.entityId!=null">
+ 				#{keyWarning.entityId},
  			</if>
- 			<if test="areaId!=null">
- 				#{areaId},
+ 			<if test="keyWarning.areaId!=null">
+ 				#{keyWarning.areaId},
  			</if>
- 			<if test="raiseTime!=null">
- 				#{raiseTime},
+ 			<if test="keyWarning.raiseTime!=null">
+ 				#{keyWarning.raiseTime},
  			</if>
- 			<if test="raiseTimeYMD!=null">
- 				#{raiseTimeYMD},
+ 			<if test="keyWarning.raiseTimeYMD!=null">
+ 				#{keyWarning.raiseTimeYMD},
  			</if>
- 			<if test="x!=null">
- 				#{x},
+ 			<if test="keyWarning.x!=null">
+ 				#{keyWarning.x},
  			</if>
- 			<if test="y!=null">
- 				#{y},
+ 			<if test="keyWarning.y!=null">
+ 				#{keyWarning.y},
  			</if>
- 			<if test="z!=null">
- 				#{z},
+ 			<if test="keyWarning.z!=null">
+ 				#{keyWarning.z},
  			</if>
- 			<if test="floor!=null">
- 				#{floor},
+ 			<if test="keyWarning.floor!=null">
+ 				#{keyWarning.floor},
  			</if>
  				0
  		</trim>
  	</insert>
 	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v3_1.KeyWarning">
-		select kw.*,s.`name` entityName,s.jobNumber from key_warning kw left join staff s on kw.tagId=s.tagId where sync=#{sync}
+		select kw.*,s.`name` entityName,s.jobNumber from ${databaseName}.key_warning kw left join ${databaseName}.staff s on kw.tagId=s.tagId where sync=#{sync}
 	</select>
 	<update id="syncByIds">
-		update key_warning set sync=${@com.sdwhNrcc.entity.v3_1.KeyWarning@SYNCED} where 1=1
-		<foreach collection="list" item="id" open=" and cast(id as char) in(" separator="," close=")">
+		update ${databaseName}.key_warning set sync=${@com.sdwhNrcc.entity.v3_1.KeyWarning@SYNCED} where 1=1
+		<foreach collection="idList" item="id" open=" and cast(id as char) in(" separator="," close=")">
 		#{id}
 		</foreach>
 	</update>

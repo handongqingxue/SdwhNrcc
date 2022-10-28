@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -37,8 +39,8 @@ public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
 	public static final String MODULE_NAME="/api/serverReceiver";
-	//private static final boolean IS_TEST=true;
-	private static final boolean IS_TEST=false;
+	private static final boolean IS_TEST=true;
+	//private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;
@@ -64,11 +66,15 @@ public class ServerReceiver {
 
 	@RequestMapping(value="/receiveMessage")
 	@ResponseBody
-	public Map<String, Object> receiveMessage() {
+	public Map<String, Object> receiveMessage(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
         try {
+        	
+        	switchSystem(request);
+
+			String databaseName = request.getAttribute("databaseName").toString();
         	if(IS_TEST) {
         		//String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
         		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT38206876\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
@@ -76,11 +82,11 @@ public class ServerReceiver {
         		String method = bodyJO.getString("method");
         		if("position".equals(method)) {
         			JSONObject paramsJO = bodyJO.getJSONObject("params");
-        			insertPositionData(paramsJO);
+        			insertPositionData(paramsJO,databaseName);
         		}
 				else if("keyWarning".equals(method)) {
 					JSONObject paramsJO = bodyJO.getJSONObject("params");
-					insertKeyWarningData(paramsJO);
+					insertKeyWarningData(paramsJO,databaseName);
 				}
         	}
         	else {
@@ -104,7 +110,10 @@ public class ServerReceiver {
 				//channel.queueDeclare("tenant_msg_F4A1D30F_sc22050664", true, false, false, null);
 	
 				// 5. 接收消息
-				channel.basicConsume("tenant_msg_F4A1D30F_sc22050664", true, new DefaultConsumer(channel) {
+				//tenant_msg_F4A1D30F_sc22050664
+				String clientSecret = request.getAttribute("clientSecret").toString();
+				String tenantId = request.getAttribute("tenantId").toString();
+				channel.basicConsume("tenant_msg_"+clientSecret+"_"+tenantId, true, new DefaultConsumer(channel) {
 	
 				        // 回调方法,当收到消息之后,会自动执行该方法
 				    public void handleDelivery(String consumerTag, Envelope envelope,AMQP.BasicProperties properties,byte[] body) throws IOException {
@@ -115,11 +124,11 @@ public class ServerReceiver {
 						String method = bodyJO.getString("method");
 						if("position".equals(method)) {
 							JSONObject paramsJO = bodyJO.getJSONObject("params");
-							insertPositionData(paramsJO);
+							insertPositionData(paramsJO,databaseName);
 						}
 						else if("keyWarning".equals(method)) {
 							JSONObject paramsJO = bodyJO.getJSONObject("params");
-							insertKeyWarningData(paramsJO);
+							insertKeyWarningData(paramsJO,databaseName);
 						}
 				    }
 				});
@@ -137,7 +146,7 @@ public class ServerReceiver {
 
 	@RequestMapping(value="/insertPositionData")
 	@ResponseBody
-	public Map<String, Object> insertPositionData(JSONObject paramsJO) {
+	public Map<String, Object> insertPositionData(JSONObject paramsJO,String databaseName) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
@@ -186,8 +195,8 @@ public class ServerReceiver {
 			position.setX(x);
 			position.setY(y);
 			position.setZ(z);
-			
-			positionService.add(position);
+
+			positionService.add(position,databaseName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -199,7 +208,7 @@ public class ServerReceiver {
 
 	@RequestMapping(value="/insertKeyWarningData")
 	@ResponseBody
-	public Map<String, Object> insertKeyWarningData(JSONObject paramsJO) {
+	public Map<String, Object> insertKeyWarningData(JSONObject paramsJO,String databaseName) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
@@ -223,7 +232,7 @@ public class ServerReceiver {
 			keyWarning.setZ(z);
 			keyWarning.setFloor(floor);
 			
-			keyWarningService.add(keyWarning);
+			keyWarningService.add(keyWarning,databaseName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -231,5 +240,22 @@ public class ServerReceiver {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	public void switchSystem(HttpServletRequest request) {
+		String tenantId=null;
+		String clientSecret=null;
+		String databaseName=null;
+		int systemFlag=Integer.valueOf(request.getParameter("systemFlag"));
+		switch (systemFlag) {
+		case Constant.WFPXHGYXGS:
+			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
+			clientSecret=Constant.CLIENT_SECRET_WFPXHGYXGS;
+			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
+			break;
+		}
+		request.setAttribute("tenantId", tenantId);
+		request.setAttribute("clientSecret", clientSecret);
+		request.setAttribute("databaseName", databaseName);
 	}
 }

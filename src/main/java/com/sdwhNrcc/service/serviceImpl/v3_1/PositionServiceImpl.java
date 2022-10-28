@@ -17,19 +17,19 @@ public class PositionServiceImpl implements PositionService {
 	private PositionMapper positionDao;
 
 	@Override
-	public int add(Position position) {
+	public int add(Position position, String databaseName) {
 		// TODO Auto-generated method stub
-		int count=positionDao.getCountByTagId(position.getTagId());
+		int count=positionDao.getCountByTagId(position.getTagId(),databaseName);
 		if(count==0)
-			positionDao.add(position);
+			positionDao.add(position,databaseName);
 		else
-			count=positionDao.edit(position);
+			count=positionDao.edit(position,databaseName);
 		return count;
 	}
 
 	@Override
-	public List<Position> queryELList() {
+	public List<Position> queryELList(String databaseName) {
 		// TODO Auto-generated method stub
-		return positionDao.queryELList();
+		return positionDao.queryELList(databaseName);
 	}
 }

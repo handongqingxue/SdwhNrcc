@@ -6,8 +6,8 @@ import com.sdwhNrcc.entity.v3_1.*;
 
 public interface PositionService {
 
-	int add(Position position);
+	int add(Position position, String databaseName);
 
-	List<Position> queryELList();
+	List<Position> queryELList(String databaseName);
 
 }

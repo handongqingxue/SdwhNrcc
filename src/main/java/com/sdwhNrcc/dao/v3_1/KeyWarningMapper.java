@@ -8,9 +8,9 @@ import com.sdwhNrcc.entity.v3_1.*;
 
 public interface KeyWarningMapper {
 
-	int add(KeyWarning keyWarning);
+	int add(@Param("keyWarning")KeyWarning keyWarning, @Param("databaseName")String databaseName);
 
-	List<KeyWarning> queryEAList(@Param("sync")int sync);
+	List<KeyWarning> queryEAList(@Param("sync")int sync, @Param("databaseName")String databaseName);
 
-	int syncByIds(List<String> idList);
+	int syncByIds(@Param("idList")List<String> idList, @Param("databaseName")String databaseName);
 }

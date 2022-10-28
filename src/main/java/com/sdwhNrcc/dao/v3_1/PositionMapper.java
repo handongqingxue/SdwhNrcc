@@ -8,11 +8,11 @@ import com.sdwhNrcc.entity.v3_1.*;
 
 public interface PositionMapper {
 
-	int add(Position position);
+	int add(@Param("position")Position position, @Param("databaseName")String databaseName);
 
-	int edit(Position position);
+	int edit(@Param("position")Position position, @Param("databaseName")String databaseName);
 
-	int getCountByTagId(@Param("tagId")String tagId);
+	int getCountByTagId(@Param("tagId")String tagId, @Param("databaseName")String databaseName);
 
-	List<Position> queryELList();
+	List<Position> queryELList(@Param("databaseName")String databaseName);
 }

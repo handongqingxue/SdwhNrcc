@@ -14,15 +14,16 @@ var path='<%=basePath %>';
 var apiPath=path+"api/";
 var epV1_3Path=path+"epV1_3/";
 var interval="60000";
+var systemFlag='${requestScope.systemFlag}';
 $(function(){
 	//makeSync();
 	receiveMessage();
-	setInterval(function(){
+	//setInterval(function(){
 		console.log("11111111");
 		dataEmployeeLocations();
 		//insertWarnRecordData();
 		dataEmployeeAlarm();
-	},interval);
+	//},interval);
 });
 
 function makeSync(){
@@ -35,6 +36,7 @@ function makeSync(){
 
 function dataEmployeeLocations(){
 	$.post(apiPath+"dataEmployeeLocations",
+		{systemFlag:systemFlag},
 		function(){
 		
 		}
@@ -43,6 +45,7 @@ function dataEmployeeLocations(){
 
 function dataEmployeeAlarm(){
 	$.post(apiPath+"dataEmployeeAlarm",
+		{systemFlag:systemFlag},
 		function(){
 		
 		}
@@ -61,6 +64,7 @@ function insertWarnRecordData(){
 
 function receiveMessage(){
 	$.post(apiPath+"serverReceiver/receiveMessage",
+		{systemFlag:systemFlag},
 		function(){
 		
 		}
