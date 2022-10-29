@@ -14,18 +14,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 public class SyncDBTask extends TimerTask {
 	
+	private int systemFlag;
+	
+	public SyncDBTask() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public SyncDBTask(int systemFlag) {
+		this.systemFlag = systemFlag;
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
+			String page=null;
+			System.out.println("systemFlag==="+systemFlag);
+			switch (systemFlag) {
+			case Constant.WFPXHGYXGS:
+				page="pxhgSyncDBRun";
+				break;
+			case Constant.SDFLXCLKJYXGS:
+				page="flxclSyncDBRun";
+				break;
+			}
+			
 			Desktop dt = Desktop.getDesktop();
-			dt.browse(new URI("http://127.0.0.1:8080/SdwhNrcc/api/goSyncDBRun"));
-			//dt.browse(new URI("http://"+Constant.SERVICE_IP+":8080/PositionPhZY/phone/goPage?page=syncDBRun"));
-			//dt.browse(new URI("http://localhost:8080/PositionPhZY/phone/goPage?page=syncDBRun"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
+			dt.browse(new URI("http://127.0.0.1:8080/SdwhNrcc/api/goPage?page="+page));
+			//dt.browse(new URI("http://"+Constant.SERVICE_IP+":8080/SdwhNrcc/api/goPage?page=pxhgSyncDBRun"));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

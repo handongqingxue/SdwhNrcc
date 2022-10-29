@@ -13,12 +13,15 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
+var cityFlag='${requestScope.cityFlag}';
+var systemFlag='${requestScope.systemFlag}';
 $(function(){
 	dataEmployeeInfo();
 });
 
 function dataEmployeeInfo(){
 	$.post(apiPath+"dataEmployeeInfo",
+		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		
 		}

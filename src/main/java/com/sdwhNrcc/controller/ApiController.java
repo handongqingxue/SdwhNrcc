@@ -63,13 +63,29 @@ public class ApiController {
 	public String goPage(HttpServletRequest request) {
 		//https://blog.csdn.net/lxyoucan/article/details/124490682
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBRun
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBRun
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDRun
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSync
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSync
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBManager
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
 			url="/testApi";
+		}
+		else if("syncDBRun".equals(page)){
+			String cityFlag = request.getParameter("cityFlag");
+			String systemFlag = request.getParameter("systemFlag");
+			request.setAttribute("cityFlag", cityFlag);
+			request.setAttribute("systemFlag", systemFlag);
+			url="/syncDBRun";
+		}
+		else if("pxhgSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS;
+		}
+		else if("flxclSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
 		}
 		else if("syncDBManager".equals(page)){
 			String cityFlag = request.getParameter("cityFlag");
@@ -78,37 +94,13 @@ public class ApiController {
 			request.setAttribute("systemFlag", systemFlag);
 			url="/syncDBManager";
 		}
-		else if("pxhgSync".equals(page)){
+		else if("pxhgSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS;
 		}
-		else if("flxclSync".equals(page)){
+		else if("flxclSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
 		}
 		return url;
-	}
-	
-	/*
-	@RequestMapping(value="/goTestApi")
-	public String goTestApi(HttpServletRequest request) {
-
-		switchCity(CITY_FLAG,request);
-		
-		return "/testApi";
-	}
-	
-	@RequestMapping(value="/goSyncDBManager")
-	public String goSyncDBManager() {
-
-		return "/syncDBManager";
-	}
-	*/
-	
-	@RequestMapping(value="/goSyncDBRun")
-	public String goSyncDBRun() {
-
-		//localhost:8080/SdwhNrcc/api/goSyncDBRun
-		
-		return "/syncDBRun";
 	}
 	
 	@RequestMapping(value="/authLogin")
@@ -175,12 +167,13 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
-			System.out.println("systemFlag==="+systemFlag);
+			setFlagInRequest(request);
 			JSONObject resultJO = null;
-			JSONObject bodyParamJO=switchSystem(systemFlag);
+			switchDatabase(request);
 			
 			JSONArray dataParamJA=new JSONArray();
+			List<EmployeeInfo> eiList = null;
+			
 			
 			/*
 			JSONObject dataParamJO=new JSONObject();
@@ -197,59 +190,69 @@ public class ApiController {
 			dataParamJA.put(dataParamJO);
 			*/
 			
-			String databaseName = request.getAttribute("databaseName").toString();
-			List<EmployeeInfo> eiList = null;
+			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				eiList = convertEntityToEmployeeInfo(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
+			case Constant.SDFLXCLKJYXGS:
+				String databaseName = request.getAttribute("databaseName").toString();
 				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
-			int eiListSize = eiList.size();
-			for (int i = 0; i < eiListSize; i++) {
-				if(i==1)
-					break;
-				EmployeeInfo ei=eiList.get(i);
-				JSONObject dataParamJO=new JSONObject();
-				dataParamJO.put("id", ei.getId());
-				dataParamJO.put("post_id", ei.getPost_id());
-				dataParamJO.put("post_name", ei.getPost_name());
-				dataParamJO.put("depart_id", ei.getDepart_id());
-				dataParamJO.put("depart_name", ei.getDepart_name());
-				dataParamJO.put("name", ei.getName());
-				dataParamJO.put("sex", ei.getSex());
-				dataParamJO.put("card_no", ei.getCard_no());
-				dataParamJO.put("company_social_code", ei.getCompany_social_code());
-				dataParamJO.put("employee_type", ei.getEmployee_type());
-				dataParamJA.put(dataParamJO);
-			}
 			
-			bodyParamJO.put("data", dataParamJA);
-			
-			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/info",request);
-			String status=resultJO.get("status").toString();
-			if("ok".equals(status)) {
-				String code=resultJO.get("code").toString();
-				String msg=resultJO.get("msg").toString();
-				String data = resultJO.getString("data");
-				System.out.println("code==="+code);
-				System.out.println("msg==="+msg);
-				System.out.println("data==="+data);
-				resultMap.put("code", code);
-				resultMap.put("msg", msg);
-				resultMap.put("data", data);
-			}
-			else {
-				boolean success=reAuthLogin(request);
-				System.out.println("success==="+success);
-				/*
-				if(success) {
-					Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
-					dataEmployeeInfo(request);
+			if(eiList!=null) {
+				int eiListSize = eiList.size();
+				for (int i = 0; i < eiListSize; i++) {
+					if(i==1)
+						break;
+					EmployeeInfo ei=eiList.get(i);
+					JSONObject dataParamJO=new JSONObject();
+					dataParamJO.put("id", ei.getId());
+					dataParamJO.put("post_id", ei.getPost_id());
+					dataParamJO.put("post_name", ei.getPost_name());
+					dataParamJO.put("depart_id", ei.getDepart_id());
+					dataParamJO.put("depart_name", ei.getDepart_name());
+					dataParamJO.put("name", ei.getName());
+					dataParamJO.put("sex", ei.getSex());
+					dataParamJO.put("card_no", ei.getCard_no());
+					dataParamJO.put("company_social_code", ei.getCompany_social_code());
+					dataParamJO.put("employee_type", ei.getEmployee_type());
+					dataParamJA.put(dataParamJO);
 				}
-				*/
+			
+				if(eiListSize>0) {
+					JSONObject bodyParamJO=switchSystem(systemFlag);
+					bodyParamJO.put("data", dataParamJA);
+				
+					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/info",request);
+					String status=resultJO.get("status").toString();
+					if("ok".equals(status)) {
+						String code=resultJO.get("code").toString();
+						String msg=resultJO.get("msg").toString();
+						String data = resultJO.getString("data");
+						System.out.println("code==="+code);
+						System.out.println("msg==="+msg);
+						System.out.println("data==="+data);
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+					}
+					else {
+						boolean success=reAuthLogin(request);
+						System.out.println("success==="+success);
+						/*
+						if(success) {
+							Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
+							dataEmployeeInfo(request);
+						}
+						*/
+					}
+				}
+				else {
+					System.out.println("暂无人员位置信息可上传省平台");
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -480,8 +483,11 @@ public class ApiController {
 			ei.setCard_no(staff.getJobNumber());
 			String companySocialCode=null;
 			switch (systemFlag) {
-			case Constant.WFRZJXHYXGS:
-				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+			case Constant.WFPXHGYXGS:
+				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
+				break;
+			case Constant.SDFLXCLKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
 			}
 			ei.setCompany_social_code(companySocialCode);

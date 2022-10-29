@@ -16,13 +16,13 @@ var epV1_3Path=path+"epV1_3/";
 var interval="60000";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
-alert(cityFlag);
+alert(systemFlag);
 $(function(){
-	//makeSync();
+	makeSync();
 	//receiveMessage();
 	//setInterval(function(){
 		console.log("11111111");
-		dataEmployeeLocations();
+		//dataEmployeeLocations();
 		//insertWarnRecordData();
 		//dataEmployeeAlarm();
 	//},interval);
@@ -30,6 +30,7 @@ $(function(){
 
 function makeSync(){
 	$.post(apiPath+"syncDBManager/makeSync",
+		{systemFlag:systemFlag},
 		function(){
 		
 		}
