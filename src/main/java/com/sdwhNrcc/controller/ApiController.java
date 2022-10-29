@@ -69,6 +69,7 @@ public class ApiController {
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBManager
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=rzjxhSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
@@ -95,10 +96,13 @@ public class ApiController {
 			url="/syncDBManager";
 		}
 		else if("pxhgSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
 		else if("flxclSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
+		}
+		else if("rzjxhSyncDBManager".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS;
 		}
 		return url;
 	}

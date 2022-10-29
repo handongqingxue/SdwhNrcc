@@ -37,8 +37,6 @@ public class EpV1_3Controller {
 	private static final String PUBLIC_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/public/embeded.smd";
 	private static final String SERVICE_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/service/embeded.smd";
 	public static final String MODULE_NAME="/epV1_3";
-	public static final String TEST_USER_Id="test";
-	public static final int EP_FLAG=1;
 	
 	@Autowired
 	private EntityService entityService;
@@ -49,6 +47,8 @@ public class EpV1_3Controller {
 	@Autowired
 	private TagService tagService;
 	@Autowired
+	private LocationService locationService;
+	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
 	private WarnTriggerService warnTriggerService;
@@ -57,17 +57,20 @@ public class EpV1_3Controller {
 	public String goTestEp(HttpServletRequest request) {
 
 		//https://blog.csdn.net/m0_57493148/article/details/124030242
-		switchEnterprise(EP_FLAG,request);
+		switchEnterprise(request);
 
 		return "/testEpV1_3";
 	}
 	
-	public void switchEnterprise(int epFlag,HttpServletRequest request) {
+	public void switchEnterprise(HttpServletRequest request) {
 		String serviceIp=null;
 		int servicePort=0;
 		String tenantId=null;
 		String userId=null;
 		String password=null;
+		String databaseName=null;
+		int epFlag=Integer.valueOf(request.getParameter("epFlag"));
+		System.out.println("epFlag==="+epFlag);
 		switch (epFlag) {
 		case Constant.WFRZJXHYXGS:
 			serviceIp=Constant.SERVICE_IP_WFRZJXHYXGS;
@@ -75,14 +78,15 @@ public class EpV1_3Controller {
 			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
 			userId=Constant.USER_ID_WFRZJXHYXGS;
 			password=Constant.PASSWORD_WFRZJXHYXGS;
+			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
 			break;
 		}
-		System.out.println("serviceIp==="+serviceIp);
 		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("userId", userId);
 		request.setAttribute("password", password);
+		request.setAttribute("databaseName", databaseName);
 	}
 
 	/**
@@ -226,7 +230,6 @@ public class EpV1_3Controller {
 	}
 	
 	public boolean reLogin(HttpServletRequest request) {
-		switchEnterprise(EP_FLAG,request);
 		String tenantId = request.getAttribute("tenantId").toString();
 		String userId = request.getAttribute("userId").toString();
 		String password = request.getAttribute("password").toString();
@@ -500,6 +503,7 @@ public class EpV1_3Controller {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			switchEnterprise(request);
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("jsonrpc", "2.0");
 			bodyParamJO.put("method", "getWarnRecords");
@@ -537,10 +541,11 @@ public class EpV1_3Controller {
 
 	@RequestMapping(value="/initEntityList")
 	@ResponseBody
-	public Map<String, Object> initEntityList() {
+	public Map<String, Object> initEntityList(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		List<Entity> list=entityService.queryList();
+		String databaseName = request.getAttribute("databaseName").toString();
+		List<Entity> list=entityService.queryList(databaseName);
 		
 		if(list.size()==0) {
 			resultMap.put("status","no");
@@ -665,12 +670,82 @@ public class EpV1_3Controller {
 		}
 	}
 
+	@RequestMapping(value="/insertLocationData")
+	@ResponseBody
+	public Map<String, Object> insertLocationData(HttpServletRequest request) {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		switchEnterprise(request);
+		Map<String, Object> tsrMap = getTagStateMap(request);
+		String status = tsrMap.get("status").toString();
+		System.out.println("status==="+status);
+		if("ok".equals(status)) {
+			String databaseName = request.getAttribute("databaseName").toString();
+			List<Entity> entityList = entityService.queryList(databaseName);
+			com.alibaba.fastjson.JSONObject resultJO = (com.alibaba.fastjson.JSONObject)tsrMap.get("result");
+			for (Entity entity : entityList) {
+				String tagId = entity.getTagId();
+				System.out.println("tagid="+tagId);
+				com.alibaba.fastjson.JSONObject tagJO = (com.alibaba.fastjson.JSONObject)resultJO.get(tagId);
+				if(tagJO!=null) {
+					String tagJOId = tagJO.getString("tagId");
+					if(tagId==tagJOId) {
+						String deviceType = tagJO.getString("deviceType");
+						String uid = tagJO.getString("uid");
+						Integer rootAreaId = tagJO.getInteger("rootAreaId");
+						Integer areaId = tagJO.getInteger("areaId");
+						Long locationTime = tagJO.getLong("locationTime");
+						Long lostTime = tagJO.getLong("lostTime");
+						Float x = tagJO.getFloat("x");
+						Float y = tagJO.getFloat("y");
+						Float z = tagJO.getFloat("z");
+						Boolean absolute = tagJO.getBoolean("absolute");
+						Float speed = tagJO.getFloat("speed");
+						Integer floor = tagJO.getInteger("floor");
+						Boolean out = tagJO.getBoolean("out");
+						Float longitude = tagJO.getFloat("longitude");
+						Float latitude = tagJO.getFloat("latitude");
+						Float altitude = tagJO.getFloat("altitude");
+						
+						Location location = new Location();
+						location.setDeviceType(deviceType);
+						location.setUid(uid);
+						location.setRootAreaId(rootAreaId);
+						location.setAreaId(areaId);
+						location.setLocationTime(locationTime);
+						location.setLostTime(lostTime);
+						location.setX(x);
+						location.setY(y);
+						location.setZ(z);
+						location.setAbsolute(absolute);
+						location.setSpeed(speed);
+						location.setFloor(floor);
+						location.setOut(out);
+						location.setLongitude(longitude);
+						location.setLatitude(latitude);
+						location.setAltitude(altitude);
+						
+						locationService.add(location);
+						
+						//"BTT32003683":{"altitude":5.9,"tagId":"BTT32003683","latitude":32.262735298435175,"locationType":"location","lostTime":0,"speed":0,"nowTime":1623829502542,"out":false,"uid":"BTT32003683","gateId":"7901","labId":2156,"floor":1,"longitude":119.11353856538909,"deviceType":"Tag","outDoor":0,"silent":false,"labInTime":1623827379823,"locationTime":1623829502361,"pingTime":1623829502361,"entityType":"staff","labInGate":"7900","inDoor":1623813324947,"entityId":24152,"userId":"3683","beacons":"BTI24007901(3950)","areaId":2,"volt":3955,"absolute":true,"x":500.47,"y":23,"z":0,"rootAreaId":1}
+					}
+				}
+			}
+		}
+		else {
+			boolean success=reLogin(request);
+			System.out.println("success==="+success);
+		}
+		return resultMap;
+	}
+
 	@RequestMapping(value="/insertWarnRecordData")
 	@ResponseBody
 	public Map<String, Object> insertWarnRecordData(HttpServletRequest request) {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			switchEnterprise(request);
 			Map<String, Object> wrrMap = getWarnRecords(request);
 			String status = wrrMap.get("status").toString();
 			if("ok".equals(status)) {
@@ -688,10 +763,13 @@ public class EpV1_3Controller {
 			}
 			else {
 				boolean success=reLogin(request);
+				System.out.println("success==="+success);
+				/*
 				if(success) {
 					Thread.sleep(1000*10);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ10√Î∫Û‘Ÿ÷¥––
 					insertWarnRecordData(request);
 				}
+				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -775,8 +853,8 @@ public class EpV1_3Controller {
 			throws IOException {
 		StringBuffer sbf = new StringBuffer(); 
 		String strRead = null; 
-		String serviceIp = request.getParameter("serviceIp");
-		String servicePort = request.getParameter("servicePort");
+		String serviceIp = request.getAttribute("serviceIp").toString();
+		String servicePort = request.getAttribute("servicePort").toString();
 		URL url = new URL(serverURL.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp).replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort));
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
@@ -795,7 +873,7 @@ public class EpV1_3Controller {
 			}
 			
 			if(cookie==null) {
-				String userId = request.getParameter("userId");
+				String userId = request.getAttribute("userId").toString();
 				if(userId!=null)
 					cookie = epLoginUserService.getCookieByUserId(userId);
 			}
@@ -829,7 +907,7 @@ public class EpV1_3Controller {
 		
 		if(serverURL.contains("public")&&"login".equals(method)) {
 			if(!checkCookieInSession(session)) {
-				getCookieFromHeader(connection,session);
+				getCookieFromHeader(connection,request);
 			}
 		}
 		
@@ -893,15 +971,17 @@ public class EpV1_3Controller {
 		}
 	}
 	
-	public String getCookieFromHeader(HttpURLConnection connection,HttpSession session) {
+	public String getCookieFromHeader(HttpURLConnection connection,HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		Map<String,List<String>> map = connection.getHeaderFields();
 		for (String key : map.keySet()) {
 			String value = map.get(key).get(0);
 			if(value.contains("JSESSIONID=")) {
 				 System.out.println("key==="+value);
+				 String userId=request.getAttribute("userId").toString();
 				 EpLoginUser epLoginUser=new EpLoginUser();
 				 epLoginUser.setCookie(value);
-				 epLoginUser.setUserId(TEST_USER_Id);
+				 epLoginUser.setUserId(userId);
 				 epLoginUserService.add(epLoginUser);
 				 
 				 session.setAttribute("epLoginUser", epLoginUser);

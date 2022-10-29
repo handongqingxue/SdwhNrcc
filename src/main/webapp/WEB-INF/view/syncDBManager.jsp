@@ -16,16 +16,18 @@ var epV1_3Path=path+"epV1_3/";
 var interval="60000";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
-alert(systemFlag);
+var epFlag='${requestScope.systemFlag}';
+alert(epFlag);
 $(function(){
-	makeSync();
-	receiveMessage();
-	setInterval(function(){
-		console.log("11111111");
-		dataEmployeeLocations();
+	//makeSync();
+	//receiveMessage();
+	//setInterval(function(){
+		console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag);
+		//dataEmployeeLocations();
+		insertLocationData();
 		//insertWarnRecordData();
-		dataEmployeeAlarm();
-	},interval);
+		//dataEmployeeAlarm();
+	//},interval);
 });
 
 function makeSync(){
@@ -51,6 +53,17 @@ function dataEmployeeAlarm(){
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		
+		}
+	,"json");
+}
+
+function insertLocationData(){
+	$.post(epV1_3Path+"insertLocationData",
+		{epFlag:epFlag},
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
 		}
 	,"json");
 }

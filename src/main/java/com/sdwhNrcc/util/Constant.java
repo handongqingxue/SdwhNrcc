@@ -18,6 +18,9 @@ public class Constant {
 	public static final String CONN_FACTORY_USERNAME="admin";
 	public static final String CONN_FACTORY_PASSWORD="admin";
 	
+	public static final int VERSION_1_3=1;
+	public static final int VERSION_3_1=2;
+	
 	
 	/**
 	 * 潍坊润中精细化工有限公司
@@ -226,6 +229,10 @@ public class Constant {
 	 * 密码
 	 */
 	public static final String PASSWORD_WFRZJXHYXGS="test";
+	/**
+	 * 数据库名
+	 */
+	public static final String DATABASE_NAME_WFRZJXHYXGS="sdwh_nrcc_wfrzjxhyxgs";
 	//潍坊润中精细化工有限公司end
 	
 	//昌邑市瑞海生物科技有限公司start

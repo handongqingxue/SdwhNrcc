@@ -63,11 +63,11 @@ public class Location {
 	public void setZ(Float z) {
 		this.z = z;
 	}
-	public Boolean getAbslute() {
-		return abslute;
+	public Boolean getAbsolute() {
+		return absolute;
 	}
-	public void setAbslute(Boolean abslute) {
-		this.abslute = abslute;
+	public void setAbsolute(Boolean absolute) {
+		this.absolute = absolute;
 	}
 	public Float getSpeed() {
 		return speed;
@@ -126,7 +126,7 @@ public class Location {
 	private Float x;
 	private Float y;
 	private Float z;
-	private Boolean abslute;
+	private Boolean absolute;
 	private Float speed;
 	private Integer floor;
 	private Boolean out;

@@ -8,7 +8,7 @@ public interface EntityService {
 
 	int add(List<Entity> entityList);
 
-	List<Entity> queryList();
+	List<Entity> queryList(String databaseName);
 
 	/**
 	 * 查询省平台所需的员工数据

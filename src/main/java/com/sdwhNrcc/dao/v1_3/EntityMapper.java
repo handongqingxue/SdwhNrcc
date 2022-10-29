@@ -12,7 +12,7 @@ public interface EntityMapper {
 
 	int edit(Entity entity);
 
-	List<Entity> queryList();
+	List<Entity> queryList(@Param("databaseName")String databaseName);
 
 	int getCountById(@Param("id")Integer id);
 

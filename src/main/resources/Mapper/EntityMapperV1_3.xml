@@ -132,7 +132,7 @@
 		where id=#{id}
 	</update>
  	<select id="queryList" resultType="com.sdwhNrcc.entity.v1_3.Entity">
- 		select * from entity where 1=1 and tagId is not null order by name
+ 		select * from ${databaseName}.entity where 1=1 and tagId is not null order by name
  	</select>
 	<select id="getCountById" resultType="java.lang.Integer">
 		select count(*) from entity where id=#{id}

@@ -39,8 +39,8 @@ public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
 	public static final String MODULE_NAME="/api/serverReceiver";
-	private static final boolean IS_TEST=true;
-	//private static final boolean IS_TEST=false;
+	//private static final boolean IS_TEST=true;
+	private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;

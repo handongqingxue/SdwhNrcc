@@ -29,9 +29,9 @@ public class EntityServiceImpl implements EntityService {
 	}
 
 	@Override
-	public List<Entity> queryList() {
+	public List<Entity> queryList(String databaseName) {
 		// TODO Auto-generated method stub
-		return entityDao.queryList();
+		return entityDao.queryList(databaseName);
 	}
 
 	@Override
