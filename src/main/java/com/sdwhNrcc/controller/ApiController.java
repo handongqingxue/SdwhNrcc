@@ -133,7 +133,7 @@ public class ApiController {
 			loginUserService.add(lu);
 			
 			HttpSession session = request.getSession();
-			Object loginUserObj = session.getAttribute("loginUser");
+			Object loginUserObj = session.getAttribute("loginUser"+username);
 			if(loginUserObj!=null) {
 				LoginUser loginUser = (LoginUser)loginUserObj;
 				loginUser.setToken(token);
@@ -539,6 +539,9 @@ public class ApiController {
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
+			case Constant.SDFLXCLKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
+				break;
 			}
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
@@ -709,24 +712,23 @@ public class ApiController {
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 			
 			//connection.setInstanceFollowRedirects(false); 
-			
+
+			Object usernameObj = null;
 			HttpSession session = request.getSession();
 			if(!path.contains("auth/login")) {
 				switchCity(request);
+				String username=request.getAttribute("username").toString();
 				
 				String token = null;
-				Object LoginUserObj = session.getAttribute("loginUser");
+				Object LoginUserObj = session.getAttribute("loginUser"+username);
 				//System.out.println("LoginUserObj==="+LoginUserObj);
 				if(LoginUserObj!=null) {
 					LoginUser loginUser = (LoginUser)LoginUserObj;
 					token = loginUser.getToken();
 				}
 				
-				Object usernameObj = null;
 				if(token==null) {
-					usernameObj = request.getAttribute("username");
-					if(usernameObj!=null)
-						token = loginUserService.getTokenByUsername(usernameObj.toString());
+					token = loginUserService.getTokenByUsername(username);
 				}
 
 				System.out.println("token==="+token);
@@ -775,12 +777,14 @@ public class ApiController {
 				resultJO.put("status", "ok");
 				
 				if(path.contains("auth/login")) {
-					if(!checkTokenInSession(session)) {
+					if(!checkTokenInSession(request)) {
 						JSONObject dataJO = resultJO.getJSONObject("data");
 						String token = dataJO.getString("token");
+						String username=request.getAttribute("username").toString();
 						LoginUser loginUser=new LoginUser();
 						loginUser.setToken(token);
-						session.setAttribute("loginUser", loginUser);
+						loginUser.setUsername(username);
+						session.setAttribute("loginUser"+username, loginUser);
 					}
 				}
 			}
@@ -796,8 +800,10 @@ public class ApiController {
 		}
 	}
 	
-	public boolean checkTokenInSession(HttpSession session) {
-		Object loginUserObj = session.getAttribute("loginUser");
+	public boolean checkTokenInSession(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String username=request.getAttribute("username").toString();
+		Object loginUserObj = session.getAttribute("loginUser"+username);
 		if(loginUserObj==null)
 			return false;
 		else {
