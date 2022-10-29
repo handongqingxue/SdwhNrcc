@@ -101,10 +101,11 @@ public class EpV3_1Controller {
 			epLoginClientService.add(elc);
 			
 			HttpSession session = request.getSession();
-			Object epLoginClientObj = session.getAttribute("epLoginClient");
+			Object epLoginClientObj = session.getAttribute("epLoginClient"+clientId);
 			if(epLoginClientObj!=null) {
 				EpLoginClient epLoginClient = (EpLoginClient)epLoginClientObj;
 				epLoginClient.setAccess_token(access_token);
+				epLoginClient.setClient_id(clientId);
 			}
 
 			resultMap=JSON.parseObject(resultStr, Map.class);
@@ -186,12 +187,10 @@ public class EpV3_1Controller {
 			else {
 				boolean success=reOauthToken(request);
 				System.out.println("success==="+success);
-				/*
 				if(success) {
-					Thread.sleep(1000*10);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ10√Î∫Û‘Ÿ÷¥––
-					insertStaffData(request);
+					Thread.sleep(1000*60);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ60√Î∫Û‘Ÿ÷¥––
+					resultMap=insertStaffData(request);
 				}
-				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -215,6 +214,12 @@ public class EpV3_1Controller {
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
 			break;
+		case Constant.SDFLXCLKJYXGS:
+			serviceIp=Constant.SERVICE_IP_FL;
+			servicePort=Constant.SERVICE_PORT_FL;
+			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
+			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
 		}
 		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
@@ -230,6 +235,10 @@ public class EpV3_1Controller {
 		case Constant.WFPXHGYXGS:
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			clientSecret=Constant.CLIENT_SECRET_WFPXHGYXGS;
+			break;
+		case Constant.SDFLXCLKJYXGS:
+			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
+			clientSecret=Constant.CLIENT_SECRET_SDFLXCLKJYXGS;
 			break;
 		}
 		request.setAttribute("tenantId", tenantId);
@@ -248,11 +257,11 @@ public class EpV3_1Controller {
 			
 			String serviceIp = request.getAttribute("serviceIp").toString();
 			String servicePort = request.getAttribute("servicePort").toString();
+			String clientId = request.getAttribute("tenantId").toString();
 			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp);
 			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort);
 			if(apiMethod.contains("oauth/token")) {
 				switchTenant(request);
-				String clientId = request.getAttribute("tenantId").toString();
 				String clientSecret = request.getAttribute("clientSecret").toString();
 				serverUrl=serverUrl.replaceAll(Constant.EP_CLIENT_ID_STR, clientId);
 				serverUrl=serverUrl.replaceAll(Constant.EP_CLIENT_SECRET_STR, clientSecret);
@@ -266,7 +275,7 @@ public class EpV3_1Controller {
 			HttpSession session = request.getSession();
 			if(!apiMethod.contains("oauth/token")) {
 				String access_token = null;
-				Object epLoginClientObj = session.getAttribute("epLoginClient");
+				Object epLoginClientObj = session.getAttribute("epLoginClient"+clientId);
 				if(epLoginClientObj!=null) {
 					EpLoginClient epLoginClient = (EpLoginClient)epLoginClientObj;
 					access_token = epLoginClient.getAccess_token();
@@ -323,11 +332,12 @@ public class EpV3_1Controller {
 				resultJO.put("status", "ok");
 				
 				if(apiMethod.contains("oauth/token")) {
-					if(!checkTokenInSession(session)) {
+					if(!checkTokenInSession(request)) {
 						String access_token = resultJO.getString("access_token");
 						EpLoginClient elc=new EpLoginClient();
 						elc.setAccess_token(access_token);
-						session.setAttribute("epLoginClient", elc);
+						elc.setClient_id(clientId);
+						session.setAttribute("epLoginClient"+clientId, elc);
 					}
 				}
 			}
@@ -343,8 +353,10 @@ public class EpV3_1Controller {
 		}
 	}
 	
-	public boolean checkTokenInSession(HttpSession session) {
-		Object epLoginClientObj = session.getAttribute("epLoginClient");
+	public boolean checkTokenInSession(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String clientId=request.getAttribute("tenantId").toString();
+		Object epLoginClientObj = session.getAttribute("epLoginClient"+clientId);
 		if(epLoginClientObj==null)
 			return false;
 		else {

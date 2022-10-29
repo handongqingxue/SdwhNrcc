@@ -242,12 +242,10 @@ public class ApiController {
 					else {
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
-						/*
 						if(success) {
 							Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
-							dataEmployeeInfo(request);
+							resultMap=dataEmployeeInfo(request);
 						}
-						*/
 					}
 				}
 				else {

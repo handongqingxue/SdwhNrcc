@@ -22,12 +22,12 @@ public class SyncDBManager {
 		int hourOfDay=0;
 		switch (systemFlag) {
 		case Constant.WFPXHGYXGS:
-			//hourOfDay=22;//22点
-			hourOfDay=2;
+			hourOfDay=22;//22点
+			//hourOfDay=2;
 			break;
 		case Constant.SDFLXCLKJYXGS:
-			//hourOfDay=23;//23点
-			hourOfDay=2;
+			hourOfDay=23;//23点
+			//hourOfDay=2;
 			break;
 		}
 		
@@ -40,7 +40,7 @@ public class SyncDBManager {
                           此时要在 第一次执行定时任务的时间加一天，以便此任务在下个时间点执行。如果不加一天，任务会立即执行。
         **/ 
 		if(date.before(new Date())){
-			//date=DateUtil.dayOper(DateUtil.getDate(new Date(), "yyyy-MM-dd"),1);
+			date=DateUtil.dayOper(DateUtil.getDate(new Date(), "yyyy-MM-dd"),1);
 		}
 		Timer timer = new Timer();
 		timer.schedule(new SyncDBTask(systemFlag), date, PERIOD_DAY);

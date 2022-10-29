@@ -13,11 +13,23 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
+var epV3_1Path=path+"epV3_1/";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
+var epFlag='${requestScope.systemFlag}';
 $(function(){
-	dataEmployeeInfo();
+	insertStaffData();
 });
+
+function insertStaffData(){
+	$.post(epV3_1Path+"insertStaffData",
+		{epFlag:epFlag},
+		function(data){
+			if(data.status=="ok")
+				dataEmployeeInfo();
+		}
+	,"json");
+}
 
 function dataEmployeeInfo(){
 	$.post(apiPath+"dataEmployeeInfo",
@@ -27,9 +39,9 @@ function dataEmployeeInfo(){
 		}
 	,"json");
 	
-	//window.opener=null;
-	//window.open(' ', '_self', ' ');
-	//window.close();
+	window.opener=null;
+	window.open(' ', '_self', ' ');
+	window.close();
 }
 /*
 $.post(phonePath+"insertWarnRecordData",

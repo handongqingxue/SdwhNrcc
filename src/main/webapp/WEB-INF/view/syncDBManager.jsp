@@ -19,13 +19,13 @@ var systemFlag='${requestScope.systemFlag}';
 alert(systemFlag);
 $(function(){
 	makeSync();
-	//receiveMessage();
-	//setInterval(function(){
+	receiveMessage();
+	setInterval(function(){
 		console.log("11111111");
-		//dataEmployeeLocations();
+		dataEmployeeLocations();
 		//insertWarnRecordData();
-		//dataEmployeeAlarm();
-	//},interval);
+		dataEmployeeAlarm();
+	},interval);
 });
 
 function makeSync(){

@@ -90,6 +90,15 @@ public class Constant {
 	 */
 	public static final int SERVICE_PORT_PX=90;
 	
+	/**
+	 * 福林服务器ip
+	 */
+	public static final String SERVICE_IP_FL="222.173.86.130";
+	/**
+	 * 福林服务器端口
+	 */
+	public static final int SERVICE_PORT_FL=90;
+	
 	
 	
 	//潍坊普鑫化工有限公司start
