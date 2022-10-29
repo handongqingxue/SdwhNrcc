@@ -140,6 +140,26 @@ public class Constant {
 	 * 统一社会信用代码
 	 */
 	public static final String DATA_ID_SDFLXCLKJYXGS="91371700MA3P1UEYX9";
+	/**
+	 * 租户id
+	 */
+	public static final String TENANT_ID_SDFLXCLKJYXGS="sc22050640";
+	/**
+	 * 用户id
+	 */
+	public static final String USER_ID_SDFLXCLKJYXGS="flcl";
+	/**
+	 * 密码
+	 */
+	public static final String PASSWORD_SDFLXCLKJYXGS="flcl";
+	/**
+	 * 密钥
+	 */
+	public static final String CLIENT_SECRET_SDFLXCLKJYXGS="71B35547";
+	/**
+	 * 数据库名
+	 */
+	public static final String DATABASE_NAME_SDFLXCLKJYXGS="sdwh_nrcc_sdflxclkjyxgs";
 	//山东福林新材料科技有限公司(菏泽)end
 	
 	//淄博鑫乾化工有限公司start

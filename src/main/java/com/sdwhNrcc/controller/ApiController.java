@@ -43,7 +43,6 @@ public class ApiController {
 	private static final String ADDRESS_URL="http://"+Constant.REALM_NAME+":"+Constant.PORT;
 	public static final String MODULE_NAME="/api";
 	public static final String TEST_USERNAME="weifang_report_data";
-	public static final int CITY_FLAG=1;
 	
 	@Autowired
 	private EntityService entityService;
@@ -62,26 +61,28 @@ public class ApiController {
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
+		//https://blog.csdn.net/lxyoucan/article/details/124490682
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSync
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSync
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
-			switchCity(CITY_FLAG,request);
-			
-			List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC);
-			System.out.println("size==="+wrList.size());
-			
 			url="/testApi";
 		}
 		else if("syncDBManager".equals(page)){
+			String cityFlag = request.getParameter("cityFlag");
 			String systemFlag = request.getParameter("systemFlag");
+			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			url="/syncDBManager";
 		}
 		else if("pxhgSync".equals(page)){
-			url="redirect:goPage?page=syncDBManager&systemFlag="+Constant.WFPXHGYXGS;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS;
+		}
+		else if("flxclSync".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
 		}
 		return url;
 	}
@@ -136,6 +137,7 @@ public class ApiController {
 			if(loginUserObj!=null) {
 				LoginUser loginUser = (LoginUser)loginUserObj;
 				loginUser.setToken(token);
+				loginUser.setUsername(username);
 			}
 			
 			resultMap.put("code", code);
@@ -156,7 +158,6 @@ public class ApiController {
 	 * @return
 	 */
 	public boolean reAuthLogin(HttpServletRequest request) {
-		switchCity(CITY_FLAG,request);
 		String username = request.getAttribute("username").toString();
 		String password = request.getAttribute("password").toString();
 		System.out.println("username==="+username);
@@ -264,57 +265,65 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
-			System.out.println("systemFlag==="+systemFlag);
-			request.setAttribute("systemFlag", systemFlag);
+			setFlagInRequest(request);
 			JSONObject resultJO = null;
-			//switchCity(CITY_FLAG,request);
-			JSONObject bodyParamJO=switchSystem(systemFlag);
 			switchDatabase(request);
 			
 			JSONArray dataParamJA=new JSONArray();
 
 			List<EmployeeLocation> elList = null;
+
+			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				elList = convertLocationToEmployeeLocation(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
+			case Constant.SDFLXCLKJYXGS:
 				String databaseName = request.getAttribute("databaseName").toString();
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
-			int elListSize = elList.size();
-			for (int i = 0; i < elListSize; i++) {
-				EmployeeLocation el=elList.get(i);
-				JSONObject dataParamJO=new JSONObject();
-				dataParamJO.put("company_social_code", el.getCompany_social_code());
-				dataParamJO.put("floor_no", el.getFloor_no());
-				dataParamJO.put("card_no", el.getCard_no());
-				dataParamJO.put("time_stamp", el.getTime_stamp());
-				dataParamJO.put("status", el.getStatus());
-				dataParamJO.put("longitude", el.getLongitude());
-				dataParamJO.put("latitude", el.getLatitude());
-				dataParamJA.put(dataParamJO);
-			}
 			
-			bodyParamJO.put("data", dataParamJA);
-			
-			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/locations",request);
-			String status=resultJO.get("status").toString();
-			if("ok".equals(status)) {
-				String code=resultJO.get("code").toString();
-				System.out.println("code==="+code);
-				String msg=resultJO.get("msg").toString();
-				String data = resultJO.getString("data");
-				System.out.println("data==="+data);
-				resultMap.put("code", code);
-				resultMap.put("msg", msg);
-				resultMap.put("data", data);
-			}
-			else {
-				boolean success=reAuthLogin(request);
-				System.out.println("success==="+success);
+			if(elList!=null) {
+				int elListSize = elList.size();
+				for (int i = 0; i < elListSize; i++) {
+					EmployeeLocation el=elList.get(i);
+					JSONObject dataParamJO=new JSONObject();
+					dataParamJO.put("company_social_code", el.getCompany_social_code());
+					dataParamJO.put("floor_no", el.getFloor_no());
+					dataParamJO.put("card_no", el.getCard_no());
+					dataParamJO.put("time_stamp", el.getTime_stamp());
+					dataParamJO.put("status", el.getStatus());
+					dataParamJO.put("longitude", el.getLongitude());
+					dataParamJO.put("latitude", el.getLatitude());
+					dataParamJA.put(dataParamJO);
+				}
+				
+				if(elListSize>0) {
+					JSONObject bodyParamJO=switchSystem(systemFlag);
+					bodyParamJO.put("data", dataParamJA);
+				
+					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/locations",request);
+					String status=resultJO.get("status").toString();
+					if("ok".equals(status)) {
+						String code=resultJO.get("code").toString();
+						System.out.println("code==="+code);
+						String msg=resultJO.get("msg").toString();
+						String data = resultJO.getString("data");
+						System.out.println("data==="+data);
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+					}
+					else {
+						boolean success=reAuthLogin(request);
+						System.out.println("success==="+success);
+					}
+				}
+				else {
+					System.out.println("暂无人员位置信息可上传省平台");
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -330,9 +339,7 @@ public class ApiController {
 	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
-			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
-			System.out.println("systemFlag==="+systemFlag);
-			request.setAttribute("systemFlag", systemFlag);
+			setFlagInRequest(request);
 			switchDatabase(request);
 			JSONObject resultJO = null;
 			
@@ -340,72 +347,81 @@ public class ApiController {
 
 			StringBuilder syncIdsSB=new StringBuilder();
 			List<EmployeeAlarm> eaList = null;
+			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
 				eaList = convertWarnRecordToEmployeeAlarm(systemFlag);
 				break;
 			case Constant.WFPXHGYXGS:
+			case Constant.SDFLXCLKJYXGS:
 				String databaseName = request.getAttribute("databaseName").toString();
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
-			int eaListSize = eaList.size();
-			for (int i = 0; i < eaListSize; i++) {
-				//if(i==5)
-					//break;
-				EmployeeAlarm ea=eaList.get(i);
-				JSONObject dataParamJO=new JSONObject();
-				String id = ea.getId();
-				syncIdsSB.append(",");
-				syncIdsSB.append(id);
-				dataParamJO.put("id", id);
-				dataParamJO.put("time", ea.getTime());
-				dataParamJO.put("type", ea.getType());
-				dataParamJO.put("area_name", ea.getArea_name());
-				dataParamJO.put("name", ea.getName());
-				dataParamJO.put("card_no", ea.getCard_no());
-				dataParamJO.put("handle_time", ea.getHandle_time());
-				dataParamJO.put("handle_remark", ea.getHandle_remark());
-				dataParamJO.put("company_social_code", ea.getCompany_social_code());
-				dataParamJO.put("longitude", ea.getLongitude());
-				dataParamJO.put("latitude", ea.getLatitude());
-				dataParamJA.put(dataParamJO);
-			}
-
-			if(eaListSize>0) {
-				JSONObject bodyParamJO=switchSystem(systemFlag);
-				bodyParamJO.put("data", dataParamJA);
-				
-				resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
-				String status=resultJO.get("status").toString();
-				if("ok".equals(status)) {
-					String code=resultJO.get("code").toString();
-					System.out.println("code==="+code);
-					String msg=resultJO.get("msg").toString();
-					String data = resultJO.getString("data");
-					System.out.println("data==="+data);
+			
+			if(eaList!=null) {
+				int eaListSize = eaList.size();
+				for (int i = 0; i < eaListSize; i++) {
+					//if(i==5)
+						//break;
+					EmployeeAlarm ea=eaList.get(i);
+					JSONObject dataParamJO=new JSONObject();
+					String id = ea.getId();
+					syncIdsSB.append(",");
+					syncIdsSB.append(id);
+					dataParamJO.put("id", id);
+					dataParamJO.put("time", ea.getTime());
+					dataParamJO.put("type", ea.getType());
+					dataParamJO.put("area_name", ea.getArea_name());
+					dataParamJO.put("name", ea.getName());
+					dataParamJO.put("card_no", ea.getCard_no());
+					dataParamJO.put("handle_time", ea.getHandle_time());
+					dataParamJO.put("handle_remark", ea.getHandle_remark());
+					dataParamJO.put("company_social_code", ea.getCompany_social_code());
+					dataParamJO.put("longitude", ea.getLongitude());
+					dataParamJO.put("latitude", ea.getLatitude());
+					dataParamJA.put(dataParamJO);
+				}
+	
+				if(eaListSize>0) {
+					JSONObject bodyParamJO=switchSystem(systemFlag);
+					bodyParamJO.put("data", dataParamJA);
 					
-					if("200".equals(code)) {
-						String syncIds = syncIdsSB.toString().substring(1);
-						System.out.println("syncIds==="+syncIds);
-						switch (systemFlag) {
-						case Constant.WFRZJXHYXGS:
-							warnRecordService.syncByIds(syncIds);
-							break;
-						case Constant.WFPXHGYXGS:
-							String databaseName = request.getAttribute("databaseName").toString();
-							keyWarningService.syncByIds(syncIds,databaseName);
-							break;
+					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
+					String status=resultJO.get("status").toString();
+					if("ok".equals(status)) {
+						String code=resultJO.get("code").toString();
+						System.out.println("code==="+code);
+						String msg=resultJO.get("msg").toString();
+						String data = resultJO.getString("data");
+						System.out.println("data==="+data);
+						
+						if("200".equals(code)) {
+							String syncIds = syncIdsSB.toString().substring(1);
+							System.out.println("syncIds==="+syncIds);
+							switch (systemFlag) {
+							case Constant.WFRZJXHYXGS:
+								warnRecordService.syncByIds(syncIds);
+								break;
+							case Constant.WFPXHGYXGS:
+							case Constant.SDFLXCLKJYXGS:
+								String databaseName = request.getAttribute("databaseName").toString();
+								keyWarningService.syncByIds(syncIds,databaseName);
+								break;
+							}
 						}
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
 					}
-					
-					resultMap.put("code", code);
-					resultMap.put("msg", msg);
-					resultMap.put("data", data);
+					else {
+						boolean success=reAuthLogin(request);
+						System.out.println("success==="+success);
+					}
 				}
 				else {
-					boolean success=reAuthLogin(request);
-					System.out.println("success==="+success);
+					System.out.println("暂无报警信息可上传省平台");
 				}
 			}
 		} catch (Exception e) {
@@ -598,9 +614,21 @@ public class ApiController {
 		return eaList;
 	}
 	
-	public void switchCity(int cityFlag,HttpServletRequest request) {
+	public void setFlagInRequest(HttpServletRequest request) {
+		int cityFlag = Integer.valueOf(request.getParameter("cityFlag"));
+		int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
+		
+		System.out.println("cityFlag==="+cityFlag);
+		System.out.println("systemFlag==="+systemFlag);
+		
+		request.setAttribute("cityFlag", cityFlag);
+		request.setAttribute("systemFlag", systemFlag);
+	}
+	
+	public void switchCity(HttpServletRequest request) {
 		String username=null;
 		String password=null;
+		int cityFlag = Integer.valueOf(request.getAttribute("cityFlag").toString());
 		switch (cityFlag) {
 		case Constant.WEI_FANG:
 			username=Constant.USERNAME_WEI_FANG;
@@ -665,6 +693,9 @@ public class ApiController {
 		case Constant.WFPXHGYXGS:
 			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
 			break;
+		case Constant.SDFLXCLKJYXGS:
+			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
 		}
 		request.setAttribute("databaseName", databaseName);
 	}
@@ -681,7 +712,7 @@ public class ApiController {
 			
 			HttpSession session = request.getSession();
 			if(!path.contains("auth/login")) {
-				switchCity(CITY_FLAG,request);
+				switchCity(request);
 				
 				String token = null;
 				Object LoginUserObj = session.getAttribute("loginUser");
@@ -691,12 +722,13 @@ public class ApiController {
 					token = loginUser.getToken();
 				}
 				
+				Object usernameObj = null;
 				if(token==null) {
-					Object usernameObj = request.getAttribute("username");
+					usernameObj = request.getAttribute("username");
 					if(usernameObj!=null)
 						token = loginUserService.getTokenByUsername(usernameObj.toString());
 				}
-				
+
 				System.out.println("token==="+token);
 				if(!StringUtils.isEmpty(token))
 					connection.setRequestProperty("Authorization", "Bearer "+token);

@@ -113,6 +113,7 @@ public class ServerReceiver {
 				//tenant_msg_F4A1D30F_sc22050664
 				String clientSecret = request.getAttribute("clientSecret").toString();
 				String tenantId = request.getAttribute("tenantId").toString();
+				System.out.println("接收推送消息的队列===tenant_msg_"+clientSecret+"_"+tenantId);
 				channel.basicConsume("tenant_msg_"+clientSecret+"_"+tenantId, true, new DefaultConsumer(channel) {
 	
 				        // 回调方法,当收到消息之后,会自动执行该方法
@@ -252,6 +253,11 @@ public class ServerReceiver {
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			clientSecret=Constant.CLIENT_SECRET_WFPXHGYXGS;
 			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
+			break;
+		case Constant.SDFLXCLKJYXGS:
+			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
+			clientSecret=Constant.CLIENT_SECRET_SDFLXCLKJYXGS;
+			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
 			break;
 		}
 		request.setAttribute("tenantId", tenantId);
