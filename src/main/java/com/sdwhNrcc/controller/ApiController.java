@@ -112,6 +112,9 @@ public class ApiController {
 		else if("flxclSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
+		else if("xqhgSyncDBManager".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.ZI_BO+"&systemFlag="+Constant.ZBXQHGYXGS+"&epVersion="+Constant.VERSION_3_1;
+		}
 		else if("rzjxhSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
 		}
@@ -213,6 +216,7 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.ZBXQHGYXGS:
 				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
@@ -298,6 +302,7 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.ZBXQHGYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -373,6 +378,7 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.ZBXQHGYXGS:
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
@@ -503,6 +509,9 @@ public class ApiController {
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
+			case Constant.ZBXQHGYXGS:
+				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
+				break;
 			}
 			ei.setCompany_social_code(companySocialCode);
 			String employeeType=null;
@@ -561,6 +570,9 @@ public class ApiController {
 				break;
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
+				break;
+			case Constant.ZBXQHGYXGS:
+				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
 				break;
 			}
 			el.setCompany_social_code(companySocialCode);
@@ -627,6 +639,12 @@ public class ApiController {
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
+			case Constant.SDFLXCLKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
+				break;
+			case Constant.ZBXQHGYXGS:
+				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
+				break;
 			}
 			ea.setCompany_social_code(companySocialCode);
 			
@@ -660,6 +678,15 @@ public class ApiController {
 		case Constant.HE_ZE:
 			username=Constant.USERNAME_HE_ZE;
 			password=Constant.PASSWORD_HE_ZE;
+			break;
+		case Constant.ZI_BO:
+			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
+			switch (systemFlag) {
+			case Constant.ZBXQHGYXGS:
+				username=Constant.AQPT_USERNAME_ZBXQHGYXGS;
+				password=Constant.AQPT_PASSWORD_ZBXQHGYXGS;
+				break;
+			}
 			break;
 		}
 		request.setAttribute("username", username);
@@ -718,6 +745,9 @@ public class ApiController {
 			break;
 		case Constant.SDFLXCLKJYXGS:
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.ZBXQHGYXGS:
+			databaseName=Constant.DATABASE_NAME_ZBXQHGYXGS;
 			break;
 		case Constant.WFRZJXHYXGS:
 			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;

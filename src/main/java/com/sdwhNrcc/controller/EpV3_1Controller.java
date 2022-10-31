@@ -209,16 +209,22 @@ public class EpV3_1Controller {
 		int epFlag=Integer.valueOf(request.getAttribute("epFlag").toString());
 		switch (epFlag) {
 		case Constant.WFPXHGYXGS:
-			serviceIp=Constant.SERVICE_IP_PX;
-			servicePort=Constant.SERVICE_PORT_PX;
+			serviceIp=Constant.SERVICE_IP_WFPXHGYXGS;
+			servicePort=Constant.SERVICE_PORT_WFPXHGYXGS;
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			databaseName=Constant.DATABASE_NAME_WFPXHGYXGS;
 			break;
 		case Constant.SDFLXCLKJYXGS:
-			serviceIp=Constant.SERVICE_IP_FL;
-			servicePort=Constant.SERVICE_PORT_FL;
+			serviceIp=Constant.SERVICE_IP_SDFLXCLKJYXGS;
+			servicePort=Constant.SERVICE_PORT_SDFLXCLKJYXGS;
 			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.ZBXQHGYXGS:
+			serviceIp=Constant.SERVICE_IP_ZBXQHGYXGS;
+			servicePort=Constant.SERVICE_PORT_ZBXQHGYXGS;
+			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;
+			databaseName=Constant.DATABASE_NAME_ZBXQHGYXGS;
 			break;
 		}
 		request.setAttribute("serviceIp", serviceIp);
@@ -239,6 +245,10 @@ public class EpV3_1Controller {
 		case Constant.SDFLXCLKJYXGS:
 			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
 			clientSecret=Constant.CLIENT_SECRET_SDFLXCLKJYXGS;
+			break;
+		case Constant.ZBXQHGYXGS:
+			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;
+			clientSecret=Constant.CLIENT_SECRET_ZBXQHGYXGS;
 			break;
 		}
 		request.setAttribute("tenantId", tenantId);
