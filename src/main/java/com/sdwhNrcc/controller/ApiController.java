@@ -78,31 +78,42 @@ public class ApiController {
 		else if("syncDBRun".equals(page)){
 			String cityFlag = request.getParameter("cityFlag");
 			String systemFlag = request.getParameter("systemFlag");
+			String epVersion = request.getParameter("epVersion");
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
+			request.setAttribute("epVersion", epVersion);
+			request.setAttribute("version_1_3", Constant.VERSION_1_3);
+			request.setAttribute("version_3_1", Constant.VERSION_3_1);
 			url="/syncDBRun";
 		}
 		else if("pxhgSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
 		else if("flxclSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
+		}
+		else if("rzjxhSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
 		}
 		else if("syncDBManager".equals(page)){
 			String cityFlag = request.getParameter("cityFlag");
 			String systemFlag = request.getParameter("systemFlag");
+			String epVersion = request.getParameter("epVersion");
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
+			request.setAttribute("epVersion", epVersion);
+			request.setAttribute("version_1_3", Constant.VERSION_1_3);
+			request.setAttribute("version_3_1", Constant.VERSION_3_1);
 			url="/syncDBManager";
 		}
 		else if("pxhgSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
 		else if("flxclSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
 		else if("rzjxhSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
 		}
 		return url;
 	}
@@ -268,6 +279,7 @@ public class ApiController {
 	@RequestMapping(value="/dataEmployeeLocations")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
+		System.out.println("dataEmployeeLocations...");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			setFlagInRequest(request);
@@ -342,6 +354,7 @@ public class ApiController {
 	@RequestMapping(value="/dataEmployeeAlarm")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
+		System.out.println("dataEmployeeAlarm...");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			setFlagInRequest(request);
@@ -705,6 +718,9 @@ public class ApiController {
 			break;
 		case Constant.SDFLXCLKJYXGS:
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.WFRZJXHYXGS:
+			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
 			break;
 		}
 		request.setAttribute("databaseName", databaseName);

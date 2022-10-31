@@ -17,21 +17,29 @@ var interval="60000";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
 var epFlag='${requestScope.systemFlag}';
-alert(epFlag);
+var epVersion='${requestScope.epVersion}';
+var version_1_3='${requestScope.version_1_3}';
+var version_3_1='${requestScope.version_3_1}';
 $(function(){
-	//makeSync();
-	//receiveMessage();
-	//setInterval(function(){
-		console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag);
-		//dataEmployeeLocations();
-		//insertLocationData();
-		//insertWarnRecordData();
-		//dataEmployeeAlarm();
-	//},interval);
-	
-		insertDutyData();
+	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
+	makeSync();
+	if(epVersion==version_1_3){
+		setInterval(function(){
+			insertLocationData();//因为是老版平台,就得每隔一段时间调用一次平台接口,把位置和报警数据先暂存到数据库里，再同步到省平台上
+			insertWarnRecordData();
+			dataEmployeeLocations();
+		},interval);
+	}
+	else if(epVersion==version_3_1){
+		receiveMessage();//只有新版真源平台才需要对接这个推送，只要数据有变化就会收到推送消息
+		setInterval(function(){//每隔一段时间把人员位置和报警信息同步到省平台一次
+			dataEmployeeLocations();
+			//dataEmployeeAlarm();
+		},interval);
+	}
 });
 
+/*
 function insertDutyData(){
 	$.post(epV1_3Path+"insertDutyData",
 		{epFlag:epFlag},
@@ -42,6 +50,7 @@ function insertDutyData(){
 		}
 	,"json");
 }
+*/
 
 function makeSync(){
 	$.post(apiPath+"syncDBManager/makeSync",
@@ -55,8 +64,9 @@ function makeSync(){
 function dataEmployeeLocations(){
 	$.post(apiPath+"dataEmployeeLocations",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
-		function(){
-		
+		function(result){
+			if(result.code=="200")
+				dataEmployeeAlarm();
 		}
 	,"json");
 }
@@ -75,8 +85,9 @@ function insertLocationData(){
 		{epFlag:epFlag},
 		function(data){
 			var status=data.status;
-			if(status=="ok")
+			if(status=="ok"){
 				console.log(data.message);
+			}
 		}
 	,"json");
 }

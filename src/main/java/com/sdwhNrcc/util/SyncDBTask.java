@@ -38,6 +38,9 @@ public class SyncDBTask extends TimerTask {
 			case Constant.SDFLXCLKJYXGS:
 				page="flxclSyncDBRun";
 				break;
+			case Constant.WFRZJXHYXGS:
+				page="rzjxhSyncDBRun";
+				break;
 			}
 			
 			Desktop dt = Desktop.getDesktop();

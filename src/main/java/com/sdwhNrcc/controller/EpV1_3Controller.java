@@ -213,7 +213,7 @@ public class EpV1_3Controller {
 				Map<String, Object> resultJOMap = (Map<String, Object>)resultMap.get("result");
 				
 				HttpSession session = request.getSession();
-				EpLoginUser epLoginUser=(EpLoginUser)session.getAttribute("epLoginUser");
+				EpLoginUser epLoginUser=(EpLoginUser)session.getAttribute("epLoginUser"+userId);
 				epLoginUser.setUserId(userId);
 				epLoginUser.setRole(Integer.valueOf(resultJOMap.get("role").toString()));
 				resultMap.put("cookie", epLoginUser.getCookie());
@@ -874,7 +874,8 @@ public class EpV1_3Controller {
 			//connection.setRequestProperty("Cookie", "JSESSIONID=849CB322A20324C2F7E11AD0A7A9899E;Path=/position; Domain=139.196.143.225; HttpOnly;");
 			//connection.setRequestProperty("Cookie", "JSESSIONID=E1CD97E8E9AA306810805BFF21D7FD7D; Path=/position; HttpOnly");
 			String cookie = null;
-			Object epLoginUserObj = session.getAttribute("epLoginUser");
+			String userId = request.getAttribute("userId").toString();
+			Object epLoginUserObj = session.getAttribute("epLoginUser"+userId);
 			//System.out.println("LoginUserObj==="+LoginUserObj);
 			if(epLoginUserObj!=null) {
 				EpLoginUser epLoginUser = (EpLoginUser)epLoginUserObj;
@@ -882,7 +883,6 @@ public class EpV1_3Controller {
 			}
 			
 			if(cookie==null) {
-				String userId = request.getAttribute("userId").toString();
 				if(userId!=null)
 					cookie = epLoginUserService.getCookieByUserId(userId);
 			}
@@ -902,9 +902,7 @@ public class EpV1_3Controller {
 		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
 		//body参数放这里
 		String bodyParamStr = bodyParamJO.toString();
-		//System.out.println("bodyParamStr==="+bodyParamStr);
 		writer.write(bodyParamStr);
-		//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
 		writer.flush();
 		InputStream is = connection.getInputStream(); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
@@ -915,7 +913,7 @@ public class EpV1_3Controller {
 		reader.close(); 
 		
 		if(serverURL.contains("public")&&"login".equals(method)) {
-			if(!checkCookieInSession(session)) {
+			if(!checkCookieInSession(request)) {
 				getCookieFromHeader(connection,request);
 			}
 		}
@@ -962,8 +960,10 @@ public class EpV1_3Controller {
 	}
 	*/
 	
-	public boolean checkCookieInSession(HttpSession session) {
-		Object epLoginUserObj = session.getAttribute("epLoginUser");
+	public boolean checkCookieInSession(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String userId  =request.getAttribute("userId").toString();
+		Object epLoginUserObj = session.getAttribute("epLoginUser"+userId);
 		if(epLoginUserObj==null)
 			return false;
 		else {
@@ -993,7 +993,7 @@ public class EpV1_3Controller {
 				 epLoginUser.setUserId(userId);
 				 epLoginUserService.add(epLoginUser);
 				 
-				 session.setAttribute("epLoginUser", epLoginUser);
+				 session.setAttribute("epLoginUser"+userId, epLoginUser);
 			}
 		}
 		return "";
