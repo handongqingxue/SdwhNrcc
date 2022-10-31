@@ -278,14 +278,14 @@ public class ApiController {
 
 			List<EmployeeLocation> elList = null;
 
+			String databaseName = request.getAttribute("databaseName").toString();
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
-				elList = convertLocationToEmployeeLocation(systemFlag);
+				elList = convertLocationToEmployeeLocation(systemFlag,databaseName);
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
-				String databaseName = request.getAttribute("databaseName").toString();
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -506,9 +506,9 @@ public class ApiController {
 		return eiList;
 	}
 	
-	public List<EmployeeLocation> convertLocationToEmployeeLocation(int systemFlag) {
+	public List<EmployeeLocation> convertLocationToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
-		List<Location> locationList=locationService.queryELList();
+		List<Location> locationList=locationService.queryELList(databaseName);
 		for (Location location : locationList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;

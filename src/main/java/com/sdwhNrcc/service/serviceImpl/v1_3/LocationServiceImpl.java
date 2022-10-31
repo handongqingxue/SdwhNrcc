@@ -17,19 +17,19 @@ public class LocationServiceImpl implements LocationService {
 	private LocationMapper locationDao;
 
 	@Override
-	public int add(Location location) {
+	public int add(Location location,String databaseName) {
 		// TODO Auto-generated method stub
-		int count=locationDao.getCountByUid(location.getUid());
+		int count=locationDao.getCountByUid(location.getUid(),databaseName);
 		if(count==0)
-			locationDao.add(location);
+			locationDao.add(location,databaseName);
 		else
-			count=locationDao.edit(location);
+			count=locationDao.edit(location,databaseName);
 		return count;
 	}
 
 	@Override
-	public List<Location> queryELList() {
+	public List<Location> queryELList(String databaseName) {
 		// TODO Auto-generated method stub
-		return locationDao.queryELList();
+		return locationDao.queryELList(databaseName);
 	}
 }

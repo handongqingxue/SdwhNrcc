@@ -685,11 +685,11 @@ public class EpV1_3Controller {
 			com.alibaba.fastjson.JSONObject resultJO = (com.alibaba.fastjson.JSONObject)tsrMap.get("result");
 			for (Entity entity : entityList) {
 				String tagId = entity.getTagId();
-				System.out.println("tagid="+tagId);
 				com.alibaba.fastjson.JSONObject tagJO = (com.alibaba.fastjson.JSONObject)resultJO.get(tagId);
 				if(tagJO!=null) {
 					String tagJOId = tagJO.getString("tagId");
-					if(tagId==tagJOId) {
+					System.out.println("tagJOId="+tagJOId);
+					if(tagId.equals(tagJOId)) {
 						String deviceType = tagJO.getString("deviceType");
 						String uid = tagJO.getString("uid");
 						Integer rootAreaId = tagJO.getInteger("rootAreaId");
@@ -725,9 +725,7 @@ public class EpV1_3Controller {
 						location.setLatitude(latitude);
 						location.setAltitude(altitude);
 						
-						locationService.add(location);
-						
-						//"BTT32003683":{"altitude":5.9,"tagId":"BTT32003683","latitude":32.262735298435175,"locationType":"location","lostTime":0,"speed":0,"nowTime":1623829502542,"out":false,"uid":"BTT32003683","gateId":"7901","labId":2156,"floor":1,"longitude":119.11353856538909,"deviceType":"Tag","outDoor":0,"silent":false,"labInTime":1623827379823,"locationTime":1623829502361,"pingTime":1623829502361,"entityType":"staff","labInGate":"7900","inDoor":1623813324947,"entityId":24152,"userId":"3683","beacons":"BTI24007901(3950)","areaId":2,"volt":3955,"absolute":true,"x":500.47,"y":23,"z":0,"rootAreaId":1}
+						locationService.add(location,databaseName);
 					}
 				}
 			}

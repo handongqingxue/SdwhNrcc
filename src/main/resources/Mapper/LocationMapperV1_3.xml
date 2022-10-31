@@ -3,165 +3,165 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.LocationMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.Location">
- 		insert into location
+ 	<insert id="add">
+ 		insert into ${databaseName}.location
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="deviceType!=null">
+ 			<if test="location.deviceType!=null">
  				deviceType,
  			</if>
- 			<if test="uid!=null">
+ 			<if test="location.uid!=null">
  				uid,
  			</if>
- 			<if test="rootAreaId!=null">
+ 			<if test="location.rootAreaId!=null">
  				rootAreaId,
  			</if>
- 			<if test="areaId!=null">
+ 			<if test="location.areaId!=null">
  				areaId,
  			</if>
- 			<if test="locationTime!=null">
+ 			<if test="location.locationTime!=null">
  				locationTime,
  			</if>
- 			<if test="lostTime!=null">
+ 			<if test="location.lostTime!=null">
  				lostTime,
  			</if>
- 			<if test="x!=null">
+ 			<if test="location.x!=null">
  				x,
  			</if>
- 			<if test="y!=null">
+ 			<if test="location.y!=null">
  				y,
  			</if>
- 			<if test="z!=null">
+ 			<if test="location.z!=null">
  				z,
  			</if>
- 			<if test="abslute!=null">
+ 			<if test="location.abslute!=null">
  				abslute,
  			</if>
- 			<if test="speed!=null">
+ 			<if test="location.speed!=null">
  				speed,
  			</if>
- 			<if test="floor!=null">
+ 			<if test="location.floor!=null">
  				floor,
  			</if>
- 			<if test="out!=null">
+ 			<if test="location.out!=null">
  				`out`,
  			</if>
- 			<if test="longitude!=null">
+ 			<if test="location.longitude!=null">
  				longitude,
  			</if>
- 			<if test="latitude!=null">
+ 			<if test="location.latitude!=null">
  				latitude,
  			</if>
- 			<if test="altitude!=null">
+ 			<if test="location.altitude!=null">
  				altitude,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="deviceType!=null">
- 				#{deviceType},
+ 			<if test="location.deviceType!=null">
+ 				#{location.deviceType},
  			</if>
- 			<if test="uid!=null">
- 				#{uid},
+ 			<if test="location.uid!=null">
+ 				#{location.uid},
  			</if>
- 			<if test="rootAreaId!=null">
- 				#{rootAreaId},
+ 			<if test="location.rootAreaId!=null">
+ 				#{location.rootAreaId},
  			</if>
- 			<if test="areaId!=null">
- 				#{areaId},
+ 			<if test="location.areaId!=null">
+ 				#{location.areaId},
  			</if>
- 			<if test="locationTime!=null">
- 				#{locationTime},
+ 			<if test="location.locationTime!=null">
+ 				#{location.locationTime},
  			</if>
- 			<if test="lostTime!=null">
- 				#{lostTime},
+ 			<if test="location.lostTime!=null">
+ 				#{location.lostTime},
  			</if>
- 			<if test="x!=null">
- 				#{x},
+ 			<if test="location.x!=null">
+ 				#{location.x},
  			</if>
- 			<if test="y!=null">
- 				#{y},
+ 			<if test="location.y!=null">
+ 				#{location.y},
  			</if>
- 			<if test="z!=null">
- 				#{z},
+ 			<if test="location.z!=null">
+ 				#{location.z},
  			</if>
- 			<if test="abslute!=null">
- 				#{abslute},
+ 			<if test="location.abslute!=null">
+ 				#{location.abslute},
  			</if>
- 			<if test="speed!=null">
- 				#{speed},
+ 			<if test="location.speed!=null">
+ 				#{location.speed},
  			</if>
- 			<if test="floor!=null">
- 				#{floor},
+ 			<if test="location.floor!=null">
+ 				#{location.floor},
  			</if>
- 			<if test="out!=null">
- 				#{out},
+ 			<if test="location.out!=null">
+ 				#{location.out},
  			</if>
- 			<if test="longitude!=null">
- 				#{longitude},
+ 			<if test="location.longitude!=null">
+ 				#{location.longitude},
  			</if>
- 			<if test="latitude!=null">
- 				#{latitude},
+ 			<if test="location.latitude!=null">
+ 				#{location.latitude},
  			</if>
- 			<if test="altitude!=null">
- 				#{altitude},
+ 			<if test="location.altitude!=null">
+ 				#{location.altitude},
  			</if>
  		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.Location">
-		update location set
+	<update id="edit">
+		update ${databaseName}.location set
 		<trim suffixOverrides=",">
-			<if test="deviceType!=null">
-				deviceType=#{deviceType},
+			<if test="location.deviceType!=null">
+				deviceType=#{location.deviceType},
 			</if>
-			<if test="rootAreaId!=null">
-				rootAreaId=#{rootAreaId},
+			<if test="location.rootAreaId!=null">
+				rootAreaId=#{location.rootAreaId},
 			</if>
-			<if test="areaId!=null">
-				areaId=#{areaId},
+			<if test="location.areaId!=null">
+				areaId=#{location.areaId},
 			</if>
-			<if test="locationTime!=null">
-				locationTime=#{locationTime},
+			<if test="location.locationTime!=null">
+				locationTime=#{location.locationTime},
 			</if>
-			<if test="lostTime!=null">
-				lostTime=#{lostTime},
+			<if test="location.lostTime!=null">
+				lostTime=#{location.lostTime},
 			</if>
-			<if test="x!=null">
-				x=#{x},
+			<if test="location.x!=null">
+				x=#{location.x},
 			</if>
-			<if test="y!=null">
-				y=#{y},
+			<if test="location.y!=null">
+				y=#{location.y},
 			</if>
-			<if test="z!=null">
-				z=#{z},
+			<if test="location.z!=null">
+				z=#{location.z},
 			</if>
-			<if test="abslute!=null">
-				abslute=#{abslute},
+			<if test="location.absolute!=null">
+				absolute=#{location.absolute},
 			</if>
-			<if test="speed!=null">
-				speed=#{speed},
+			<if test="location.speed!=null">
+				speed=#{location.speed},
 			</if>
-			<if test="floor!=null">
-				floor=#{floor},
+			<if test="location.floor!=null">
+				floor=#{location.floor},
 			</if>
-			<if test="out!=null">
-				`out`=#{out},
+			<if test="location.out!=null">
+				`out`=#{location.out},
 			</if>
-			<if test="longitude!=null">
-				longitude=#{longitude},
+			<if test="location.longitude!=null">
+				longitude=#{location.longitude},
 			</if>
-			<if test="latitude!=null">
-				latitude=#{latitude},
+			<if test="location.latitude!=null">
+				latitude=#{location.latitude},
 			</if>
-			<if test="altitude!=null">
-				altitude=#{altitude},
+			<if test="location.altitude!=null">
+				altitude=#{location.altitude},
 			</if>
 		</trim>
-		where uid=#{uid}
+		where uid=#{location.uid}
 	</update>
 	<select id="getCountByUid" resultType="java.lang.Integer">
-		select count(*) from location where uid=#{uid}
+		select count(*) from ${databaseName}.location where uid=#{uid}
 	</select>
 	<select id="queryELList" resultType="com.sdwhNrcc.entity.v1_3.Location">
-		select l.*,t.userId from location l left join tag t on l.uid=t.id
+		select l.*,t.userId from ${databaseName}.location l left join ${databaseName}.tag t on l.uid=t.id
 	</select>
 </mapper>

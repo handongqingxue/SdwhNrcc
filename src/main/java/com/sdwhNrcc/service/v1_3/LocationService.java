@@ -6,8 +6,8 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface LocationService {
 
-	int add(Location location);
+	int add(Location location, String databaseName);
 
-	List<Location> queryELList();
+	List<Location> queryELList(String databaseName);
 
 }

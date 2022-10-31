@@ -8,12 +8,12 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface LocationMapper {
 
-	int add(Location location);
+	int add(@Param("location")Location location, @Param("databaseName")String databaseName);
 
-	int edit(Location location);
+	int edit(@Param("location")Location location, @Param("databaseName")String databaseName);
 
-	int getCountByUid(@Param("uid")String uid);
+	int getCountByUid(@Param("uid")String uid, @Param("databaseName")String databaseName);
 
-	List<Location> queryELList();
+	List<Location> queryELList(@Param("databaseName")String databaseName);
 
 }
