@@ -3,141 +3,141 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.EntityMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.Entity">
- 		insert into entity
+ 	<insert id="add">
+ 		insert into ${databaseName}.entity
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
+ 			<if test="entity.tagId!=null">
  				tagId,
  			</if>
- 			<if test="entityType!=null">
+ 			<if test="entity.entityType!=null">
  				entityType,
  			</if>
- 			<if test="sex!=null">
+ 			<if test="entity.sex!=null">
  				sex,
  			</if>
- 			<if test="departmentId!=null">
+ 			<if test="entity.departmentId!=null">
  				departmentId,
  			</if>
- 			<if test="photo!=null">
+ 			<if test="entity.photo!=null">
  				photo,
  			</if>
- 			<if test="pid!=null">
+ 			<if test="entity.pid!=null">
  				pid,
  			</if>
- 			<if test="userId!=null">
+ 			<if test="entity.userId!=null">
  				userId,
  			</if>
- 			<if test="post!=null">
+ 			<if test="entity.post!=null">
  				post,
  			</if>
- 			<if test="phone!=null">
+ 			<if test="entity.phone!=null">
  				phone,
  			</if>
- 			<if test="name!=null">
+ 			<if test="entity.name!=null">
  				name,
  			</if>
- 			<if test="dutyId!=null">
+ 			<if test="entity.dutyId!=null">
  				dutyId,
  			</if>
- 			<if test="id!=null">
+ 			<if test="entity.id!=null">
  				id,
  			</if>
- 			<if test="age!=null">
+ 			<if test="entity.age!=null">
  				age,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
- 				#{tagId},
+ 			<if test="entity.tagId!=null">
+ 				#{entity.tagId},
  			</if>
- 			<if test="entityType!=null">
- 				#{entityType},
+ 			<if test="entity.entityType!=null">
+ 				#{entity.entityType},
  			</if>
- 			<if test="sex!=null">
- 				#{sex},
+ 			<if test="entity.sex!=null">
+ 				#{entity.sex},
  			</if>
- 			<if test="departmentId!=null">
- 				#{departmentId},
+ 			<if test="entity.departmentId!=null">
+ 				#{entity.departmentId},
  			</if>
- 			<if test="photo!=null">
- 				#{photo},
+ 			<if test="entity.photo!=null">
+ 				#{entity.photo},
  			</if>
- 			<if test="pid!=null">
- 				#{pid},
+ 			<if test="entity.pid!=null">
+ 				#{entity.pid},
  			</if>
- 			<if test="userId!=null">
- 				#{userId},
+ 			<if test="entity.userId!=null">
+ 				#{entity.userId},
  			</if>
- 			<if test="post!=null">
- 				#{post},
+ 			<if test="entity.post!=null">
+ 				#{entity.post},
  			</if>
- 			<if test="phone!=null">
- 				#{phone},
+ 			<if test="entity.phone!=null">
+ 				#{entity.phone},
  			</if>
- 			<if test="name!=null">
- 				#{name},
+ 			<if test="entity.name!=null">
+ 				#{entity.name},
  			</if>
- 			<if test="dutyId!=null">
- 				#{dutyId},
+ 			<if test="entity.dutyId!=null">
+ 				#{entity.dutyId},
  			</if>
- 			<if test="id!=null">
- 				#{id},
+ 			<if test="entity.id!=null">
+ 				#{entity.id},
  			</if>
- 			<if test="age!=null">
- 				#{age},
+ 			<if test="entity.age!=null">
+ 				#{entity.age},
  			</if>
  		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.Entity">
-		update entity set
+	<update id="edit">
+		update ${databaseName}.entity set
 		<trim suffixOverrides=",">
-			<if test="tagId!=null">
-				tagId=#{tagId},
+			<if test="entity.tagId!=null">
+				tagId=#{entity.tagId},
 			</if>
-			<if test="entityType!=null">
-				entityType=#{entityType},
+			<if test="entity.entityType!=null">
+				entityType=#{entity.entityType},
 			</if>
-			<if test="sex!=null">
-				sex=#{sex},
+			<if test="entity.sex!=null">
+				sex=#{entity.sex},
 			</if>
-			<if test="departmentId!=null">
-				departmentId=#{departmentId},
+			<if test="entity.departmentId!=null">
+				departmentId=#{entity.departmentId},
 			</if>
-			<if test="photo!=null">
-				photo=#{photo},
+			<if test="entity.photo!=null">
+				photo=#{entity.photo},
 			</if>
-			<if test="pid!=null">
-				pid=#{pid},
+			<if test="entity.pid!=null">
+				pid=#{entity.pid},
 			</if>
-			<if test="userId!=null">
-				userId=#{userId},
+			<if test="entity.userId!=null">
+				userId=#{entity.userId},
 			</if>
-			<if test="post!=null">
-				post=#{post},
+			<if test="entity.post!=null">
+				post=#{entity.post},
 			</if>
-			<if test="phone!=null">
-				phone=#{phone},
+			<if test="entity.phone!=null">
+				phone=#{entity.phone},
 			</if>
- 			<if test="name!=null">
- 				name=#{name},
+ 			<if test="entity.name!=null">
+ 				name=#{entity.name},
  			</if>
- 			<if test="dutyId!=null">
- 				dutyId=#{dutyId},
+ 			<if test="entity.dutyId!=null">
+ 				dutyId=#{entity.dutyId},
  			</if>
- 			<if test="age!=null">
- 				age=#{age},
+ 			<if test="entity.age!=null">
+ 				age=#{entity.age},
  			</if>
 		</trim>
-		where id=#{id}
+		where id=#{entity.id}
 	</update>
  	<select id="queryList" resultType="com.sdwhNrcc.entity.v1_3.Entity">
  		select * from ${databaseName}.entity where 1=1 and tagId is not null order by name
  	</select>
 	<select id="getCountById" resultType="java.lang.Integer">
-		select count(*) from entity where id=#{id}
+		select count(*) from ${databaseName}.entity where id=#{id}
 	</select>
 	<select id="queryEIList" resultType="com.sdwhNrcc.entity.v1_3.Entity">
-		select e.*,d.`name` dutyName from entity e left join duty d on e.dutyId=d.id
+		select e.*,d.`name` dutyName from ${databaseName}.entity e left join ${databaseName}.duty d on e.dutyId=d.id
 	</select>
 </mapper>

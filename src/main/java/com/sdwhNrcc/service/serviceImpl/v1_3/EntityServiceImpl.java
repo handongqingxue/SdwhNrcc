@@ -16,14 +16,14 @@ public class EntityServiceImpl implements EntityService {
 	private EntityMapper entityDao;
 
 	@Override
-	public int add(List<Entity> entityList) {
+	public int add(List<Entity> entityList,String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (Entity entity : entityList) {
-			if(entityDao.getCountById(entity.getId())==0)
-				count+=entityDao.add(entity);
+			if(entityDao.getCountById(entity.getId(),databaseName)==0)
+				count+=entityDao.add(entity,databaseName);
 			else
-				count+=entityDao.edit(entity);
+				count+=entityDao.edit(entity,databaseName);
 		}
 		return count;
 	}
@@ -35,8 +35,8 @@ public class EntityServiceImpl implements EntityService {
 	}
 
 	@Override
-	public List<Entity> queryEIList() {
+	public List<Entity> queryEIList(String databaseName) {
 		// TODO Auto-generated method stub
-		return entityDao.queryEIList();
+		return entityDao.queryEIList(databaseName);
 	}
 }

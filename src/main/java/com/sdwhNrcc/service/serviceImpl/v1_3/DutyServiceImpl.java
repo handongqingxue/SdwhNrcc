@@ -17,22 +17,22 @@ public class DutyServiceImpl implements DutyService {
 	private DutyMapper dutyDao;
 
 	@Override
-	public int add(List<Duty> dutyList) {
+	public int add(List<Duty> dutyList,String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (Duty duty : dutyList) {
-			count=dutyDao.getCountById(duty.getId());
+			count=dutyDao.getCountById(duty.getId(), databaseName);
 			if(count==0)
-				count=dutyDao.add(duty);
+				count=dutyDao.add(duty, databaseName);
 			else
-				count=dutyDao.edit(duty);
+				count=dutyDao.edit(duty, databaseName);
 		}
 		return count;
 	}
 
 	@Override
-	public List<Map<String, Object>> summaryOnlineDuty() {
+	public List<Map<String, Object>> summaryOnlineDuty(String databaseName) {
 		// TODO Auto-generated method stub
-		return dutyDao.summaryOnlineDuty();
+		return dutyDao.summaryOnlineDuty(databaseName);
 	}
 }

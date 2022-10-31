@@ -4,28 +4,28 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.WarnTriggerMapper">
 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.WarnTrigger">
- 		insert into warn_trigger
+ 		insert into ${databaseName}.warn_trigger
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="id!=null">
+ 			<if test="warnTrigger.id!=null">
  				id,
  			</if>
- 			<if test="name!=null">
+ 			<if test="warnTrigger.name!=null">
  				name,
  			</if>
- 			<if test="warnType!=null">
+ 			<if test="warnTrigger.warnType!=null">
  				warnType,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="id!=null">
- 				#{id},
+ 			<if test="warnTrigger.id!=null">
+ 				#{warnTrigger.id},
  			</if>
- 			<if test="name!=null">
- 				#{name},
+ 			<if test="warnTrigger.name!=null">
+ 				#{warnTrigger.name},
  			</if>
- 			<if test="warnType!=null">
- 				#{warnType},
+ 			<if test="warnTrigger.warnType!=null">
+ 				#{warnTrigger.warnType},
  			</if>
  		</trim>
  	</insert>

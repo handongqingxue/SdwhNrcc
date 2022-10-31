@@ -3,102 +3,102 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.DutyMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.Duty">
- 		insert into duty
+ 	<insert id="add">
+ 		insert into ${databaseName}.duty
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="entityType!=null">
+ 			<if test="duty.entityType!=null">
  				entityType,
  			</if>
- 			<if test="onlineIcon!=null">
+ 			<if test="duty.onlineIcon!=null">
  				onlineIcon,
  			</if>
- 			<if test="name!=null">
+ 			<if test="duty.name!=null">
  				name,
  			</if>
- 			<if test="offlineIcon!=null">
+ 			<if test="duty.offlineIcon!=null">
  				offlineIcon,
  			</if>
- 			<if test="id!=null">
+ 			<if test="duty.id!=null">
  				id,
  			</if>
- 			<if test="cnEntityType!=null">
+ 			<if test="duty.cnEntityType!=null">
  				cnEntityType,
  			</if>
- 			<if test="onlineColor!=null">
+ 			<if test="duty.onlineColor!=null">
  				onlineColor,
  			</if>
- 			<if test="key!=null">
+ 			<if test="duty.key!=null">
  				`key`,
  			</if>
- 			<if test="offlineColor!=null">
+ 			<if test="duty.offlineColor!=null">
  				offlineColor,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="entityType!=null">
+ 			<if test="duty.entityType!=null">
  				#{entityType},
  			</if>
- 			<if test="onlineIcon!=null">
+ 			<if test="duty.onlineIcon!=null">
  				#{onlineIcon},
  			</if>
- 			<if test="name!=null">
+ 			<if test="duty.name!=null">
  				#{name},
  			</if>
- 			<if test="offlineIcon!=null">
+ 			<if test="duty.offlineIcon!=null">
  				#{offlineIcon},
  			</if>
- 			<if test="id!=null">
+ 			<if test="duty.id!=null">
  				#{id},
  			</if>
- 			<if test="cnEntityType!=null">
+ 			<if test="duty.cnEntityType!=null">
  				#{cnEntityType},
  			</if>
- 			<if test="onlineColor!=null">
+ 			<if test="duty.onlineColor!=null">
  				#{onlineColor},
  			</if>
- 			<if test="key!=null">
+ 			<if test="duty.key!=null">
  				#{key},
  			</if>
- 			<if test="offlineColor!=null">
+ 			<if test="duty.offlineColor!=null">
  				#{offlineColor},
  			</if>
 		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.Duty">
-		update duty set
+	<update id="edit">
+		update ${databaseName}.duty set
 		<trim suffixOverrides=",">
-			<if test="entityType!=null">
-				entityType=#{entityType},
+			<if test="duty.entityType!=null">
+				entityType=#{duty.entityType},
 			</if>
-			<if test="onlineIcon!=null">
-				onlineIcon=#{onlineIcon},
+			<if test="duty.onlineIcon!=null">
+				onlineIcon=#{duty.onlineIcon},
 			</if>
-			<if test="name!=null">
-				name=#{name},
+			<if test="duty.name!=null">
+				name=#{duty.name},
 			</if>
-			<if test="offlineIcon!=null">
-				offlineIcon=#{offlineIcon},
+			<if test="duty.offlineIcon!=null">
+				offlineIcon=#{duty.offlineIcon},
 			</if>
-			<if test="cnEntityType!=null">
-				cnEntityType=#{cnEntityType},
+			<if test="duty.cnEntityType!=null">
+				cnEntityType=#{duty.cnEntityType},
 			</if>
-			<if test="onlineColor!=null">
-				onlineColor=#{onlineColor},
+			<if test="duty.onlineColor!=null">
+				onlineColor=#{duty.onlineColor},
 			</if>
-			<if test="key!=null">
-				`key`=#{key},
+			<if test="duty.key!=null">
+				`key`=#{duty.key},
 			</if>
-			<if test="offlineColor!=null">
-				offlineColor=#{offlineColor},
+			<if test="duty.offlineColor!=null">
+				offlineColor=#{duty.offlineColor},
 			</if>
 		</trim>
-		where id=#{id}
+		where id=#{duty.id}
 	</update>
 	<select id="getCountById" resultType="java.lang.Integer">
-		select count(*) from duty where id=#{id}
+		select count(*) from ${databaseName}.duty where id=#{id}
 	</select>
 	<select id="summaryOnlineDuty" resultType="java.util.Map">
-		select d.name,count(*) onLineCount from location l,entity e,duty d where l.uid=e.tagId and e.dutyId=d.id and l.`out`=0 GROUP BY d.name
+		select d.name,count(*) onLineCount from ${databaseName}.location l,${databaseName}.entity e,${databaseName}.duty d where l.uid=e.tagId and e.dutyId=d.id and l.`out`=0 GROUP BY d.name
 	</select>
 </mapper>

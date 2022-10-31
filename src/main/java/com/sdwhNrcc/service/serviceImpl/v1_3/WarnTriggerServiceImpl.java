@@ -18,11 +18,11 @@ public class WarnTriggerServiceImpl implements WarnTriggerService {
 	private WarnTriggerMapper warnTriggerDao;
 
 	@Override
-	public int add(List<WarnTrigger> warnTriggerList) {
+	public int add(List<WarnTrigger> warnTriggerList, String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (WarnTrigger warnTrigger : warnTriggerList) {
-			count+=warnTriggerDao.add(warnTrigger);
+			count+=warnTriggerDao.add(warnTrigger, databaseName);
 		}
 		return count;
 	}

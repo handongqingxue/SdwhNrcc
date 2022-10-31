@@ -9,12 +9,12 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface DutyMapper {
 
-	int add(Duty duty);
+	int add(@Param("duty")Duty duty, @Param("databaseName")String databaseName);
 
-	int getCountById(@Param("id")Integer id);
+	int getCountById(@Param("id")Integer id, @Param("databaseName")String databaseName);
 
-	int edit(Duty duty);
+	int edit(@Param("duty")Duty duty, @Param("databaseName")String databaseName);
 
-	List<Map<String, Object>> summaryOnlineDuty();
+	List<Map<String, Object>> summaryOnlineDuty(@Param("databaseName")String databaseName);
 
 }

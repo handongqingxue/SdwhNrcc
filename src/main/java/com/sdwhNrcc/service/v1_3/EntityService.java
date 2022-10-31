@@ -6,7 +6,7 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface EntityService {
 
-	int add(List<Entity> entityList);
+	int add(List<Entity> entityList,String databaseName);
 
 	List<Entity> queryList(String databaseName);
 
@@ -14,6 +14,6 @@ public interface EntityService {
 	 * 查询省平台所需的员工数据
 	 * @return
 	 */
-	List<Entity> queryEIList();
+	List<Entity> queryEIList(String databaseName);
 
 }

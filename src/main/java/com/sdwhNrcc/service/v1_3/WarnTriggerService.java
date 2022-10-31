@@ -6,6 +6,6 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface WarnTriggerService {
 
-	int add(List<WarnTrigger> warnTriggerList);
+	int add(List<WarnTrigger> warnTriggerList, String databaseName);
 
 }

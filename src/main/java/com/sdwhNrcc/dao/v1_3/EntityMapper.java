@@ -8,14 +8,14 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface EntityMapper {
 
-	int add(Entity entity);
+	int add(@Param("entity")Entity entity, @Param("databaseName")String databaseName);
 
-	int edit(Entity entity);
+	int edit(@Param("entity")Entity entity, @Param("databaseName")String databaseName);
 
 	List<Entity> queryList(@Param("databaseName")String databaseName);
 
-	int getCountById(@Param("id")Integer id);
+	int getCountById(@Param("id")Integer id, @Param("databaseName")String databaseName);
 
-	List<Entity> queryEIList();
+	List<Entity> queryEIList(@Param("databaseName")String databaseName);
 
 }

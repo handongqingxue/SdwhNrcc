@@ -29,12 +29,11 @@ $(function(){
 		//dataEmployeeAlarm();
 	//},interval);
 	
-		insertWarnRecordData();
+		insertDutyData();
 });
 
-/*
-function insertWarnRecordData(){
-	$.post(epV1_3Path+"insertWarnRecordData",
+function insertDutyData(){
+	$.post(epV1_3Path+"insertDutyData",
 		{epFlag:epFlag},
 		function(data){
 			var status=data.status;
@@ -43,7 +42,6 @@ function insertWarnRecordData(){
 		}
 	,"json");
 }
-*/
 
 function makeSync(){
 	$.post(apiPath+"syncDBManager/makeSync",

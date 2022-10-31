@@ -7,8 +7,8 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface DutyService {
 
-	int add(List<Duty> dutyList);
+	int add(List<Duty> dutyList, String databaseName);
 
-	List<Map<String, Object>> summaryOnlineDuty();
+	List<Map<String, Object>> summaryOnlineDuty(String databaseName);
 
 }

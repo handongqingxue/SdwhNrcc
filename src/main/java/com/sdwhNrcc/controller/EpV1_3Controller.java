@@ -576,11 +576,13 @@ public class EpV1_3Controller {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			switchEnterprise(request);
 			Map<String, Object> erMap = getEntities("staff", request);
 			String status = erMap.get("status").toString();
 			if("ok".equals(status)) {
+				String databaseName = request.getAttribute("databaseName").toString();
 				List<Entity> entityList = JSON.parseArray(erMap.get("result").toString(),Entity.class);
-				int count=entityService.add(entityList);
+				int count=entityService.add(entityList,databaseName);
 				if(count==0) {
 					resultMap.put("status", "no");
 					resultMap.put("message", "初始化实体信息失败");
@@ -593,12 +595,6 @@ public class EpV1_3Controller {
 			else {
 				boolean success=reLogin(request);
 				System.out.println("success==="+success);
-				/*
-				if(success) {
-					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
-					insertEntityData(request);
-				}
-				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -615,11 +611,13 @@ public class EpV1_3Controller {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			switchEnterprise(request);
 			Map<String, Object> drMap = getDutys(request);
 			String status = drMap.get("status").toString();
 			if("ok".equals(status)) {
+				String databaseName = request.getAttribute("databaseName").toString();
 				List<Duty> dutyList = JSON.parseArray(drMap.get("result").toString(),Duty.class);
-				int count=dutyService.add(dutyList);
+				int count=dutyService.add(dutyList,databaseName);
 				if(count==0) {
 					resultMap.put("status", "no");
 					resultMap.put("message", "初始化员工职务列表失败");
@@ -799,9 +797,10 @@ public class EpV1_3Controller {
 			Map<String, Object> wtrMap = getWarnTriggers(request);
 			String status = wtrMap.get("status").toString();
 			if("ok".equals(status)) {
+				String databaseName = request.getAttribute("databaseName").toString();
 				List<WarnTrigger> warnTriggerList = JSON.parseArray(wtrMap.get("result").toString(),WarnTrigger.class);
 				System.out.println("==="+warnTriggerList.size());
-				int count=warnTriggerService.add(warnTriggerList);
+				int count=warnTriggerService.add(warnTriggerList,databaseName);
 				if(count==0) {
 					resultMap.put("status", "no");
 					resultMap.put("message", "初始化报警触发器失败");
