@@ -24,11 +24,26 @@ $(function(){
 	//setInterval(function(){
 		console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag);
 		//dataEmployeeLocations();
-		insertLocationData();
+		//insertLocationData();
 		//insertWarnRecordData();
 		//dataEmployeeAlarm();
 	//},interval);
+	
+		insertWarnRecordData();
 });
+
+/*
+function insertWarnRecordData(){
+	$.post(epV1_3Path+"insertWarnRecordData",
+		{epFlag:epFlag},
+		function(data){
+			var status=data.status;
+			if(status=="ok")
+				console.log(data.message);
+		}
+	,"json");
+}
+*/
 
 function makeSync(){
 	$.post(apiPath+"syncDBManager/makeSync",
@@ -70,6 +85,7 @@ function insertLocationData(){
 
 function insertWarnRecordData(){
 	$.post(epV1_3Path+"insertWarnRecordData",
+		{epFlag:epFlag},
 		function(data){
 			var status=data.status;
 			if(status=="ok")

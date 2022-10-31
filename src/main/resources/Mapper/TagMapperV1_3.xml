@@ -3,75 +3,75 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.TagMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.Tag">
- 		insert into tag
+ 	<insert id="add">
+ 		insert into ${databaseName}.tag
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="temporary!=null">
+ 			<if test="tag.temporary!=null">
  				temporary,
  			</if>
- 			<if test="entityType!=null">
+ 			<if test="tag.entityType!=null">
  				entityType,
  			</if>
- 			<if test="tagStyle!=null">
+ 			<if test="tag.tagStyle!=null">
  				tagStyle,
  			</if>
- 			<if test="id!=null">
+ 			<if test="tag.id!=null">
  				id,
  			</if>
- 			<if test="userId!=null">
+ 			<if test="tag.userId!=null">
  				userId,
  			</if>
- 			<if test="engineMask!=null">
+ 			<if test="tag.engineMask!=null">
  				engineMask,
  			</if>
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="temporary!=null">
- 				#{temporary},
+ 			<if test="tag.temporary!=null">
+ 				#{tag.temporary},
  			</if>
- 			<if test="entityType!=null">
- 				#{entityType},
+ 			<if test="tag.entityType!=null">
+ 				#{tag.entityType},
  			</if>
- 			<if test="tagStyle!=null">
- 				#{tagStyle},
+ 			<if test="tag.tagStyle!=null">
+ 				#{tag.tagStyle},
  			</if>
- 			<if test="id!=null">
- 				#{id},
+ 			<if test="tag.id!=null">
+ 				#{tag.id},
  			</if>
- 			<if test="userId!=null">
- 				#{userId},
+ 			<if test="tag.userId!=null">
+ 				#{tag.userId},
  			</if>
- 			<if test="engineMask!=null">
- 				#{engineMask},
+ 			<if test="tag.engineMask!=null">
+ 				#{tag.engineMask},
  			</if>
  		</trim>
  	</insert>
-	<update id="edit" parameterType="com.sdwhNrcc.entity.v1_3.Tag">
-		update tag set
+	<update id="edit">
+		update ${databaseName}.tag set
 		<trim suffixOverrides=",">
-			<if test="temporary!=null">
-				temporary=#{temporary},
+			<if test="tag.temporary!=null">
+				temporary=#{tag.temporary},
 			</if>
-			<if test="entityType!=null">
-				entityType=#{entityType},
+			<if test="tag.entityType!=null">
+				entityType=#{tag.entityType},
 			</if>
-			<if test="tagStyle!=null">
-				tagStyle=#{tagStyle},
+			<if test="tag.tagStyle!=null">
+				tagStyle=#{tag.tagStyle},
 			</if>
-			<if test="userId!=null">
-				userId=#{userId},
+			<if test="tag.userId!=null">
+				userId=#{tag.userId},
 			</if>
-			<if test="engineMask!=null">
-				engineMask=#{engineMask},
+			<if test="tag.engineMask!=null">
+				engineMask=#{tag.engineMask},
 			</if>
 		</trim>
-		where id=#{id}
+		where id=#{tag.id}
 	</update>
 	<select id="select" resultType="com.sdwhNrcc.entity.v1_3.Tag">
-		select * from tag
+		select * from ${databaseName}.tag
 	</select>
 	<select id="getCountById" resultType="java.lang.Integer">
-		select count(*) from tag where id=#{id}
+		select count(*) from ${databaseName}.tag where id=#{id}
 	</select>
 </mapper>

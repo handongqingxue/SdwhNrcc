@@ -3,139 +3,139 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdwhNrcc.dao.v1_3.WarnRecordMapper">
- 	<insert id="add" parameterType="com.sdwhNrcc.entity.v1_3.WarnRecord">
- 		insert into warn_record
+ 	<insert id="add">
+ 		insert into ${databaseName}.warn_record
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
+ 			<if test="warnRecord.tagId!=null">
  				tagId,
  			</if>
- 			<if test="warnType!=null">
+ 			<if test="warnRecord.warnType!=null">
  				warnType,
  			</if>
- 			<if test="triggerId!=null">
+ 			<if test="warnRecord.triggerId!=null">
  				triggerId,
  			</if>
- 			<if test="pid!=null">
+ 			<if test="warnRecord.pid!=null">
  				pid,
  			</if>
- 			<if test="sessionId!=null">
+ 			<if test="warnRecord.sessionId!=null">
  				sessionId,
  			</if>
- 			<if test="userId!=null">
+ 			<if test="warnRecord.userId!=null">
  				userId,
  			</if>
- 			<if test="keyCode!=null">
+ 			<if test="warnRecord.keyCode!=null">
  				keyCode,
  			</if>
- 			<if test="uid!=null">
+ 			<if test="warnRecord.uid!=null">
  				uid,
  			</if>
- 			<if test="areaId!=null">
+ 			<if test="warnRecord.areaId!=null">
  				areaId,
  			</if>
- 			<if test="absolute!=null">
+ 			<if test="warnRecord.absolute!=null">
  				absolute,
  			</if>
- 			<if test="raiseTime!=null">
+ 			<if test="warnRecord.raiseTime!=null">
  				raiseTime,
  			</if>
- 			<if test="raiseTimeYMD!=null">
+ 			<if test="warnRecord.raiseTimeYMD!=null">
  				raiseTimeYMD,
  			</if>
- 			<if test="x!=null">
+ 			<if test="warnRecord.x!=null">
  				x,
  			</if>
- 			<if test="y!=null">
+ 			<if test="warnRecord.y!=null">
  				y,
  			</if>
- 			<if test="z!=null">
+ 			<if test="warnRecord.z!=null">
  				z,
  			</if>
- 			<if test="startTime!=null">
+ 			<if test="warnRecord.startTime!=null">
  				startTime,
  			</if>
- 			<if test="startTimeYMD!=null">
+ 			<if test="warnRecord.startTimeYMD!=null">
  				startTimeYMD,
  			</if>
- 			<if test="id!=null">
+ 			<if test="warnRecord.id!=null">
  				id,
  			</if>
- 			<if test="rootAreaId!=null">
+ 			<if test="warnRecord.rootAreaId!=null">
  				rootAreaId,
  			</if>
  				sync
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
- 			<if test="tagId!=null">
- 				#{tagId},
+ 			<if test="warnRecord.tagId!=null">
+ 				#{warnRecord.tagId},
  			</if>
- 			<if test="warnType!=null">
- 				#{warnType},
+ 			<if test="warnRecord.warnType!=null">
+ 				#{warnRecord.warnType},
  			</if>
- 			<if test="triggerId!=null">
- 				#{triggerId},
+ 			<if test="warnRecord.triggerId!=null">
+ 				#{warnRecord.triggerId},
  			</if>
- 			<if test="pid!=null">
- 				#{pid},
+ 			<if test="warnRecord.pid!=null">
+ 				#{warnRecord.pid},
  			</if>
- 			<if test="sessionId!=null">
- 				#{sessionId},
+ 			<if test="warnRecord.sessionId!=null">
+ 				#{warnRecord.sessionId},
  			</if>
- 			<if test="userId!=null">
- 				#{userId},
+ 			<if test="warnRecord.userId!=null">
+ 				#{warnRecord.userId},
  			</if>
- 			<if test="keyCode!=null">
- 				#{keyCode},
+ 			<if test="warnRecord.keyCode!=null">
+ 				#{warnRecord.keyCode},
  			</if>
- 			<if test="uid!=null">
- 				#{uid},
+ 			<if test="warnRecord.uid!=null">
+ 				#{warnRecord.uid},
  			</if>
- 			<if test="areaId!=null">
- 				#{areaId},
+ 			<if test="warnRecord.areaId!=null">
+ 				#{warnRecord.areaId},
  			</if>
- 			<if test="absolute!=null">
- 				#{absolute},
+ 			<if test="warnRecord.absolute!=null">
+ 				#{warnRecord.absolute},
  			</if>
- 			<if test="raiseTime!=null">
- 				#{raiseTime},
+ 			<if test="warnRecord.raiseTime!=null">
+ 				#{warnRecord.raiseTime},
  			</if>
- 			<if test="raiseTimeYMD!=null">
- 				#{raiseTimeYMD},
+ 			<if test="warnRecord.raiseTimeYMD!=null">
+ 				#{warnRecord.raiseTimeYMD},
  			</if>
- 			<if test="x!=null">
- 				#{x},
+ 			<if test="warnRecord.x!=null">
+ 				#{warnRecord.x},
  			</if>
- 			<if test="y!=null">
- 				#{y},
+ 			<if test="warnRecord.y!=null">
+ 				#{warnRecord.y},
  			</if>
- 			<if test="z!=null">
- 				#{z},
+ 			<if test="warnRecord.z!=null">
+ 				#{warnRecord.z},
  			</if>
- 			<if test="startTime!=null">
- 				#{startTime},
+ 			<if test="warnRecord.startTime!=null">
+ 				#{warnRecord.startTime},
  			</if>
- 			<if test="startTimeYMD!=null">
- 				#{startTimeYMD},
+ 			<if test="warnRecord.startTimeYMD!=null">
+ 				#{warnRecord.startTimeYMD},
  			</if>
- 			<if test="id!=null">
- 				#{id},
+ 			<if test="warnRecord.id!=null">
+ 				#{warnRecord.id},
  			</if>
- 			<if test="rootAreaId!=null">
- 				#{rootAreaId},
+ 			<if test="warnRecord.rootAreaId!=null">
+ 				#{warnRecord.rootAreaId},
  			</if>
  				0
  		</trim>
  	</insert>
 	<select id="getCountById" resultType="java.lang.Integer">
-		select count(*) from warn_record where id=#{id}
+		select count(*) from ${databaseName}.warn_record where id=#{id}
 	</select>
 	<select id="queryEAList" resultType="com.sdwhNrcc.entity.v1_3.WarnRecord">
-		select wr.*,wt.`name` triggerName,e.`name` entityName from sdwh_nrcc_wfrzjxhyxgs.warn_record wr left join sdwh_nrcc_wfrzjxhyxgs.warn_trigger wt on wr.triggerId=wt.id left join sdwh_nrcc_wfrzjxhyxgs.entity e on wr.uid=e.tagId where sync=#{sync}
+		select wr.*,wt.`name` triggerName,e.`name` entityName from ${databaseName}.warn_record wr left join ${databaseName}.warn_trigger wt on wr.triggerId=wt.id left join ${databaseName}.entity e on wr.uid=e.tagId where sync=#{sync}
 	</select>
 	<update id="syncByIds">
-		update warn_record set sync=${@com.sdwhNrcc.entity.v1_3.WarnRecord@SYNCED} where 1=1
-		<foreach collection="list" item="id" open=" and cast(id as char) in(" separator="," close=")">
+		update ${databaseName}.warn_record set sync=${@com.sdwhNrcc.entity.v1_3.WarnRecord@SYNCED} where 1=1
+		<foreach collection="idList" item="id" open=" and cast(id as char) in(" separator="," close=")">
 		#{id}
 		</foreach>
 	</update>

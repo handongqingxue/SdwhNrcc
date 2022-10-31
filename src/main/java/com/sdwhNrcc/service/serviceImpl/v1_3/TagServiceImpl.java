@@ -18,22 +18,22 @@ public class TagServiceImpl implements TagService {
 	private TagMapper tagDao;
 
 	@Override
-	public int add(List<Tag> tagList) {
+	public int add(List<Tag> tagList, String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (Tag tag : tagList) {
-			count=tagDao.getCountById(tag.getId());
+			count=tagDao.getCountById(tag.getId(), databaseName);
 			if(count==0)
-				count=tagDao.add(tag);
+				count=tagDao.add(tag, databaseName);
 			else
-				count=tagDao.edit(tag);
+				count=tagDao.edit(tag, databaseName);
 		}
 		return count;
 	}
 
 	@Override
-	public List<Tag> select() {
+	public List<Tag> select(String databaseName) {
 		// TODO Auto-generated method stub
-		return tagDao.select();
+		return tagDao.select(databaseName);
 	}
 }

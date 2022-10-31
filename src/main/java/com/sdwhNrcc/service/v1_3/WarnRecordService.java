@@ -7,10 +7,10 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface WarnRecordService {
 
-	int add(List<WarnRecord> warnRecordList);
+	int add(List<WarnRecord> warnRecordList, String databaseName);
 
-	List<WarnRecord> queryEAList(int sync);
+	List<WarnRecord> queryEAList(int sync, String databaseName);
 
-	int syncByIds(String syncIds);
+	int syncByIds(String syncIds, String databaseName);
 
 }

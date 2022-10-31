@@ -8,12 +8,12 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface TagMapper {
 
-	int add(Tag tag);
+	int add(@Param("tag")Tag tag, @Param("databaseName")String databaseName);
 
-	int edit(Tag tag);
+	int edit(@Param("tag")Tag tag, @Param("databaseName")String databaseName);
 
-	List<Tag> select();
+	List<Tag> select(@Param("databaseName")String databaseName);
 
-	int getCountById(@Param("id")String id);
+	int getCountById(@Param("id")String id, @Param("databaseName")String databaseName);
 
 }

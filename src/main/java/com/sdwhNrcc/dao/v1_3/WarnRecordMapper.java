@@ -9,12 +9,12 @@ import com.sdwhNrcc.entity.v1_3.*;
 
 public interface WarnRecordMapper {
 
-	int add(WarnRecord warnRecord);
+	int add(@Param("warnRecord")WarnRecord warnRecord, @Param("databaseName")String databaseName);
 
-	int getCountById(@Param("id")Integer id);
+	int getCountById(@Param("id")Integer id, @Param("databaseName")String databaseName);
 
-	List<WarnRecord> queryEAList(@Param("sync")int sync);
+	List<WarnRecord> queryEAList(@Param("sync")int sync, @Param("databaseName")String databaseName);
 
-	int syncByIds(List<String> idList);
+	int syncByIds(@Param("idList")List<String> idList, @Param("databaseName")String databaseName);
 
 }

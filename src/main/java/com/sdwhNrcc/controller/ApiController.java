@@ -352,14 +352,14 @@ public class ApiController {
 
 			StringBuilder syncIdsSB=new StringBuilder();
 			List<EmployeeAlarm> eaList = null;
+			String databaseName = request.getAttribute("databaseName").toString();
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			case Constant.WFRZJXHYXGS:
-				eaList = convertWarnRecordToEmployeeAlarm(systemFlag);
+				eaList = convertWarnRecordToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
-				String databaseName = request.getAttribute("databaseName").toString();
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
@@ -406,11 +406,10 @@ public class ApiController {
 							System.out.println("syncIds==="+syncIds);
 							switch (systemFlag) {
 							case Constant.WFRZJXHYXGS:
-								warnRecordService.syncByIds(syncIds);
+								warnRecordService.syncByIds(syncIds,databaseName);
 								break;
 							case Constant.WFPXHGYXGS:
 							case Constant.SDFLXCLKJYXGS:
-								String databaseName = request.getAttribute("databaseName").toString();
 								keyWarningService.syncByIds(syncIds,databaseName);
 								break;
 							}
@@ -571,9 +570,9 @@ public class ApiController {
 		return elList;
 	}
 	
-	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm(int systemFlag) {
+	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm(int systemFlag,String databaseName) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
-		List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC);
+		List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC,databaseName);
 		for (WarnRecord wr : wrList) {
 			EmployeeAlarm ea=new EmployeeAlarm();
 			ea.setId(wr.getId()+"");

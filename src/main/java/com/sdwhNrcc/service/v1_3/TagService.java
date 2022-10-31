@@ -6,8 +6,8 @@ import com.sdwhNrcc.entity.v1_3.Tag;
 
 public interface TagService {
 
-	int add(List<Tag> tagList);
+	int add(List<Tag> tagList, String databaseName);
 
-	List<Tag> select();
+	List<Tag> select(String databaseName);
 
 }

@@ -20,11 +20,11 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 	private WarnRecordMapper warnRecordDao;
 
 	@Override
-	public int add(List<WarnRecord> warnRecordList) {
+	public int add(List<WarnRecord> warnRecordList, String databaseName) {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (WarnRecord warnRecord : warnRecordList) {
-			if(warnRecordDao.getCountById(warnRecord.getId())>0)
+			if(warnRecordDao.getCountById(warnRecord.getId(),databaseName)>0)
 				continue;
 			Long raiseTime = warnRecord.getRaiseTime();
 			if(!StringUtils.isEmpty(String.valueOf(raiseTime)))
@@ -32,22 +32,22 @@ public class WarnRecordServiceImpl implements WarnRecordService {
 			Long startTime = warnRecord.getStartTime();
 			if(!StringUtils.isEmpty(String.valueOf(startTime)))
 				warnRecord.setStartTimeYMD(DateUtil.convertLongToString(startTime));
-			count+=warnRecordDao.add(warnRecord);
+			count+=warnRecordDao.add(warnRecord,databaseName);
 		}
 		return count;
 	}
 
 	@Override
-	public List<WarnRecord> queryEAList(int sync) {
+	public List<WarnRecord> queryEAList(int sync, String databaseName) {
 		// TODO Auto-generated method stub
-		return warnRecordDao.queryEAList(sync);
+		return warnRecordDao.queryEAList(sync,databaseName);
 	}
 
 	@Override
-	public int syncByIds(String syncIds) {
+	public int syncByIds(String syncIds, String databaseName) {
 		// TODO Auto-generated method stub
 		List<String> idList = Arrays.asList(syncIds.split(","));
-		return warnRecordDao.syncByIds(idList);
+		return warnRecordDao.syncByIds(idList,databaseName);
 	}
 
 }

@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -509,12 +511,21 @@ public class EpV1_3Controller {
 			bodyParamJO.put("method", "getWarnRecords");
 			JSONObject paramJO=new JSONObject();
 			paramJO.put("triggerIds", "[1]");
-			paramJO.put("startTime", "1618267921076");
-			paramJO.put("endTime", "1718277921076");
+			
+			long endTime = new Date().getTime();
+			Calendar calendar=Calendar.getInstance();
+			calendar.add(Calendar.HOUR_OF_DAY, -1);
+			Date date = calendar.getTime();
+			long startTime = date.getTime();
+			//System.err.println(startTime);
+			//System.err.println(endTime);
+			
+			paramJO.put("startTime", startTime);
+			paramJO.put("endTime", endTime);
 			bodyParamJO.put("params", paramJO);
 			bodyParamJO.put("id", 1);
 			JSONObject resultJO = postBody(SERVICE_URL,bodyParamJO,"getWarnRecords",request);
-			//System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
+			System.out.println("getWarnRecords:resultJO==="+resultJO.toString());
 			resultMap=JSON.parseObject(resultJO.toString());
 			/*
 			 {"result":[
@@ -640,11 +651,13 @@ public class EpV1_3Controller {
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
+			switchEnterprise(request);
 			Map<String, Object> trMap = getTags(request);
 			String status = trMap.get("status").toString();
 			if("ok".equals(status)) {
 				List<Tag> tagList = JSON.parseArray(trMap.get("result").toString(),Tag.class);
-				int count=tagService.add(tagList);
+				String databaseName = request.getAttribute("databaseName").toString();
+				int count=tagService.add(tagList,databaseName);
 				if(count==0) {
 					resultMap.put("status", "no");
 					resultMap.put("message", "初始化定位标签列表失败");
@@ -656,10 +669,7 @@ public class EpV1_3Controller {
 			}
 			else {
 				boolean success=reLogin(request);
-				if(success) {
-					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
-					insertTagData(request);
-				}
+				System.out.println("success==="+success);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -747,27 +757,29 @@ public class EpV1_3Controller {
 			Map<String, Object> wrrMap = getWarnRecords(request);
 			String status = wrrMap.get("status").toString();
 			if("ok".equals(status)) {
-				List<WarnRecord> warnRecordList = JSON.parseArray(wrrMap.get("result").toString(),WarnRecord.class);
-				System.out.println("==="+warnRecordList.size());
-				int count=warnRecordService.add(warnRecordList);
-				if(count==0) {
+				Object resultObj = wrrMap.get("result");
+				if(resultObj==null) {
 					resultMap.put("status", "no");
-					resultMap.put("message", "初始化报警记录失败");
+					resultMap.put("message", "暂无报警记录");
 				}
 				else {
-					resultMap.put("status", "ok");
-					resultMap.put("message", "初始化报警记录成功");
+					String databaseName = request.getAttribute("databaseName").toString();
+					List<WarnRecord> warnRecordList = JSON.parseArray(resultObj.toString(),WarnRecord.class);
+					System.out.println("==="+warnRecordList.size());
+					int count=warnRecordService.add(warnRecordList,databaseName);
+					if(count==0) {
+						resultMap.put("status", "no");
+						resultMap.put("message", "初始化报警记录失败");
+					}
+					else {
+						resultMap.put("status", "ok");
+						resultMap.put("message", "初始化报警记录成功");
+					}
 				}
 			}
 			else {
 				boolean success=reLogin(request);
 				System.out.println("success==="+success);
-				/*
-				if(success) {
-					Thread.sleep(1000*10);//避免频繁操作，休眠10秒后再执行
-					insertWarnRecordData(request);
-				}
-				*/
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
