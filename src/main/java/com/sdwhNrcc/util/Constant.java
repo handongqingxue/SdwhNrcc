@@ -8,14 +8,17 @@ public class Constant {
 	public static final String SERVICE_IP_LZQ="218.201.121.116";
 	public static final int SERVICE_PORT_LZQ=18009;
 	
+	public static final int SDWH=1;
+	public static final int LZQ=2;
+	
 	public static final int WEI_FANG=1;
 	public static final int HE_ZE=2;
 	public static final int ZI_BO=3;
 	
 	public static final String SERVICE_IP_STR="serviceIp";
 	public static final String SERVICE_PORT_STR="servicePort";
-	public static final String EP_CLIENT_ID_STR="clientId";
-	public static final String EP_CLIENT_SECRET_STR="clientSecret";
+	public static final String CLIENT_ID_STR="clientId";
+	public static final String CLIENT_SECRET_STR="clientSecret";
 	
 	public static final String CONN_FACTORY_HOST="127.0.0.1";
 	public static final int CONN_FACTORY_PORT=5672;
@@ -181,6 +184,7 @@ public class Constant {
 	 * 安全平台密码(md5加密后的)
 	 */
 	public static final String AQPT_PASSWORD_ZBXQHGYXGS="389b185ffcc27a00a4f3588b2ec1f3c4";
+	public static final String DATA_Id_ZBXQHGYXGS="fbbcd141-1526-42de-ac9e-843e0395671e";
 	/**
 	 * 项目名称
 	 */

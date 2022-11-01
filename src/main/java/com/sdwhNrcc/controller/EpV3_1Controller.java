@@ -86,7 +86,7 @@ public class EpV3_1Controller {
 			JSONObject bodyParamJO=new JSONObject();
 			
 			String apiMethod="oauth/token";
-			String params="?client_id="+Constant.EP_CLIENT_ID_STR+"&grant_type=client_credentials&client_secret="+Constant.EP_CLIENT_SECRET_STR;
+			String params="?client_id="+Constant.CLIENT_ID_STR+"&grant_type=client_credentials&client_secret="+Constant.CLIENT_SECRET_STR;
 			resultJO = requestApi(apiMethod,params,bodyParamJO,"GET",request);
 			String resultStr = resultJO.toString();
 			System.out.println("resultJO==="+resultStr);
@@ -273,8 +273,8 @@ public class EpV3_1Controller {
 			if(apiMethod.contains("oauth/token")) {
 				switchTenant(request);
 				String clientSecret = request.getAttribute("clientSecret").toString();
-				serverUrl=serverUrl.replaceAll(Constant.EP_CLIENT_ID_STR, clientId);
-				serverUrl=serverUrl.replaceAll(Constant.EP_CLIENT_SECRET_STR, clientSecret);
+				serverUrl=serverUrl.replaceAll(Constant.CLIENT_ID_STR, clientId);
+				serverUrl=serverUrl.replaceAll(Constant.CLIENT_SECRET_STR, clientSecret);
 			}
 			
 			URL url = new URL(serverUrl);

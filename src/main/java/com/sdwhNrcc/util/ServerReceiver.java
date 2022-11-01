@@ -38,9 +38,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
-	public static final String MODULE_NAME="/api/serverReceiver";
-	//private static final boolean IS_TEST=true;
-	private static final boolean IS_TEST=false;
+	public static final String MODULE_NAME="/serverReceiver";
+	private static final boolean IS_TEST=true;
+	//private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;
@@ -76,8 +76,8 @@ public class ServerReceiver {
 
 			String databaseName = request.getAttribute("databaseName").toString();
         	if(IS_TEST) {
-        		//String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
-        		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT38206876\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
+        		String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
+        		//String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT38206876\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
         		com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
         		String method = bodyJO.getString("method");
         		if("position".equals(method)) {
@@ -258,6 +258,11 @@ public class ServerReceiver {
 			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
 			clientSecret=Constant.CLIENT_SECRET_SDFLXCLKJYXGS;
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.ZBXQHGYXGS:
+			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;
+			clientSecret=Constant.CLIENT_SECRET_ZBXQHGYXGS;
+			databaseName=Constant.DATABASE_NAME_ZBXQHGYXGS;
 			break;
 		}
 		request.setAttribute("tenantId", tenantId);

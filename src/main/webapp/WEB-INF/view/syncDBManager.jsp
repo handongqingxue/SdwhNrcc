@@ -11,17 +11,24 @@
 <script type="text/javascript" src="<%=basePath %>resource/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 var path='<%=basePath %>';
-var apiPath=path+"api/";
+var sdwhApiPath=path+"sdwhApi/";
+var lzqApiPath=path+"lzqApi/";
+var serverReceiverPath=path+"serverReceiver/";
+var syncDBManagerPath=path+"syncDBManager/";
 var epV1_3Path=path+"epV1_3/";
 var interval="60000";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
 var epFlag='${requestScope.systemFlag}';
 var epVersion='${requestScope.epVersion}';
+var apiFlag='${requestScope.apiFlag}';
 var version_1_3='${requestScope.version_1_3}';
 var version_3_1='${requestScope.version_3_1}';
+var sdwhFlag='${requestScope.sdwhFlag}';
+var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
-	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
+	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion+",apiFlag="+apiFlag);
+	/*
 	makeSync();
 	if(epVersion==version_1_3){
 		setInterval(function(){
@@ -37,6 +44,9 @@ $(function(){
 			//dataEmployeeAlarm();
 		},interval);
 	}
+	*/
+	//receiveMessage();
+	dataEmployeeLocations();
 });
 
 /*
@@ -53,7 +63,7 @@ function insertDutyData(){
 */
 
 function makeSync(){
-	$.post(apiPath+"syncDBManager/makeSync",
+	$.post(syncDBManagerPath+"makeSync",
 		{systemFlag:systemFlag},
 		function(){
 		
@@ -62,7 +72,12 @@ function makeSync(){
 }
 
 function dataEmployeeLocations(){
-	$.post(apiPath+"dataEmployeeLocations",
+	var path;
+	if(apiFlag==sdwhFlag)
+		path=sdwhApiPath;
+	else if(apiFlag==lzqFlag)
+		path=lzqApiPath;
+	$.post(path+"dataEmployeeLocations",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(result){
 			if(result.code=="200")
@@ -72,7 +87,12 @@ function dataEmployeeLocations(){
 }
 
 function dataEmployeeAlarm(){
-	$.post(apiPath+"dataEmployeeAlarm",
+	var path;
+	if(apiFlag==sdwhFlag)
+		path=sdwhApiPath;
+	else if(apiFlag==lzqFlag)
+		path=lzqApiPath;
+	$.post(path+"dataEmployeeAlarm",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		
@@ -104,7 +124,7 @@ function insertWarnRecordData(){
 }
 
 function receiveMessage(){
-	$.post(apiPath+"serverReceiver/receiveMessage",
+	$.post(serverReceiverPath+"receiveMessage",
 		{systemFlag:systemFlag},
 		function(){
 		

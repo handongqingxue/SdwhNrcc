@@ -37,12 +37,11 @@ import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.*;
 
 @Controller
-@RequestMapping(ApiController.MODULE_NAME)
-public class ApiController {
+@RequestMapping(SdwhApiController.MODULE_NAME)
+public class SdwhApiController {
 
-	private static final String ADDRESS_URL="http://"+Constant.SERVICE_IP_STR+":"+Constant.SERVICE_PORT_STR;
-	public static final String MODULE_NAME="/api";
-	public static final String TEST_USERNAME="weifang_report_data";
+	private static final String ADDRESS_URL="http://"+Constant.SERVICE_IP_SDWH+":"+Constant.SERVICE_PORT_SDWH;
+	public static final String MODULE_NAME="/sdwhApi";
 	
 	@Autowired
 	private EntityService entityService;
@@ -62,69 +61,79 @@ public class ApiController {
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
 		//https://blog.csdn.net/lxyoucan/article/details/124490682
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=testApi
 		
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBRun
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBRun
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBRun
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=xqhgSyncDBRun
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=rzjxhSyncDBRun
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBRun
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBRun
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBRun
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBRun
 		
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBManager
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBManager
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=xqhgSyncDBManager
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=rzjxhSyncDBManager
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBManager
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBManager
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBManager
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
 			url="/testApi";
 		}
 		else if("syncDBRun".equals(page)){
+			
 			String cityFlag = request.getParameter("cityFlag");
 			String systemFlag = request.getParameter("systemFlag");
 			String epVersion = request.getParameter("epVersion");
+			String apiFlag = request.getParameter("apiFlag");
+			
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			request.setAttribute("epVersion", epVersion);
+			request.setAttribute("apiFlag", apiFlag);
+			
 			request.setAttribute("version_1_3", Constant.VERSION_1_3);
 			request.setAttribute("version_3_1", Constant.VERSION_3_1);
+			
+			request.setAttribute("sdwhFlag", Constant.SDWH);
+			request.setAttribute("lzqFlag", Constant.LZQ);
+			
 			url="/syncDBRun";
 		}
 		else if("pxhgSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("flxclSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
-		}
-		else if("xqhgSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.ZI_BO+"&systemFlag="+Constant.ZBXQHGYXGS+"&epVersion="+Constant.VERSION_3_1;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rzjxhSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
 		}
 		else if("syncDBManager".equals(page)){
+			
 			String cityFlag = request.getParameter("cityFlag");
 			String systemFlag = request.getParameter("systemFlag");
 			String epVersion = request.getParameter("epVersion");
+			String apiFlag = request.getParameter("apiFlag");
+			
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			request.setAttribute("epVersion", epVersion);
+			request.setAttribute("apiFlag", apiFlag);
+			
 			request.setAttribute("version_1_3", Constant.VERSION_1_3);
 			request.setAttribute("version_3_1", Constant.VERSION_3_1);
-			url="/syncDBManager";
+			
+			request.setAttribute("sdwhFlag", Constant.SDWH);
+			request.setAttribute("lzqFlag", Constant.LZQ);
+			
+			url="/syncDBManager";//不管企业接口和平台接口调用的是哪个版本，都往这个页面里跳转，在页面里做一下判断就行
 		}
 		else if("pxhgSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFPXHGYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("flxclSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
-		}
-		else if("xqhgSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.ZI_BO+"&systemFlag="+Constant.ZBXQHGYXGS+"&epVersion="+Constant.VERSION_3_1;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rzjxhSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
 		}
 		return url;
 	}
@@ -188,63 +197,6 @@ public class ApiController {
 			return false;
 	}
 
-	@RequestMapping(value="/loginDoLogin")
-	@ResponseBody
-	public Map<String, Object> loginDoLogin(String username, String password, HttpServletRequest request) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-			JSONObject resultJO = null;
-			JSONObject bodyParamJO=new JSONObject();
-			bodyParamJO.put("username", username);
-			bodyParamJO.put("password", password);
-			resultJO = postBody(bodyParamJO,"/Login/doLogin",request);
-			String code=resultJO.get("code").toString();
-			System.out.println("==="+code);
-			String info=resultJO.get("info").toString();
-			
-			JSONObject data = resultJO.getJSONObject("data");
-			String token = data.getString("token");
-			LoginUser lu=new LoginUser(token,username);
-			loginUserService.add(lu);
-			
-			HttpSession session = request.getSession();
-			Object loginUserObj = session.getAttribute("loginUser"+username);
-			if(loginUserObj!=null) {
-				LoginUser loginUser = (LoginUser)loginUserObj;
-				loginUser.setToken(token);
-				loginUser.setUsername(username);
-			}
-			
-			resultMap.put("code", code);
-			resultMap.put("info", info);
-			resultMap.put("data", data);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			return resultMap;
-		}
-	}
-	
-	/**
-	 * 重新登录
-	 * @param request
-	 * @return
-	 */
-	public boolean reLoginDoLogin(HttpServletRequest request) {
-		String username = request.getAttribute("username").toString();
-		String password = request.getAttribute("password").toString();
-		System.out.println("username==="+username);
-		System.out.println("password==="+password);
-		Map<String, Object> resultMap = loginDoLogin(username,password,request);
-		String code = resultMap.get("code").toString();
-		if("200".equals(code))
-			return true;
-		else
-			return false;
-	}
-
 	@RequestMapping(value="/dataEmployeeInfo")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
@@ -281,7 +233,6 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
-			case Constant.ZBXQHGYXGS:
 				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
@@ -324,17 +275,7 @@ public class ApiController {
 						resultMap.put("data", data);
 					}
 					else {
-						boolean success=false;
-						switch (systemFlag) {
-						case Constant.WFRZJXHYXGS:
-						case Constant.WFPXHGYXGS:
-						case Constant.SDFLXCLKJYXGS:
-							success=reAuthLogin(request);
-							break;
-						case Constant.ZBXQHGYXGS:
-							success=reLoginDoLogin(request);
-							break;
-						}
+						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
 						if(success) {
 							Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
@@ -377,7 +318,6 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
-			case Constant.ZBXQHGYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -453,7 +393,6 @@ public class ApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
-			case Constant.ZBXQHGYXGS:
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
@@ -584,9 +523,6 @@ public class ApiController {
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
-			case Constant.ZBXQHGYXGS:
-				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
-				break;
 			}
 			ei.setCompany_social_code(companySocialCode);
 			String employeeType=null;
@@ -645,9 +581,6 @@ public class ApiController {
 				break;
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
-				break;
-			case Constant.ZBXQHGYXGS:
-				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
 				break;
 			}
 			el.setCompany_social_code(companySocialCode);
@@ -717,9 +650,6 @@ public class ApiController {
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
-			case Constant.ZBXQHGYXGS:
-				companySocialCode=Constant.DATA_ID_ZBXQHGYXGS;
-				break;
 			}
 			ea.setCompany_social_code(companySocialCode);
 			
@@ -742,39 +672,19 @@ public class ApiController {
 	}
 	
 	public void switchCity(HttpServletRequest request) {
-		String serviceIp=null;
-		int servicePort=0;
 		String username=null;
 		String password=null;
 		int cityFlag = Integer.valueOf(request.getAttribute("cityFlag").toString());
 		switch (cityFlag) {
 		case Constant.WEI_FANG:
-			serviceIp=Constant.SERVICE_IP_SDWH;
-			servicePort=Constant.SERVICE_PORT_SDWH;
 			username=Constant.USERNAME_WEI_FANG;
 			password=Constant.PASSWORD_WEI_FANG;
 			break;
 		case Constant.HE_ZE:
-			serviceIp=Constant.SERVICE_IP_SDWH;
-			servicePort=Constant.SERVICE_PORT_SDWH;
 			username=Constant.USERNAME_HE_ZE;
 			password=Constant.PASSWORD_HE_ZE;
 			break;
-		case Constant.ZI_BO:
-			serviceIp=Constant.SERVICE_IP_LZQ;
-			servicePort=Constant.SERVICE_PORT_LZQ;
-			
-			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
-			switch (systemFlag) {
-			case Constant.ZBXQHGYXGS:
-				username=Constant.AQPT_USERNAME_ZBXQHGYXGS;
-				password=Constant.AQPT_PASSWORD_ZBXQHGYXGS;
-				break;
-			}
-			break;
 		}
-		request.setAttribute("serviceIp", serviceIp);
-		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("username", username);
 		request.setAttribute("password", password);
 	}
@@ -799,11 +709,6 @@ public class ApiController {
 			systemName=Constant.SYSTEM_NAME_SDFLXCLKJYXGS;
 			areaCode=Constant.AREA_CODE_SDFLXCLKJYXGS;
 			dataId=Constant.DATA_ID_SDFLXCLKJYXGS;
-			break;
-		case Constant.ZBXQHGYXGS:
-			systemName=Constant.SYSTEM_NAME_ZBXQHGYXGS;
-			areaCode=Constant.AREA_CODE_ZBXQHGYXGS;
-			dataId=Constant.DATA_ID_ZBXQHGYXGS;
 			break;
 		case Constant.SDBFXCLYXGS:
 			systemName=Constant.SYSTEM_NAME_SDBFXCLYXGS;
@@ -832,9 +737,6 @@ public class ApiController {
 		case Constant.SDFLXCLKJYXGS:
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
 			break;
-		case Constant.ZBXQHGYXGS:
-			databaseName=Constant.DATABASE_NAME_ZBXQHGYXGS;
-			break;
 		case Constant.WFRZJXHYXGS:
 			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
 			break;
@@ -850,11 +752,6 @@ public class ApiController {
 			StringBuffer sbf = new StringBuffer(); 
 			String strRead = null; 
 			String serverUrl=ADDRESS_URL+path;
-			
-			String serviceIp = request.getAttribute("serviceIp").toString();
-			String servicePort = request.getAttribute("servicePort").toString();
-			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
-			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
 			
 			URL url = new URL(serverUrl); 
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 

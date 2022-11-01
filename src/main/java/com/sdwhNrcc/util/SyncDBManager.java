@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value="/api/syncDBManager")
+@RequestMapping(value="/syncDBManager")
 public class SyncDBManager {
 	//时间间隔(1天)
 	private static final long PERIOD_DAY =24*60*60*1000;
