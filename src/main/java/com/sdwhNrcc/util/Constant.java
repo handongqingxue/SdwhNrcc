@@ -184,7 +184,6 @@ public class Constant {
 	 * 安全平台密码(md5加密后的)
 	 */
 	public static final String AQPT_PASSWORD_ZBXQHGYXGS="389b185ffcc27a00a4f3588b2ec1f3c4";
-	public static final String DATA_Id_ZBXQHGYXGS="fbbcd141-1526-42de-ac9e-843e0395671e";
 	/**
 	 * 项目名称
 	 */
