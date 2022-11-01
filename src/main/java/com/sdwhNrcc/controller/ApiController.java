@@ -40,7 +40,7 @@ import com.sdwhNrcc.util.*;
 @RequestMapping(ApiController.MODULE_NAME)
 public class ApiController {
 
-	private static final String ADDRESS_URL="http://"+Constant.REALM_NAME+":"+Constant.PORT;
+	private static final String ADDRESS_URL="http://"+Constant.SERVICE_IP_STR+":"+Constant.SERVICE_PORT_STR;
 	public static final String MODULE_NAME="/api";
 	public static final String TEST_USERNAME="weifang_report_data";
 	
@@ -63,12 +63,17 @@ public class ApiController {
 	public String goPage(HttpServletRequest request) {
 		//https://blog.csdn.net/lxyoucan/article/details/124490682
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=testApi
+		
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBRun
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBRun
-		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDRun
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBRun
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=xqhgSyncDBRun
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=rzjxhSyncDBRun
+		
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=syncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=pxhgSyncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=flxclSyncDBManager
+		//http://localhost:8080/SdwhNrcc/api/goPage?page=xqhgSyncDBManager
 		//http://localhost:8080/SdwhNrcc/api/goPage?page=rzjxhSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
@@ -91,6 +96,9 @@ public class ApiController {
 		}
 		else if("flxclSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1;
+		}
+		else if("xqhgSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.ZI_BO+"&systemFlag="+Constant.ZBXQHGYXGS+"&epVersion="+Constant.VERSION_3_1;
 		}
 		else if("rzjxhSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3;
@@ -132,7 +140,7 @@ public class ApiController {
 			bodyParamJO.put("username", username);
 			//bodyParamJO.put("password", "Um5oNWFqSXdNakFo");
 			bodyParamJO.put("password", password);
-			resultJO = postBody(ADDRESS_URL,bodyParamJO,"/auth/login",request);
+			resultJO = postBody(bodyParamJO,"/auth/login",request);
 			String code=resultJO.get("code").toString();
 			System.out.println("==="+code);
 			String msg=resultJO.get("msg").toString();
@@ -173,6 +181,63 @@ public class ApiController {
 		System.out.println("username==="+username);
 		System.out.println("password==="+password);
 		Map<String, Object> resultMap = authLogin(username,password,request);
+		String code = resultMap.get("code").toString();
+		if("200".equals(code))
+			return true;
+		else
+			return false;
+	}
+
+	@RequestMapping(value="/loginDoLogin")
+	@ResponseBody
+	public Map<String, Object> loginDoLogin(String username, String password, HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject resultJO = null;
+			JSONObject bodyParamJO=new JSONObject();
+			bodyParamJO.put("username", username);
+			bodyParamJO.put("password", password);
+			resultJO = postBody(bodyParamJO,"/Login/doLogin",request);
+			String code=resultJO.get("code").toString();
+			System.out.println("==="+code);
+			String info=resultJO.get("info").toString();
+			
+			JSONObject data = resultJO.getJSONObject("data");
+			String token = data.getString("token");
+			LoginUser lu=new LoginUser(token,username);
+			loginUserService.add(lu);
+			
+			HttpSession session = request.getSession();
+			Object loginUserObj = session.getAttribute("loginUser"+username);
+			if(loginUserObj!=null) {
+				LoginUser loginUser = (LoginUser)loginUserObj;
+				loginUser.setToken(token);
+				loginUser.setUsername(username);
+			}
+			
+			resultMap.put("code", code);
+			resultMap.put("info", info);
+			resultMap.put("data", data);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+	
+	/**
+	 * ÷ÿ–¬µ«¬º
+	 * @param request
+	 * @return
+	 */
+	public boolean reLoginDoLogin(HttpServletRequest request) {
+		String username = request.getAttribute("username").toString();
+		String password = request.getAttribute("password").toString();
+		System.out.println("username==="+username);
+		System.out.println("password==="+password);
+		Map<String, Object> resultMap = loginDoLogin(username,password,request);
 		String code = resultMap.get("code").toString();
 		if("200".equals(code))
 			return true;
@@ -245,7 +310,7 @@ public class ApiController {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
 				
-					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/info",request);
+					resultJO = postBody(bodyParamJO,"/data/employee/info",request);
 					String status=resultJO.get("status").toString();
 					if("ok".equals(status)) {
 						String code=resultJO.get("code").toString();
@@ -259,7 +324,17 @@ public class ApiController {
 						resultMap.put("data", data);
 					}
 					else {
-						boolean success=reAuthLogin(request);
+						boolean success=false;
+						switch (systemFlag) {
+						case Constant.WFRZJXHYXGS:
+						case Constant.WFPXHGYXGS:
+						case Constant.SDFLXCLKJYXGS:
+							success=reAuthLogin(request);
+							break;
+						case Constant.ZBXQHGYXGS:
+							success=reLoginDoLogin(request);
+							break;
+						}
 						System.out.println("success==="+success);
 						if(success) {
 							Thread.sleep(1000*60);//±‹√‚∆µ∑±≤Ÿ◊˜£¨–›√ﬂ1∑÷÷”∫Û‘Ÿ÷¥––
@@ -326,7 +401,7 @@ public class ApiController {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
 				
-					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/locations",request);
+					resultJO = postBody(bodyParamJO,"/data/employee/locations",request);
 					String status=resultJO.get("status").toString();
 					if("ok".equals(status)) {
 						String code=resultJO.get("code").toString();
@@ -411,7 +486,7 @@ public class ApiController {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
 					
-					resultJO = postBody(ADDRESS_URL,bodyParamJO,"/data/employee/alarm",request);
+					resultJO = postBody(bodyParamJO,"/data/employee/alarm",request);
 					String status=resultJO.get("status").toString();
 					if("ok".equals(status)) {
 						String code=resultJO.get("code").toString();
@@ -667,19 +742,28 @@ public class ApiController {
 	}
 	
 	public void switchCity(HttpServletRequest request) {
+		String serviceIp=null;
+		int servicePort=0;
 		String username=null;
 		String password=null;
 		int cityFlag = Integer.valueOf(request.getAttribute("cityFlag").toString());
 		switch (cityFlag) {
 		case Constant.WEI_FANG:
+			serviceIp=Constant.SERVICE_IP_SDWH;
+			servicePort=Constant.SERVICE_PORT_SDWH;
 			username=Constant.USERNAME_WEI_FANG;
 			password=Constant.PASSWORD_WEI_FANG;
 			break;
 		case Constant.HE_ZE:
+			serviceIp=Constant.SERVICE_IP_SDWH;
+			servicePort=Constant.SERVICE_PORT_SDWH;
 			username=Constant.USERNAME_HE_ZE;
 			password=Constant.PASSWORD_HE_ZE;
 			break;
 		case Constant.ZI_BO:
+			serviceIp=Constant.SERVICE_IP_LZQ;
+			servicePort=Constant.SERVICE_PORT_LZQ;
+			
 			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
 			switch (systemFlag) {
 			case Constant.ZBXQHGYXGS:
@@ -689,6 +773,8 @@ public class ApiController {
 			}
 			break;
 		}
+		request.setAttribute("serviceIp", serviceIp);
+		request.setAttribute("servicePort", servicePort);
 		request.setAttribute("username", username);
 		request.setAttribute("password", password);
 	}
@@ -756,20 +842,27 @@ public class ApiController {
 		request.setAttribute("databaseName", databaseName);
 	}
 	
-	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String path, HttpServletRequest request) {
+	public JSONObject postBody(JSONObject bodyParamJO, String path, HttpServletRequest request) {
 		JSONObject resultJO = null;
 		try {
+			switchCity(request);
+			
 			StringBuffer sbf = new StringBuffer(); 
 			String strRead = null; 
-			URL url = new URL(serverURL+path); 
+			String serverUrl=ADDRESS_URL+path;
+			
+			String serviceIp = request.getAttribute("serviceIp").toString();
+			String servicePort = request.getAttribute("servicePort").toString();
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
+			
+			URL url = new URL(serverUrl); 
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 			
 			//connection.setInstanceFollowRedirects(false); 
 
-			Object usernameObj = null;
 			HttpSession session = request.getSession();
 			if(!path.contains("auth/login")) {
-				switchCity(request);
 				String username=request.getAttribute("username").toString();
 				
 				String token = null;

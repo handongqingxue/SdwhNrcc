@@ -2,15 +2,18 @@ package com.sdwhNrcc.util;
 
 public class Constant {
 
-	public static final String REALM_NAME="sdwh.nrcc.com.cn";
-	public static final int PORT=8102;
+	public static final String SERVICE_IP_SDWH="sdwh.nrcc.com.cn";
+	public static final int SERVICE_PORT_SDWH=8102;
+	
+	public static final String SERVICE_IP_LZQ="218.201.121.116";
+	public static final int SERVICE_PORT_LZQ=18009;
 	
 	public static final int WEI_FANG=1;
 	public static final int HE_ZE=2;
 	public static final int ZI_BO=3;
 	
-	public static final String EP_SERVICE_IP_STR="serviceIp";
-	public static final String EP_SERVICE_PORT_STR="servicePort";
+	public static final String SERVICE_IP_STR="serviceIp";
+	public static final String SERVICE_PORT_STR="servicePort";
 	public static final String EP_CLIENT_ID_STR="clientId";
 	public static final String EP_CLIENT_SECRET_STR="clientSecret";
 	

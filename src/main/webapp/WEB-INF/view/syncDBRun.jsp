@@ -13,18 +13,31 @@
 <script type="text/javascript">
 var path='<%=basePath %>';
 var apiPath=path+"api/";
+var epV1_3Path=path+"epV1_3/";
 var epV3_1Path=path+"epV3_1/";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
 var epFlag='${requestScope.systemFlag}';
+var epVersion='${requestScope.epVersion}';
+var version_1_3='${requestScope.version_1_3}';
+var version_3_1='${requestScope.version_3_1}';
 $(function(){
-	insertStaffData();
+	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
+	if(epVersion==version_1_3){
+		
+	}
+	else if(epVersion==version_3_1){
+		alert(111);
+		dataEmployeeInfo();
+	}
 });
 
 function insertStaffData(){
+	alert(epVersion)
 	$.post(epV3_1Path+"insertStaffData",
 		{epFlag:epFlag},
 		function(data){
+			console.log(data);
 			if(data.status=="ok")
 				dataEmployeeInfo();
 		}
@@ -32,6 +45,7 @@ function insertStaffData(){
 }
 
 function dataEmployeeInfo(){
+	alert(222)
 	$.post(apiPath+"dataEmployeeInfo",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
@@ -39,17 +53,10 @@ function dataEmployeeInfo(){
 		}
 	,"json");
 	
-	window.opener=null;
-	window.open(' ', '_self', ' ');
+	//window.opener=null;
+	//window.open(' ', '_self', ' ');
 	window.close();
 }
-/*
-$.post(phonePath+"insertWarnRecordData",
-	function(){
-		
-	}
-,"json");
-*/
 </script>
 </head>
 <body>

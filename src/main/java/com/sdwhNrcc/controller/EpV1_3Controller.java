@@ -36,8 +36,8 @@ import com.sdwhNrcc.util.*;
 public class EpV1_3Controller {
 
 	//private static final String PUBLIC_URL="http://"+Constant.SERVICE_IP+":8081/position/public/embeded.smd";
-	private static final String PUBLIC_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/public/embeded.smd";
-	private static final String SERVICE_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/position/service/embeded.smd";
+	private static final String PUBLIC_URL="http://"+Constant.SERVICE_IP_STR+":"+Constant.SERVICE_PORT_STR+"/position/public/embeded.smd";
+	private static final String SERVICE_URL="http://"+Constant.SERVICE_IP_STR+":"+Constant.SERVICE_PORT_STR+"/position/service/embeded.smd";
 	public static final String MODULE_NAME="/epV1_3";
 	
 	@Autowired
@@ -864,7 +864,7 @@ public class EpV1_3Controller {
 		String strRead = null; 
 		String serviceIp = request.getAttribute("serviceIp").toString();
 		String servicePort = request.getAttribute("servicePort").toString();
-		URL url = new URL(serverURL.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp).replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort));
+		URL url = new URL(serverURL.replaceAll(Constant.SERVICE_IP_STR, serviceIp).replaceAll(Constant.SERVICE_PORT_STR, servicePort));
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
 		//connection.setInstanceFollowRedirects(false); 

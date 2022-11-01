@@ -35,7 +35,7 @@ import com.sdwhNrcc.util.Constant;
 @RequestMapping(EpV3_1Controller.MODULE_NAME)
 public class EpV3_1Controller {
 
-	private static final String ADDRESS_URL="http://"+Constant.EP_SERVICE_IP_STR+":"+Constant.EP_SERVICE_PORT_STR+"/positionApi/";
+	private static final String ADDRESS_URL="http://"+Constant.SERVICE_IP_STR+":"+Constant.SERVICE_PORT_STR+"/positionApi/";
 	public static final String MODULE_NAME="/epV3_1";
 
 	@Autowired
@@ -268,8 +268,8 @@ public class EpV3_1Controller {
 			String serviceIp = request.getAttribute("serviceIp").toString();
 			String servicePort = request.getAttribute("servicePort").toString();
 			String clientId = request.getAttribute("tenantId").toString();
-			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_IP_STR, serviceIp);
-			serverUrl=serverUrl.replaceAll(Constant.EP_SERVICE_PORT_STR, servicePort);
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
+			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
 			if(apiMethod.contains("oauth/token")) {
 				switchTenant(request);
 				String clientSecret = request.getAttribute("clientSecret").toString();
