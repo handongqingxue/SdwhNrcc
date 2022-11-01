@@ -12,15 +12,19 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 var path='<%=basePath %>';
-var apiPath=path+"api/";
+var sdwhApiPath=path+"sdwhApi/";
+var lzqApiPath=path+"lzqApi/";
 var epV1_3Path=path+"epV1_3/";
 var epV3_1Path=path+"epV3_1/";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
 var epFlag='${requestScope.systemFlag}';
 var epVersion='${requestScope.epVersion}';
+var apiFlag='${requestScope.apiFlag}';
 var version_1_3='${requestScope.version_1_3}';
 var version_3_1='${requestScope.version_3_1}';
+var sdwhFlag='${requestScope.sdwhFlag}';
+var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
 	if(epVersion==version_1_3){
@@ -45,8 +49,13 @@ function insertStaffData(){
 }
 
 function dataEmployeeInfo(){
-	alert(222)
-	$.post(apiPath+"dataEmployeeInfo",
+	alert(apiFlag)
+	var path;
+	if(apiFlag==sdwhFlag)
+		path=sdwhApiPath;
+	else if(apiFlag==lzqFlag)
+		path=lzqApiPath;
+	$.post(path+"dataEmployeeInfo",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		

@@ -46,7 +46,7 @@ $(function(){
 	}
 	*/
 	//receiveMessage();
-	dataEmployeeLocations();
+	dataEmployeeAlarm();
 });
 
 /*

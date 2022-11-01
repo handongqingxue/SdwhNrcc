@@ -211,13 +211,10 @@ public class LzqApiController {
 					if("ok".equals(status)) {
 						String code=resultJO.get("code").toString();
 						String msg=resultJO.get("msg").toString();
-						String data = resultJO.getString("data");
 						System.out.println("code==="+code);
 						System.out.println("msg==="+msg);
-						System.out.println("data==="+data);
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
-						resultMap.put("data", data);
 					}
 					else {
 						boolean success=reLoginDoLogin(request);
@@ -338,9 +335,10 @@ public class LzqApiController {
 						//break;
 					EmployeeAlarm ea=eaList.get(i);
 					JSONObject dataParamJO=new JSONObject();
-					String id = ea.getId();
+					String kwId = ea.getKwId();
 					syncIdsSB.append(",");
-					syncIdsSB.append(id);
+					syncIdsSB.append(kwId);
+					String id = ea.getId();
 					dataParamJO.put("id", id);
 					dataParamJO.put("time", ea.getTime());
 					dataParamJO.put("type", ea.getType());
@@ -365,8 +363,6 @@ public class LzqApiController {
 						String code=resultJO.get("code").toString();
 						System.out.println("code==="+code);
 						String msg=resultJO.get("msg").toString();
-						String data = resultJO.getString("data");
-						System.out.println("data==="+data);
 						
 						if("200".equals(code)) {
 							String syncIds = syncIdsSB.toString().substring(1);
@@ -380,7 +376,6 @@ public class LzqApiController {
 						
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
-						resultMap.put("data", data);
 					}
 					else {
 						boolean success=reLoginDoLogin(request);
@@ -472,7 +467,8 @@ public class LzqApiController {
 		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC,databaseName);
 		for (KeyWarning kw : kwList) {
 			EmployeeAlarm ea=new EmployeeAlarm();
-			ea.setId(kw.getId()+"");
+			ea.setId(UUID.randomUUID().toString());
+			ea.setKwId(kw.getId()+"");
 			ea.setTime(kw.getRaiseTimeYMD());
 			ea.setType("oneKeyAlarm:alarm");
 			ea.setArea_name("map");
