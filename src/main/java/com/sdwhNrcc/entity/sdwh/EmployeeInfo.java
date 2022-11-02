@@ -2,12 +2,20 @@ package com.sdwhNrcc.entity.sdwh;
 
 public class EmployeeInfo {
 
+	public static final String NEI_BU_YUAN_GONG="01";
+	
 	private String id;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getLzqId() {
+		return lzqId;
+	}
+	public void setLzqId(String lzqId) {
+		this.lzqId = lzqId;
 	}
 	public String getPost_id() {
 		return post_id;
@@ -63,6 +71,13 @@ public class EmployeeInfo {
 	public void setEmployee_type(String employee_type) {
 		this.employee_type = employee_type;
 	}
+	public String getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+	}
+	private String lzqId;
 	private String post_id;
 	private String post_name;
 	private String depart_id;
@@ -72,4 +87,5 @@ public class EmployeeInfo {
 	private String card_no;
 	private String company_social_code;
 	private String employee_type;
+	private String deleted;
 }

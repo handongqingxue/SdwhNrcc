@@ -186,11 +186,11 @@ public class LzqApiController {
 			if(eiList!=null) {
 				int eiListSize = eiList.size();
 				for (int i = 0; i < eiListSize; i++) {
-					if(i==1)
-						break;
+					//if(i==1)
+						//break;
 					EmployeeInfo ei=eiList.get(i);
 					JSONObject dataParamJO=new JSONObject();
-					dataParamJO.put("id", ei.getId());
+					dataParamJO.put("id", ei.getLzqId());
 					dataParamJO.put("post_id", ei.getPost_id());
 					dataParamJO.put("post_name", ei.getPost_name());
 					dataParamJO.put("depart_id", ei.getDepart_id());
@@ -200,6 +200,7 @@ public class LzqApiController {
 					dataParamJO.put("card_no", ei.getCard_no());
 					dataParamJO.put("company_social_code", ei.getCompany_social_code());
 					dataParamJO.put("employee_type", ei.getEmployee_type());
+					dataParamJO.put("deleted", ei.getDeleted());
 					dataParamJA.put(dataParamJO);
 				}
 			
@@ -401,16 +402,13 @@ public class LzqApiController {
 		List<Staff> staffList=staffService.queryEIList(databaseName);
 		for (Staff staff : staffList) {
 			EmployeeInfo ei=new EmployeeInfo();
-			ei.setId(staff.getId()+"");
-			ei.setPost_id("");
-			String post = staff.getPost();
-			if(StringUtils.isEmpty(post))
-				post="未知";
-			ei.setPost_name(post);
-			ei.setDepart_id(staff.getDeptId()+"");
-			ei.setDepart_name("未知");
+			ei.setLzqId(staff.getLzqId());
+			ei.setPost_id("fbbcd141-1526-42de-ac9e-843e0395671e");
+			ei.setPost_name("操作工");
+			ei.setDepart_id(staff.getDeptLzqId());
+			ei.setDepart_name(staff.getDeptName());
 			ei.setName(staff.getName());
-			ei.setSex((staff.getSex()==1?0:1)+"");
+			ei.setSex((staff.getSex()==0?"男":"女"));
 			ei.setCard_no(staff.getJobNumber());
 			String companySocialCode=null;
 			switch (systemFlag) {
@@ -423,10 +421,15 @@ public class LzqApiController {
 			int type=staff.getType();
 			switch (type) {
 			case Staff.NEI_BU_YUAN_GONG:
-				employeeType="内部员工";
+				employeeType=EmployeeInfo.NEI_BU_YUAN_GONG;
 				break;
 			}
 			ei.setEmployee_type(employeeType);
+			String deletedStr=null;
+			Integer deleted = staff.getDeleted();
+			if(deleted==null)
+				deletedStr="0";
+			ei.setDeleted(deletedStr);
 			eiList.add(ei);
 		}
 		return eiList;

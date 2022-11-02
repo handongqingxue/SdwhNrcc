@@ -47,7 +47,7 @@ $(function(){
 	}
 	*/
 	//receiveMessage();
-	insertDeptData();
+	//insertDeptData();
 });
 
 function insertDeptData(){

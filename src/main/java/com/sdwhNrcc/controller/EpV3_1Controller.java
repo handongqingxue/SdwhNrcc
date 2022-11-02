@@ -165,14 +165,12 @@ public class EpV3_1Controller {
 			String status = deptListMap.get("status").toString();
 			if("ok".equals(status)) {
 				Object dataObj = deptListMap.get("data");
-				com.alibaba.fastjson.JSONObject dataJO = null;
-				com.alibaba.fastjson.JSONArray recordJA = null;
+				com.alibaba.fastjson.JSONArray dataJA = null;
 				if(dataObj!=null) {
-					dataJO=(com.alibaba.fastjson.JSONObject)dataObj;
-					recordJA = dataJO.getJSONArray("records");
+					dataJA=(com.alibaba.fastjson.JSONArray)dataObj;
 					
 				}
-				List<Dept> deptList = JSON.parseArray(recordJA.toString(),Dept.class);
+				List<Dept> deptList = JSON.parseArray(dataJA.toString(),Dept.class);
 				String databaseName = request.getAttribute("databaseName").toString();
 				int count=deptService.add(deptList,databaseName);
 				if(count==0) {
@@ -379,13 +377,16 @@ public class EpV3_1Controller {
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.connect(); 
 			
+			//https://blog.csdn.net/zhengaog/article/details/118405244
+			if("POST".equals(requestMethod)) {
+				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
+				//body参数放这里
+				String bodyParamStr = bodyParamJO.toString();
+				//System.out.println("bodyParamStr==="+bodyParamStr);
+				writer.write(bodyParamStr);
+				writer.flush();
+			}
 			
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
-			//body参数放这里
-			String bodyParamStr = bodyParamJO.toString();
-			//System.out.println("bodyParamStr==="+bodyParamStr);
-			writer.write(bodyParamStr);
-			writer.flush();
 			InputStream is = connection.getInputStream(); 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
 			while ((strRead = reader.readLine()) != null) { 

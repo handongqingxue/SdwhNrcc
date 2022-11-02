@@ -83,6 +83,18 @@ public class Staff {
 	public void setDeptId(Integer deptId) {
 		this.deptId = deptId;
 	}
+	public String getDeptLzqId() {
+		return deptLzqId;
+	}
+	public void setDeptLzqId(String deptLzqId) {
+		this.deptLzqId = deptLzqId;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
 	public Integer getOrgId() {
 		return orgId;
 	}
@@ -125,6 +137,8 @@ public class Staff {
 	private String security;
 	private Integer entityIconId;
 	private Integer deptId;
+	private String deptLzqId;
+	private String deptName;
 	private Integer orgId;
 	private Integer type;
 	private Integer deleted;
