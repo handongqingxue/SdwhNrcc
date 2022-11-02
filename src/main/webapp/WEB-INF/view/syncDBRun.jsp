@@ -55,7 +55,7 @@ function dataEmployeeInfo(){
 		path=sdwhApiPath;
 	else if(apiFlag==lzqFlag)
 		path=lzqApiPath;
-	$.post(path+"dataEmployeeInfo",
+	$.post(lzqApiPath+"dataEmployeeInfo",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		

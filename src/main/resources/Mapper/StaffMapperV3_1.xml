@@ -9,6 +9,9 @@
  			<if test="staff.id!=null">
  				id,
  			</if>
+ 			<if test="staff.lzqId!=null">
+ 				lzqId,
+ 			</if>
  			<if test="staff.name!=null">
  				name,
  			</if>
@@ -59,6 +62,9 @@
  		<trim prefix="(" suffix=")" suffixOverrides=",">
  			<if test="staff.id!=null">
  				#{staff.id},
+ 			</if>
+ 			<if test="staff.lzqId!=null">
+ 				#{staff.lzqId},
  			</if>
  			<if test="staff.name!=null">
  				#{staff.name},

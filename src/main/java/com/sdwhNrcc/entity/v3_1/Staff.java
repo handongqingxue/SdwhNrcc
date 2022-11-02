@@ -11,6 +11,12 @@ public class Staff {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	public String getLzqId() {
+		return lzqId;
+	}
+	public void setLzqId(String lzqId) {
+		this.lzqId = lzqId;
+	}
 	public String getName() {
 		return name;
 	}
@@ -107,6 +113,7 @@ public class Staff {
 	public void setFileId(Integer fileId) {
 		this.fileId = fileId;
 	}
+	private String lzqId;
 	private String name;
 	private Integer sex;
 	private String phone;

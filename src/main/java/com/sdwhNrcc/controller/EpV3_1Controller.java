@@ -41,6 +41,8 @@ public class EpV3_1Controller {
 	@Autowired
 	private EpLoginClientService epLoginClientService;
 	@Autowired
+	private DeptService deptService;
+	@Autowired
 	private StaffService staffService;
 
 	@RequestMapping(value="/goTestEp")
@@ -127,6 +129,72 @@ public class EpV3_1Controller {
 			return true;
 		else
 			return false;
+	}
+
+	@RequestMapping(value="/apiDeptFormDeptSelect")
+	@ResponseBody
+	public Map<String, Object> apiDeptFormDeptSelect(HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			JSONObject resultJO = null;
+			JSONObject bodyParamJO=new JSONObject();
+			
+			String apiMethod="api/dept/formDeptSelect/100";
+			String params="";
+			resultJO = requestApi(apiMethod,params,bodyParamJO,"GET",request);
+			resultMap=JSON.parseObject(resultJO.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+	
+	@RequestMapping(value="/insertDeptData")
+	@ResponseBody
+	public Map<String, Object> insertDeptData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int epFlag = Integer.valueOf(request.getParameter("epFlag"));
+			System.out.println("epFlag==="+epFlag);
+			request.setAttribute("epFlag", epFlag);
+			Map<String, Object> deptListMap = apiDeptFormDeptSelect(request);
+			String status = deptListMap.get("status").toString();
+			if("ok".equals(status)) {
+				Object dataObj = deptListMap.get("data");
+				com.alibaba.fastjson.JSONObject dataJO = null;
+				com.alibaba.fastjson.JSONArray recordJA = null;
+				if(dataObj!=null) {
+					dataJO=(com.alibaba.fastjson.JSONObject)dataObj;
+					recordJA = dataJO.getJSONArray("records");
+					
+				}
+				List<Dept> deptList = JSON.parseArray(recordJA.toString(),Dept.class);
+				String databaseName = request.getAttribute("databaseName").toString();
+				int count=deptService.add(deptList,databaseName);
+				if(count==0) {
+					resultMap.put("status", "no");
+					resultMap.put("message", "初始化部门信息失败");
+				}
+				else {
+					resultMap.put("status", "ok");
+					resultMap.put("message", "初始化部门信息成功");
+				}
+			}
+			else {
+				boolean success=reOauthToken(request);
+				System.out.println("success==="+success);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
 	}
 
 	@RequestMapping(value="/apiStaffDataList")

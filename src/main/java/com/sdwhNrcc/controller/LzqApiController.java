@@ -30,6 +30,7 @@ import com.sdwhNrcc.service.sdwh.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
 import com.sdwhNrcc.util.DateUtil;
+import com.sdwhNrcc.util.StringUtil;
 
 @Controller
 @RequestMapping(LzqApiController.MODULE_NAME)
@@ -335,11 +336,11 @@ public class LzqApiController {
 						//break;
 					EmployeeAlarm ea=eaList.get(i);
 					JSONObject dataParamJO=new JSONObject();
-					String kwId = ea.getKwId();
-					syncIdsSB.append(",");
-					syncIdsSB.append(kwId);
 					String id = ea.getId();
-					dataParamJO.put("id", id);
+					syncIdsSB.append(",");
+					syncIdsSB.append(id);
+					String lzqId = ea.getLzqId();
+					dataParamJO.put("id", lzqId);
 					dataParamJO.put("time", ea.getTime());
 					dataParamJO.put("type", ea.getType());
 					dataParamJO.put("area_name", ea.getArea_name());
@@ -467,8 +468,8 @@ public class LzqApiController {
 		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC,databaseName);
 		for (KeyWarning kw : kwList) {
 			EmployeeAlarm ea=new EmployeeAlarm();
-			ea.setId(UUID.randomUUID().toString());
-			ea.setKwId(kw.getId()+"");
+			ea.setId(kw.getId()+"");
+			ea.setLzqId(kw.getLzqId());
 			ea.setTime(kw.getRaiseTimeYMD());
 			ea.setType("oneKeyAlarm:alarm");
 			ea.setArea_name("map");
@@ -529,7 +530,7 @@ public class LzqApiController {
 			break;
 		}
 		bodyParamJO.put("companyCode", companyCode);
-		bodyParamJO.put("dataId", UUID.randomUUID().toString());
+		bodyParamJO.put("dataId", StringUtil.createUUID());
 		return bodyParamJO;
 	}
 	

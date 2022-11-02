@@ -6,6 +6,9 @@
  	<insert id="add">
  		insert into ${databaseName}.key_warning
  		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="keyWarning.lzqId!=null">
+ 				lzqId,
+ 			</if>
  			<if test="keyWarning.tagId!=null">
  				tagId,
  			</if>
@@ -37,6 +40,9 @@
  		</trim>
  		values
  		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="keyWarning.lzqId!=null">
+ 				#{keyWarning.lzqId},
+ 			</if>
  			<if test="keyWarning.tagId!=null">
  				#{keyWarning.tagId},
  			</if>

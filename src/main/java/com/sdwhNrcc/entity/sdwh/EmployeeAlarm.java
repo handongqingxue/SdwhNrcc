@@ -9,11 +9,11 @@ public class EmployeeAlarm {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getKwId() {
-		return kwId;
+	public String getLzqId() {
+		return lzqId;
 	}
-	public void setKwId(String kwId) {
-		this.kwId = kwId;
+	public void setLzqId(String lzqId) {
+		this.lzqId = lzqId;
 	}
 	public String getTime() {
 		return time;
@@ -75,7 +75,7 @@ public class EmployeeAlarm {
 	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
-	private String kwId;
+	private String lzqId;
 	private String time;
 	private String type;
 	private String area_name;

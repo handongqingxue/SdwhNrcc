@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.DeptMapper">
+ 	<insert id="add">
+ 		insert into ${databaseName}.dept
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="dept.deptId!=null">
+ 				deptId,
+ 			</if>
+ 			<if test="dept.deptLzqId!=null">
+ 				deptLzqId,
+ 			</if>
+ 			<if test="dept.parentId!=null">
+ 				parentId,
+ 			</if>
+ 			<if test="dept.ancestors!=null">
+ 				ancestors,
+ 			</if>
+ 			<if test="dept.deptName!=null">
+ 				deptName,
+ 			</if>
+ 			<if test="dept.orderNum!=null">
+ 				orderNum,
+ 			</if>
+ 			<if test="dept.leader!=null">
+ 				leader,
+ 			</if>
+ 			<if test="dept.phone!=null">
+ 				phone,
+ 			</if>
+ 			<if test="dept.email!=null">
+ 				email,
+ 			</if>
+ 			<if test="dept.status!=null">
+ 				status,
+ 			</if>
+ 			<if test="dept.delFlag!=null">
+ 				delFlag,
+ 			</if>
+ 			<if test="dept.createBy!=null">
+ 				createBy,
+ 			</if>
+ 			<if test="dept.createTime!=null">
+ 				createTime,
+ 			</if>
+ 			<if test="dept.updateBy!=null">
+ 				updateBy,
+ 			</if>
+ 			<if test="dept.updateTime!=null">
+ 				updateTime,
+ 			</if>
+ 			<if test="dept.remark!=null">
+ 				remark,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="dept.deptId!=null">
+ 				#{dept.deptId},
+ 			</if>
+ 			<if test="dept.deptLzqId!=null">
+ 				#{dept.deptLzqId},
+ 			</if>
+ 			<if test="dept.parentId!=null">
+ 				#{dept.parentId},
+ 			</if>
+ 			<if test="dept.ancestors!=null">
+ 				#{dept.ancestors},
+ 			</if>
+ 			<if test="dept.deptName!=null">
+ 				#{dept.deptName},
+ 			</if>
+ 			<if test="dept.orderNum!=null">
+ 				#{dept.orderNum},
+ 			</if>
+ 			<if test="dept.leader!=null">
+ 				#{dept.leader},
+ 			</if>
+ 			<if test="dept.phone!=null">
+ 				#{dept.phone},
+ 			</if>
+ 			<if test="dept.email!=null">
+ 				#{dept.email},
+ 			</if>
+ 			<if test="dept.status!=null">
+ 				#{dept.status},
+ 			</if>
+ 			<if test="dept.delFlag!=null">
+ 				#{dept.delFlag},
+ 			</if>
+ 			<if test="dept.createBy!=null">
+ 				#{dept.createBy},
+ 			</if>
+ 			<if test="dept.createTime!=null">
+ 				#{dept.createTime},
+ 			</if>
+ 			<if test="dept.updateBy!=null">
+ 				#{dept.updateBy},
+ 			</if>
+ 			<if test="dept.updateTime!=null">
+ 				#{dept.updateTime},
+ 			</if>
+ 			<if test="dept.remark!=null">
+ 				#{dept.remark},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<update id="edit">
+		update ${databaseName}.dept set
+		<trim suffixOverrides=",">
+ 			<if test="dept.parentId!=null">
+ 				parentId=#{dept.parentId},
+ 			</if>
+			<if test="dept.ancestors!=null">
+				ancestors=#{dept.ancestors},
+			</if>
+			<if test="dept.deptName!=null">
+				deptName=#{dept.deptName},
+			</if>
+			<if test="dept.orderNum!=null">
+				orderNum=#{dept.orderNum},
+			</if>
+			<if test="dept.leader!=null">
+				leader=#{dept.leader},
+			</if>
+			<if test="dept.phone!=null">
+				phone=#{dept.phone},
+			</if>
+			<if test="dept.email!=null">
+				email=#{dept.email},
+			</if>
+			<if test="dept.status!=null">
+				status=#{dept.status},
+			</if>
+			<if test="dept.delFlag!=null">
+				delFlag=#{dept.delFlag},
+			</if>
+			<if test="dept.createBy!=null">
+				createBy=#{dept.createBy},
+			</if>
+			<if test="dept.createTime!=null">
+				createTime=#{dept.createTime},
+			</if>
+			<if test="dept.updateBy!=null">
+				updateBy=#{dept.updateBy},
+			</if>
+			<if test="dept.updateTime!=null">
+				updateTime=#{dept.updateTime},
+			</if>
+			<if test="dept.remark!=null">
+				remark=#{dept.remark},
+			</if>
+		</trim>
+		where deptId=#{dept.deptId}
+	</update>
+	<select id="getCountByDeptId" resultType="java.lang.Integer">
+		select count(*) from ${databaseName}.dept where deptId=#{deptId}
+	</select>
+</mapper>

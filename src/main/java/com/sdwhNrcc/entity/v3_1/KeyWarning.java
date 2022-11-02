@@ -12,6 +12,12 @@ public class KeyWarning {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	public String getLzqId() {
+		return lzqId;
+	}
+	public void setLzqId(String lzqId) {
+		this.lzqId = lzqId;
+	}
 	public String getTagId() {
 		return tagId;
 	}
@@ -84,6 +90,7 @@ public class KeyWarning {
 	public void setJobNumber(String jobNumber) {
 		this.jobNumber = jobNumber;
 	}
+	private String lzqId;
 	private String tagId;
 	private Integer entityId;
 	private String entityName;

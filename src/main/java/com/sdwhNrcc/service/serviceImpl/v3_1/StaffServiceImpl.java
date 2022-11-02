@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.sdwhNrcc.dao.v3_1.*;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.v3_1.*;
+import com.sdwhNrcc.util.Constant;
+import com.sdwhNrcc.util.StringUtil;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -20,8 +22,14 @@ public class StaffServiceImpl implements StaffService {
 		// TODO Auto-generated method stub
 		int count=0;
 		for (Staff staff : staffList) {
-			if(staffDao.getCountById(staff.getId(),databaseName)==0)
+			if(staffDao.getCountById(staff.getId(),databaseName)==0) {
+				switch (databaseName) {
+				case Constant.DATABASE_NAME_ZBXQHGYXGS:
+					staff.setLzqId(StringUtil.createUUID());
+					break;
+				}
 				count+=staffDao.add(staff, databaseName);
+			}
 			else
 				count+=staffDao.edit(staff, databaseName);
 		}

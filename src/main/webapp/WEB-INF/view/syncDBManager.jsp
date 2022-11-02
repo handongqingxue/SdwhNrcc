@@ -16,6 +16,7 @@ var lzqApiPath=path+"lzqApi/";
 var serverReceiverPath=path+"serverReceiver/";
 var syncDBManagerPath=path+"syncDBManager/";
 var epV1_3Path=path+"epV1_3/";
+var epV3_1Path=path+"epV3_1/";
 var interval="60000";
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
@@ -46,12 +47,12 @@ $(function(){
 	}
 	*/
 	//receiveMessage();
-	dataEmployeeAlarm();
+	insertDeptData();
 });
 
-/*
-function insertDutyData(){
-	$.post(epV1_3Path+"insertDutyData",
+function insertDeptData(){
+	alert(epFlag)
+	$.post(epV3_1Path+"insertDeptData",
 		{epFlag:epFlag},
 		function(data){
 			var status=data.status;
@@ -60,7 +61,6 @@ function insertDutyData(){
 		}
 	,"json");
 }
-*/
 
 function makeSync(){
 	$.post(syncDBManagerPath+"makeSync",

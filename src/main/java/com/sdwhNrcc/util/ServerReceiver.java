@@ -77,7 +77,7 @@ public class ServerReceiver {
 			String databaseName = request.getAttribute("databaseName").toString();
         	if(IS_TEST) {
         		//String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
-        		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT38206876\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
+        		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT34089197\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
         		com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
         		String method = bodyJO.getString("method");
         		if("position".equals(method)) {
@@ -214,6 +214,7 @@ public class ServerReceiver {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
+			String lzqId = StringUtil.createUUID();
 			String tagId = paramsJO.getString("tagId");
 			Integer entityId = paramsJO.getInteger("entityId");
 			Integer areaId = paramsJO.getInteger("areaId");
@@ -224,6 +225,7 @@ public class ServerReceiver {
 			Integer floor = paramsJO.getInteger("floor");
 			
 			KeyWarning keyWarning=new KeyWarning();
+			keyWarning.setLzqId(lzqId);
 			keyWarning.setTagId(tagId);
 			keyWarning.setEntityId(entityId);
 			keyWarning.setAreaId(areaId);
