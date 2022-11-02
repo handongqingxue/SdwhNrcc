@@ -274,7 +274,7 @@ public class SdwhApiController {
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
 					}
-					else {
+					else if("no".equals(status)) {
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
 						if(success) {
@@ -476,11 +476,8 @@ public class SdwhApiController {
 		for (Entity entity : entityList) {
 			EmployeeInfo ei=new EmployeeInfo();
 			ei.setId(entity.getId()+"");
-			ei.setPost_id("");
-			String post = entity.getPost();
-			if(StringUtils.isEmpty(post))
-				post="Î´Öª";
-			ei.setPost_name(post);
+			ei.setPost_id(entity.getDutyId()+"");
+			ei.setPost_name(entity.getDutyName());
 			ei.setDepart_id(entity.getDepartmentId()+"");
 			ei.setDepart_name("Î´Öª");
 			ei.setName(entity.getName());
@@ -816,19 +813,26 @@ public class SdwhApiController {
 			}
 			else {
 				System.out.println("result==="+result);
-				resultJO = new JSONObject(result);
-				resultJO.put("status", "ok");
-				
-				if(path.contains("auth/login")) {
-					if(!checkTokenInSession(request)) {
-						JSONObject dataJO = resultJO.getJSONObject("data");
-						String token = dataJO.getString("token");
-						String username=request.getAttribute("username").toString();
-						LoginUser loginUser=new LoginUser();
-						loginUser.setToken(token);
-						loginUser.setUsername(username);
-						session.setAttribute("loginUser"+username, loginUser);
+				if(!result.contains("²Ù×÷Æµ·±")) {
+					resultJO = new JSONObject(result);
+					resultJO.put("status", "ok");
+					
+					if(path.contains("auth/login")) {
+						if(!checkTokenInSession(request)) {
+							JSONObject dataJO = resultJO.getJSONObject("data");
+							String token = dataJO.getString("token");
+							String username=request.getAttribute("username").toString();
+							LoginUser loginUser=new LoginUser();
+							loginUser.setToken(token);
+							loginUser.setUsername(username);
+							session.setAttribute("loginUser"+username, loginUser);
+						}
 					}
+				}
+				else {
+					resultJO = new JSONObject();
+					resultJO.put("status", "error");
+					resultJO.put("msg", result);
 				}
 			}
 		} catch (Exception e) {

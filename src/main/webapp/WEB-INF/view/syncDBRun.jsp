@@ -28,7 +28,8 @@ var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
 	if(epVersion==version_1_3){
-		
+		alert(444);
+		dataEmployeeInfo();
 	}
 	else if(epVersion==version_3_1){
 		alert(111);
@@ -55,7 +56,7 @@ function dataEmployeeInfo(){
 		path=sdwhApiPath;
 	else if(apiFlag==lzqFlag)
 		path=lzqApiPath;
-	$.post(lzqApiPath+"dataEmployeeInfo",
+	$.post(path+"dataEmployeeInfo",
 		{cityFlag:cityFlag,systemFlag:systemFlag},
 		function(){
 		
