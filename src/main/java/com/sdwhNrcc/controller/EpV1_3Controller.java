@@ -231,6 +231,11 @@ public class EpV1_3Controller {
 		}
 	}
 	
+	/**
+	 * 重新登录
+	 * @param request
+	 * @return
+	 */
 	public boolean reLogin(HttpServletRequest request) {
 		String tenantId = request.getAttribute("tenantId").toString();
 		String userId = request.getAttribute("userId").toString();
@@ -836,12 +841,13 @@ public class EpV1_3Controller {
 	}
 
 	/**
-	 * 接收推送消息
+	 * 接收推送消息(目前服务器里只能设置一个推送地址，之前真源定位手机端已经设置过了，这个项目里每隔一分钟获取一次标签位置就行，这个接口暂时用不到)
 	 * @param request
 	 * @param response
 	 * @param json
 	 * @return
 	 */
+	/**
 	@RequestMapping(value="/receivePushData", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> receivePushData(HttpServletRequest request, HttpServletResponse response, @RequestBody String json) {
@@ -857,6 +863,7 @@ public class EpV1_3Controller {
 		}
 		return resultMap;
 	}
+	**/
 	
 	public JSONObject postBody(String serverURL, JSONObject bodyParamJO, String method, HttpServletRequest request)
 			throws IOException {
@@ -960,6 +967,11 @@ public class EpV1_3Controller {
 	}
 	*/
 	
+	/**
+	 * 验证session里有无该登录用户
+	 * @param request
+	 * @return
+	 */
 	public boolean checkCookieInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String userId  =request.getAttribute("userId").toString();

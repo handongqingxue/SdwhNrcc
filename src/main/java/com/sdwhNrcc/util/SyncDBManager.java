@@ -20,7 +20,7 @@ public class SyncDBManager {
 		int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
 		System.out.println("systemFlag="+systemFlag);
 		int hourOfDay=0;
-		switch (systemFlag) {
+		switch (systemFlag) {//为了避免操作频繁现象，把不同企业的人员信息分时间点同步
 		case Constant.WFPXHGYXGS:
 			hourOfDay=22;//22点
 			//hourOfDay=2;
