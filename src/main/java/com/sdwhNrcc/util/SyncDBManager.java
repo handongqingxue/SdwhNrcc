@@ -25,7 +25,14 @@ public class SyncDBManager {
 			hourOfDay=22;//22µã
 			//hourOfDay=2;
 			break;
+			/*
 		case Constant.SDFLXCLKJYXGS:
+			hourOfDay=23;//23µã
+			//hourOfDay=2;
+			break;
+			*/
+		case Constant.ZBXQHGYXGS:
+		case Constant.WFRZJXHYXGS:
 			hourOfDay=23;//23µã
 			//hourOfDay=2;
 			break;

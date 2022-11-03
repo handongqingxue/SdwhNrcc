@@ -277,10 +277,6 @@ public class SdwhApiController {
 					else if("no".equals(status)) {
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
-						if(success) {
-							Thread.sleep(1000*60);//避免频繁操作，休眠1分钟后再执行
-							resultMap=dataEmployeeInfo(request);
-						}
 					}
 				}
 				else {

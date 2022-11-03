@@ -171,11 +171,13 @@ public class Constant {
 	/**
 	 * 鑫乾服务器ip
 	 */
-	public static final String SERVICE_IP_ZBXQHGYXGS="222.173.86.130";
+	public static final String SERVICE_IP_ZBXQHGYXGS="192.168.1.10";
+	//public static final String SERVICE_IP_ZBXQHGYXGS="222.173.86.130";
 	/**
 	 * 鑫乾服务器端口
 	 */
-	public static final int SERVICE_PORT_ZBXQHGYXGS=2001;
+	public static final int SERVICE_PORT_ZBXQHGYXGS=80;
+	//public static final int SERVICE_PORT_ZBXQHGYXGS=2001;
 	/**
 	 * 安全平台用户名
 	 */

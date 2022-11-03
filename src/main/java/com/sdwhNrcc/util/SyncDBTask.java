@@ -29,22 +29,30 @@ public class SyncDBTask extends TimerTask {
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
+			String api=null;
 			String page=null;
 			System.out.println("systemFlag==="+systemFlag);
 			switch (systemFlag) {
 			case Constant.WFPXHGYXGS:
+				api="sdwhApi";
 				page="pxhgSyncDBRun";
 				break;
 			case Constant.SDFLXCLKJYXGS:
+				api="sdwhApi";
 				page="flxclSyncDBRun";
 				break;
+			case Constant.ZBXQHGYXGS:
+				api="lzqApi";
+				page="xqhgSyncDBRun";
+				break;
 			case Constant.WFRZJXHYXGS:
+				api="sdwhApi";
 				page="rzjxhSyncDBRun";
 				break;
 			}
 			
 			Desktop dt = Desktop.getDesktop();
-			dt.browse(new URI("http://127.0.0.1:8080/SdwhNrcc/api/goPage?page="+page));
+			dt.browse(new URI("http://localhost:8080/SdwhNrcc/"+api+"/goPage?page="+page));
 			//dt.browse(new URI("http://"+Constant.SERVICE_IP+":8080/SdwhNrcc/api/goPage?page=pxhgSyncDBRun"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

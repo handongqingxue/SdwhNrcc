@@ -29,7 +29,6 @@ var sdwhFlag='${requestScope.sdwhFlag}';
 var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion+",apiFlag="+apiFlag);
-	/*
 	makeSync();
 	if(epVersion==version_1_3){
 		setInterval(function(){
@@ -45,7 +44,6 @@ $(function(){
 			//dataEmployeeAlarm();
 		},interval);
 	}
-	*/
 	//receiveMessage();
 	//insertDeptData();
 });

@@ -28,17 +28,16 @@ var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
 	if(epVersion==version_1_3){
-		alert(444);
-		dataEmployeeInfo();
+		//dataEmployeeInfo();
 	}
 	else if(epVersion==version_3_1){
-		alert(111);
-		dataEmployeeInfo();
+		//alert(111);
+		insertStaffData();
 	}
 });
 
 function insertStaffData(){
-	alert(epVersion)
+	//alert(epVersion)
 	$.post(epV3_1Path+"insertStaffData",
 		{epFlag:epFlag},
 		function(data){
@@ -50,7 +49,7 @@ function insertStaffData(){
 }
 
 function dataEmployeeInfo(){
-	alert(apiFlag)
+	//alert(apiFlag)
 	var path;
 	if(apiFlag==sdwhFlag)
 		path=sdwhApiPath;

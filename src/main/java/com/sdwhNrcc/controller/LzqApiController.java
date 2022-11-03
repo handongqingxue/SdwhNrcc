@@ -280,6 +280,7 @@ public class LzqApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					//System.out.println("bodyParamJO==="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -358,6 +359,7 @@ public class LzqApiController {
 				if(eaListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					//System.out.println("bodyParamJO==="+bodyParamJO.toString());
 					
 					resultJO = postBody(bodyParamJO,"/employee/alarm",request);
 					String status=resultJO.get("status").toString();
@@ -609,7 +611,7 @@ public class LzqApiController {
 			
 			connection.disconnect();
 			String result = sbf.toString();
-			//System.out.println("result==="+result);
+			System.out.println("result==="+result);
 			if(result.contains("DOCTYPE")) {
 				resultJO = new JSONObject();
 				resultJO.put("status", "no");
@@ -619,7 +621,6 @@ public class LzqApiController {
 				resultJO.put("status", "no");
 			}
 			else {
-				System.out.println("result==="+result);
 				resultJO = new JSONObject(result);
 				resultJO.put("status", "ok");
 				
