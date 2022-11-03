@@ -63,14 +63,22 @@ public class SdwhApiController {
 		//https://blog.csdn.net/lxyoucan/article/details/124490682
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=testApi
 		
+		//省平台同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBRun
+		//普鑫化工同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBRun
+		//福林新材料同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBRun
+		//润中精细化工同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBRun
 		
+		//省平台同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBManager
+		//普鑫化工同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBManager
+		//福林新材料同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBManager
+		//润中精细化工同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
@@ -79,11 +87,12 @@ public class SdwhApiController {
 		}
 		else if("syncDBRun".equals(page)){
 			
-			String cityFlag = request.getParameter("cityFlag");
-			String systemFlag = request.getParameter("systemFlag");
-			String epVersion = request.getParameter("epVersion");
-			String apiFlag = request.getParameter("apiFlag");
+			String cityFlag = request.getParameter("cityFlag");//获取城市标识
+			String systemFlag = request.getParameter("systemFlag");//获取企业系统标识
+			String epVersion = request.getParameter("epVersion");//获取企业接口版本标识
+			String apiFlag = request.getParameter("apiFlag");//获取平台标识
 			
+			//将不同标识设置到request里去，以便后面从中获取调用
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			request.setAttribute("epVersion", epVersion);
@@ -138,6 +147,13 @@ public class SdwhApiController {
 		return url;
 	}
 	
+	/**
+	 * 登录
+	 * @param username
+	 * @param password
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/authLogin")
 	@ResponseBody
 	public Map<String, Object> authLogin(String username, String password, HttpServletRequest request) {
@@ -197,6 +213,11 @@ public class SdwhApiController {
 			return false;
 	}
 
+	/**
+	 * 同步人员信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeInfo")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
@@ -240,8 +261,8 @@ public class SdwhApiController {
 			if(eiList!=null) {
 				int eiListSize = eiList.size();
 				for (int i = 0; i < eiListSize; i++) {
-					if(i==1)
-						break;
+					//if(i==1)
+						//break;
 					EmployeeInfo ei=eiList.get(i);
 					JSONObject dataParamJO=new JSONObject();
 					dataParamJO.put("id", ei.getId());
@@ -274,7 +295,7 @@ public class SdwhApiController {
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
 					}
-					else if("no".equals(status)) {
+					else if("no".equals(status)) {//若登录信息失效，需重新登录
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
 					}
@@ -292,6 +313,11 @@ public class SdwhApiController {
 		}
 	}
 
+	/**
+	 * 同步人员位置
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeLocations")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
@@ -367,6 +393,11 @@ public class SdwhApiController {
 		}
 	}
 
+	/**
+	 * 同步报警信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeAlarm")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
@@ -433,7 +464,7 @@ public class SdwhApiController {
 						if("200".equals(code)) {
 							String syncIds = syncIdsSB.toString().substring(1);
 							System.out.println("syncIds==="+syncIds);
-							switch (systemFlag) {
+							switch (systemFlag) {//根据系统标识判断是新版还是旧版系统，更改报警记录里的同步标识为已同步
 							case Constant.WFRZJXHYXGS:
 								warnRecordService.syncByIds(syncIds,databaseName);
 								break;
@@ -466,6 +497,12 @@ public class SdwhApiController {
 		}
 	}
 	
+	/**
+	 * 把v1.3接口获取的人员信息转换为省平台的人员信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeInfo> convertEntityToEmployeeInfo(int systemFlag,String databaseName) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
 		List<Entity> entityList=entityService.queryEIList(databaseName);
@@ -492,6 +529,12 @@ public class SdwhApiController {
 		return eiList;
 	}
 	
+	/**
+	 * 把v3.1接口获取的人员信息转换为省平台的人员信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeInfo> convertStaffToEmployeeInfo(int systemFlag,String databaseName) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
 		List<Staff> staffList=staffService.queryEIList(databaseName);
@@ -531,6 +574,12 @@ public class SdwhApiController {
 		return eiList;
 	}
 	
+	/**
+	 * 把v1.3接口获取的人员位置信息转换为省平台的人员位置信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeLocation> convertLocationToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Location> locationList=locationService.queryELList(databaseName);
@@ -562,6 +611,12 @@ public class SdwhApiController {
 		return elList;
 	}
 	
+	/**
+	 * 把v3.1接口获取的人员位置信息转换为省平台的人员位置信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> positionList=positionService.queryELList(databaseName);
@@ -596,6 +651,12 @@ public class SdwhApiController {
 		return elList;
 	}
 	
+	/**
+	 * 把v1.3接口获取的报警信息转换为省平台的报警信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeAlarm> convertWarnRecordToEmployeeAlarm(int systemFlag,String databaseName) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
 		List<WarnRecord> wrList=warnRecordService.queryEAList(WarnRecord.UNSYNC,databaseName);
@@ -623,6 +684,12 @@ public class SdwhApiController {
 		return eaList;
 	}
 	
+	/**
+	 * 把v3.1接口获取的报警信息转换为省平台的报警信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeAlarm> convertKeyWarningToEmployeeAlarm(int systemFlag,String databaseName) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
 		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC,databaseName);
@@ -653,6 +720,10 @@ public class SdwhApiController {
 		return eaList;
 	}
 	
+	/**
+	 * 获取各个标识存到request里，以便后面调用
+	 * @param request
+	 */
 	public void setFlagInRequest(HttpServletRequest request) {
 		int cityFlag = Integer.valueOf(request.getParameter("cityFlag"));
 		int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
@@ -664,6 +735,10 @@ public class SdwhApiController {
 		request.setAttribute("systemFlag", systemFlag);
 	}
 	
+	/**
+	 * 根据城市标识选择账户、密码
+	 * @param request
+	 */
 	public void switchCity(HttpServletRequest request) {
 		String username=null;
 		String password=null;
@@ -682,6 +757,11 @@ public class SdwhApiController {
 		request.setAttribute("password", password);
 	}
 	
+	/**
+	 * 根据企业标识选择接口所需的企业信息
+	 * @param systemFlag
+	 * @return
+	 */
 	public JSONObject switchSystem(int systemFlag) {
 		JSONObject bodyParamJO=new JSONObject();
 		String systemName=null;
@@ -720,6 +800,10 @@ public class SdwhApiController {
 		return bodyParamJO;
 	}
 	
+	/**
+	 * 根据企业标识选择数据库
+	 * @param request
+	 */
 	public void switchDatabase(HttpServletRequest request) {
 		String databaseName=null;
 		int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
@@ -758,12 +842,12 @@ public class SdwhApiController {
 				String token = null;
 				Object LoginUserObj = session.getAttribute("loginUser"+username);
 				//System.out.println("LoginUserObj==="+LoginUserObj);
-				if(LoginUserObj!=null) {
+				if(LoginUserObj!=null) {//先从session里获取登录用户信息的token
 					LoginUser loginUser = (LoginUser)LoginUserObj;
 					token = loginUser.getToken();
 				}
 				
-				if(token==null) {
+				if(token==null) {//若session里没有用户，再从数据库里获取token(在重启服务token未过期情况下调用)
 					token = loginUserService.getTokenByUsername(username);
 				}
 
@@ -786,7 +870,6 @@ public class SdwhApiController {
 			String bodyParamStr = bodyParamJO.toString();
 			//System.out.println("bodyParamStr==="+bodyParamStr);
 			writer.write(bodyParamStr);
-			//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
 			writer.flush();
 			InputStream is = connection.getInputStream(); 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
@@ -798,7 +881,7 @@ public class SdwhApiController {
 			
 			connection.disconnect();
 			String result = sbf.toString();
-			//System.out.println("result==="+result);
+			System.out.println("result==="+result);
 			if(result.contains("DOCTYPE")) {
 				resultJO = new JSONObject();
 				resultJO.put("status", "no");
@@ -808,13 +891,12 @@ public class SdwhApiController {
 				resultJO.put("status", "no");
 			}
 			else {
-				System.out.println("result==="+result);
 				if(!result.contains("操作频繁")) {
 					resultJO = new JSONObject(result);
 					resultJO.put("status", "ok");
 					
 					if(path.contains("auth/login")) {
-						if(!checkTokenInSession(request)) {
+						if(!checkTokenInSession(request)) {//若session里不存在该用户，需要把用户存到session里
 							JSONObject dataJO = resultJO.getJSONObject("data");
 							String token = dataJO.getString("token");
 							String username=request.getAttribute("username").toString();
@@ -825,7 +907,7 @@ public class SdwhApiController {
 						}
 					}
 				}
-				else {
+				else {//操作频繁，稍后再调用
 					resultJO = new JSONObject();
 					resultJO.put("status", "error");
 					resultJO.put("msg", result);
@@ -843,6 +925,11 @@ public class SdwhApiController {
 		}
 	}
 	
+	/**
+	 * 验证session里有无该登录用户
+	 * @param request
+	 * @return
+	 */
 	public boolean checkTokenInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String username=request.getAttribute("username").toString();

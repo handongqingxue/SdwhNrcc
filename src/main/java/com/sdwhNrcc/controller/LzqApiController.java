@@ -50,20 +50,25 @@ public class LzqApiController {
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
+		//临淄区平台同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/lzqApi/goPage?page=syncDBRun
+		//鑫乾化工同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/lzqApi/goPage?page=xqhgSyncDBRun
-		
+
+		//临淄区平台同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/lzqApi/goPage?page=syncDBManager
+		//鑫乾化工同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/lzqApi/goPage?page=xqhgSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("syncDBRun".equals(page)){
 
-			String cityFlag = request.getParameter("cityFlag");
-			String systemFlag = request.getParameter("systemFlag");
-			String epVersion = request.getParameter("epVersion");
-			String apiFlag = request.getParameter("apiFlag");
-			
+			String cityFlag = request.getParameter("cityFlag");//获取城市标识
+			String systemFlag = request.getParameter("systemFlag");//获取企业系统标识
+			String epVersion = request.getParameter("epVersion");//获取企业接口版本标识
+			String apiFlag = request.getParameter("apiFlag");//获取平台标识
+
+			//将不同标识设置到request里去，以便后面从中获取调用
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			request.setAttribute("epVersion", epVersion);
@@ -106,6 +111,13 @@ public class LzqApiController {
 		return url;
 	}
 
+	/**
+	 * 登录
+	 * @param username
+	 * @param password
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/loginDoLogin")
 	@ResponseBody
 	public Map<String, Object> loginDoLogin(String username, String password, HttpServletRequest request) {
@@ -163,6 +175,11 @@ public class LzqApiController {
 			return false;
 	}
 
+	/**
+	 * 同步人员信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeInfo")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeInfo(HttpServletRequest request) {
@@ -240,6 +257,11 @@ public class LzqApiController {
 		}
 	}
 
+	/**
+	 * 同步人员位置
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeLocations")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeLocations(HttpServletRequest request) {
@@ -309,6 +331,11 @@ public class LzqApiController {
 		}
 	}
 
+	/**
+	 * 同步报警信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/dataEmployeeAlarm")
 	@ResponseBody
 	public Map<String, Object> dataEmployeeAlarm(HttpServletRequest request) {
@@ -399,6 +426,12 @@ public class LzqApiController {
 		}
 	}
 	
+	/**
+	 * 把v3.1接口获取的人员信息转换为省平台的人员信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeInfo> convertStaffToEmployeeInfo(int systemFlag,String databaseName) {
 		List<EmployeeInfo> eiList=new ArrayList<EmployeeInfo>();
 		List<Staff> staffList=staffService.queryEIList(databaseName);
@@ -437,6 +470,12 @@ public class LzqApiController {
 		return eiList;
 	}
 	
+	/**
+	 * 把v3.1接口获取的人员位置信息转换为省平台的人员位置信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> positionList=positionService.queryELList(databaseName);
@@ -468,6 +507,12 @@ public class LzqApiController {
 		return elList;
 	}
 	
+	/**
+	 * 把v3.1接口获取的报警信息转换为省平台的报警信息
+	 * @param systemFlag
+	 * @param databaseName
+	 * @return
+	 */
 	public List<EmployeeAlarm> convertKeyWarningToEmployeeAlarm(int systemFlag,String databaseName) {
 		List<EmployeeAlarm> eaList=new ArrayList<EmployeeAlarm>();
 		List<KeyWarning> kwList=keyWarningService.queryEAList(WarnRecord.UNSYNC,databaseName);
@@ -496,6 +541,10 @@ public class LzqApiController {
 		return eaList;
 	}
 	
+	/**
+	 * 获取各个标识存到request里，以便后面调用
+	 * @param request
+	 */
 	public void setFlagInRequest(HttpServletRequest request) {
 		int cityFlag = Integer.valueOf(request.getParameter("cityFlag"));
 		int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
@@ -507,6 +556,10 @@ public class LzqApiController {
 		request.setAttribute("systemFlag", systemFlag);
 	}
 	
+	/**
+	 * 根据城市标识选择账户、密码
+	 * @param request
+	 */
 	public void switchCity(HttpServletRequest request) {
 		String username=null;
 		String password=null;
@@ -526,6 +579,11 @@ public class LzqApiController {
 		request.setAttribute("password", password);
 	}
 	
+	/**
+	 * 根据企业标识选择接口所需的企业信息
+	 * @param systemFlag
+	 * @return
+	 */
 	public JSONObject switchSystem(int systemFlag) {
 		JSONObject bodyParamJO=new JSONObject();
 		String companyCode=null;
@@ -539,6 +597,10 @@ public class LzqApiController {
 		return bodyParamJO;
 	}
 	
+	/**
+	 * 根据企业标识选择数据库
+	 * @param request
+	 */
 	public void switchDatabase(HttpServletRequest request) {
 		String databaseName=null;
 		int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
@@ -571,12 +633,12 @@ public class LzqApiController {
 				String token = null;
 				Object LoginUserObj = session.getAttribute("loginUser"+username);
 				//System.out.println("LoginUserObj==="+LoginUserObj);
-				if(LoginUserObj!=null) {
+				if(LoginUserObj!=null) {//先从session里获取登录用户信息的token
 					LoginUser loginUser = (LoginUser)LoginUserObj;
 					token = loginUser.getToken();
 				}
 				
-				if(token==null) {
+				if(token==null) {//若session里没有用户，再从数据库里获取token(在重启服务token未过期情况下调用)
 					token = loginUserService.getTokenByUsername(username);
 				}
 
@@ -599,7 +661,6 @@ public class LzqApiController {
 			String bodyParamStr = bodyParamJO.toString();
 			//System.out.println("bodyParamStr==="+bodyParamStr);
 			writer.write(bodyParamStr);
-			//writer.write("{ \"jsonrpc\": \"2.0\", \"params\":{\"tenantId\":\"ts000000061\",\"userId\":\"test001\"}, \"method\":\"getCode\", \"id\":1 }"); 
 			writer.flush();
 			InputStream is = connection.getInputStream(); 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
@@ -625,7 +686,7 @@ public class LzqApiController {
 				resultJO.put("status", "ok");
 				
 				if(path.contains("Login/doLogin")) {
-					if(!checkTokenInSession(request)) {
+					if(!checkTokenInSession(request)) {//若session里不存在该用户，需要把用户存到session里
 						JSONObject dataJO = resultJO.getJSONObject("data");
 						String token = dataJO.getString("token");
 						String username=request.getAttribute("username").toString();
@@ -648,6 +709,11 @@ public class LzqApiController {
 		}
 	}
 	
+	/**
+	 * 验证session里有无该登录用户
+	 * @param request
+	 * @return
+	 */
 	public boolean checkTokenInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String username=request.getAttribute("username").toString();

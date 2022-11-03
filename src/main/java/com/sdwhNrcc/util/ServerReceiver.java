@@ -54,8 +54,6 @@ public class ServerReceiver {
 	public void process(Message message) {
 		
 		//String msg,Channel channel,Message message
-		//https://blog.csdn.net/lovekjl/article/details/108616353
-		//http://localhost:15672/#/queues/%2F/tenant_msg_F4A1D30F_sc22050664
 		//String str = new String(message.getBody());
 		//JSON.parseObject();
 		//System.out.println("str==="+str);
@@ -68,6 +66,10 @@ public class ServerReceiver {
 	@ResponseBody
 	public Map<String, Object> receiveMessage(HttpServletRequest request) {
 
+		//https://blog.csdn.net/Bb15070047748/article/details/112184411
+		//https://blog.csdn.net/sinat_31583645/article/details/116766214
+		//https://blog.csdn.net/lovekjl/article/details/108616353
+		//浏览器里查看推送情况的链接:http://localhost:15672/#/queues/%2F/tenant_msg_F4A1D30F_sc22050664
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
         try {
@@ -75,7 +77,7 @@ public class ServerReceiver {
         	switchSystem(request);
 
 			String databaseName = request.getAttribute("databaseName").toString();
-        	if(IS_TEST) {
+        	if(IS_TEST) {//测试部分，在本地调用模拟接收推送消息
         		//String bodyJOStr = "{\"method\":\"position\",\"params\":{\"absolute\":true,\"altitude\":1.0,\"areaId\":10023,\"beacons\":\"BTI2501FEA6(15000)\",\"entityType\":\"staff\",\"floor\":1,\"inDoor\":1662096250425,\"latitude\":37.041073098658146,\"locationTime\":1666764909608,\"longitude\":119.57507922005624,\"out\":false,\"rootAreaId\":1,\"silent\":false,\"speed\":0.0,\"stateTime\":1666764894643,\"tagId\":\"BTT38206876\",\"volt\":4100,\"voltUnit\":\"mV\",\"x\":81.184,\"y\":176.867,\"z\":0.0}}";
         		String bodyJOStr = "{\"method\":\"keyWarning\",\"params\":{\"tagId\":\"BTT34089197\",\"entityId\":1791,\"areaId\":10023,\"raiseTime\":1666764894643,\"x\":81.184,\"y\":176.867,\"z\":0.0,\"floor\":1}}";
         		com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
@@ -89,7 +91,7 @@ public class ServerReceiver {
 					insertKeyWarningData(paramsJO,databaseName);
 				}
         	}
-        	else {
+        	else {//发布服务器后根据队列接收推送消息
         		System.out.println("获取推送信息。。。");
 				ConnectionFactory factory = new ConnectionFactory();
 	
@@ -133,7 +135,11 @@ public class ServerReceiver {
 						}
 				    }
 				});
+				
 				// 不释放资源,让rabbitmq一直监听
+				//如果通道不关闭会一直监听我们的队列
+		        //channel.close();
+		        //connection.close();
         	}
 			
 		} catch (Exception e) {
