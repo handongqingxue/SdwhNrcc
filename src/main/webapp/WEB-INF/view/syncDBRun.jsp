@@ -31,8 +31,7 @@ $(function(){
 		//dataEmployeeInfo();
 	}
 	else if(epVersion==version_3_1){
-		//insertStaffData();
-		dataEmployeeInfo();
+		insertStaffData();
 	}
 });
 

@@ -351,6 +351,7 @@ public class SdwhApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.SDBFXCLYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -431,6 +432,7 @@ public class SdwhApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.SDBFXCLYXGS:
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
@@ -481,6 +483,7 @@ public class SdwhApiController {
 								break;
 							case Constant.WFPXHGYXGS:
 							case Constant.SDFLXCLKJYXGS:
+							case Constant.SDBFXCLYXGS:
 								keyWarningService.syncByIds(syncIds,databaseName);
 								break;
 							}
@@ -644,6 +647,9 @@ public class SdwhApiController {
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
+			case Constant.SDBFXCLYXGS:
+				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
+				break;
 			}
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
@@ -723,6 +729,9 @@ public class SdwhApiController {
 				break;
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
+				break;
+			case Constant.SDBFXCLYXGS:
+				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
 				break;
 			}
 			ea.setCompany_social_code(companySocialCode);
