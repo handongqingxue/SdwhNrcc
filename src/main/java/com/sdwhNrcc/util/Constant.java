@@ -14,6 +14,7 @@ public class Constant {
 	public static final int WEI_FANG=1;
 	public static final int HE_ZE=2;
 	public static final int ZI_BO=3;
+	public static final int TAI_AN=4;
 	
 	public static final String SERVICE_IP_STR="serviceIp";
 	public static final String SERVICE_PORT_STR="servicePort";
@@ -98,6 +99,17 @@ public class Constant {
 	 */
 	public static final String PASSWORD_HE_ZE="Rnh5ajIwMjAh";
 	//菏泽地区登录账号end
+
+	//泰安地区登录账号start
+	/**
+	 * 泰安地区用户名
+	 */
+	public static final String USERNAME_TAI_AN="taian_report_data";
+	/**
+	 * 泰安地区密码(加密后的)
+	 */
+	public static final String PASSWORD_TAI_AN="Rnh5ajIwMjAh";
+	//泰安地区登录账号end
 	
 	//潍坊普鑫化工有限公司start
 	/**
@@ -240,17 +252,45 @@ public class Constant {
 	
 	//山东宝沣新材料有限公司start
 	/**
+	 * 宝沣服务器ip
+	 */
+	public static final String SERVICE_IP_SDBFXCLYXGS="nl.yz-cloud.com";
+	/**
+	 * 宝沣服务器端口
+	 */
+	public static final int SERVICE_PORT_SDBFXCLYXGS=443;
+	/**
 	 * 宝沣项目名称
 	 */
 	public static final String SYSTEM_NAME_SDBFXCLYXGS="人员定位、视频分析、特殊作业、双重预防机制";
 	/**
 	 * 宝沣9位企业编码
 	 */
-	public static final String AREA_CODE_SDBFXCLYXGS="";
+	public static final String AREA_CODE_SDBFXCLYXGS="370980250";
 	/**
 	 * 宝沣统一社会信用代码
 	 */
 	public static final String DATA_ID_SDBFXCLYXGS="91370982MA3QL3EY61";
+	/**
+	 * 宝沣租户id
+	 */
+	public static final String TENANT_ID_SDBFXCLYXGS="sc22090841";
+	/**
+	 * 宝沣用户id
+	 */
+	public static final String USER_ID_SDBFXCLYXGS="BFCL";
+	/**
+	 * 宝沣密码
+	 */
+	public static final String PASSWORD_SDBFXCLYXGS="BFCL";
+	/**
+	 * 宝沣密钥
+	 */
+	public static final String CLIENT_SECRET_SDBFXCLYXGS="6D993921";
+	/**
+	 * 宝沣数据库名
+	 */
+	public static final String DATABASE_NAME_SDBFXCLYXGS="sdwh_nrcc_sdbfxclyxgs";
 	//山东宝沣新材料有限公司end
 	
 	//潍坊润中精细化工有限公司start

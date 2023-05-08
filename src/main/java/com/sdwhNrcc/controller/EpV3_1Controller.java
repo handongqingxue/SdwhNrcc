@@ -51,6 +51,7 @@ public class EpV3_1Controller {
 		//https://blog.csdn.net/m0_57493148/article/details/124030242
 		//http://localhost:8080/SdwhNrcc/epV3_1/goTestEp
 		//http://localhost:8080/SdwhNrcc/epV3_1/goPage?page=pxhgSync
+		//http://localhost:8080/SdwhNrcc/epV3_1/goPage?page=bfxclSync
 
 		return "/testEpV3_1";
 	}
@@ -66,6 +67,9 @@ public class EpV3_1Controller {
 		}
 		else if("pxhgSync".equals(page)){
 			url="redirect:goPage?page=testEp&epFlag="+Constant.WFPXHGYXGS;
+		}
+		else if("bfxclSync".equals(page)){
+			url="redirect:goPage?page=testEp&epFlag="+Constant.SDBFXCLYXGS;
 		}
 		return url;
 	}
@@ -292,6 +296,12 @@ public class EpV3_1Controller {
 			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;
 			databaseName=Constant.DATABASE_NAME_ZBXQHGYXGS;
 			break;
+		case Constant.SDBFXCLYXGS:
+			serviceIp=Constant.SERVICE_IP_SDBFXCLYXGS;
+			servicePort=Constant.SERVICE_PORT_SDBFXCLYXGS;
+			tenantId=Constant.TENANT_ID_SDBFXCLYXGS;
+			databaseName=Constant.DATABASE_NAME_SDBFXCLYXGS;
+			break;
 		}
 		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
@@ -316,6 +326,10 @@ public class EpV3_1Controller {
 			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;
 			clientSecret=Constant.CLIENT_SECRET_ZBXQHGYXGS;
 			break;
+		case Constant.SDBFXCLYXGS:
+			tenantId=Constant.TENANT_ID_SDBFXCLYXGS;
+			clientSecret=Constant.CLIENT_SECRET_SDBFXCLYXGS;
+			break;
 		}
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("clientSecret", clientSecret);
@@ -335,7 +349,13 @@ public class EpV3_1Controller {
 			String servicePort = request.getAttribute("servicePort").toString();
 			String clientId = request.getAttribute("tenantId").toString();
 			serverUrl=serverUrl.replaceAll(Constant.SERVICE_IP_STR, serviceIp);
-			serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
+			if("443".equals(servicePort)) {
+				serverUrl=serverUrl.replaceAll("http","https");
+				serverUrl=serverUrl.replaceAll(":"+Constant.SERVICE_PORT_STR, "");
+			}
+			else
+				serverUrl=serverUrl.replaceAll(Constant.SERVICE_PORT_STR, servicePort);
+			
 			if(apiMethod.contains("oauth/token")) {
 				switchTenant(request);
 				String clientSecret = request.getAttribute("clientSecret").toString();

@@ -22,7 +22,7 @@ var epFlag='${requestScope.epFlag}';
 $(function(){
 	//oauthToken();
 	//apiStaffDataList();
-	//insertStaffData();
+	insertStaffData();
 });
 
 function oauthToken(){

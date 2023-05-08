@@ -22,6 +22,7 @@ public class SyncDBManager {
 		int hourOfDay=0;
 		switch (systemFlag) {//为了避免操作频繁现象，把不同企业的人员信息分时间点同步
 		case Constant.WFPXHGYXGS:
+		case Constant.SDBFXCLYXGS:
 			hourOfDay=22;//22点
 			//hourOfDay=2;
 			break;

@@ -45,6 +45,10 @@ public class SyncDBTask extends TimerTask {
 				api="lzqApi";
 				page="xqhgSyncDBRun";
 				break;
+			case Constant.SDBFXCLYXGS:
+				api="sdwhApi";
+				page="bfxclSyncDBRun";
+				break;
 			case Constant.WFRZJXHYXGS:
 				api="sdwhApi";
 				page="rzjxhSyncDBRun";
