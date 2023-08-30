@@ -353,11 +353,11 @@ public class Constant {
 	/**
 	 * 瑞海用户id
 	 */
-	public static final String USER_ID_CYSRHSWKJYXGS="admin";
+	public static final String USER_ID_CYSRHSWKJYXGS="rhsw";
 	/**
 	 * 瑞海密码
 	 */
-	public static final String PASSWORD_CYSRHSWKJYXGS="123";
+	public static final String PASSWORD_CYSRHSWKJYXGS="rhsw";
 	//昌邑市瑞海生物科技有限公司end
 	
 	//山东蓝天消毒科技有限公司start
