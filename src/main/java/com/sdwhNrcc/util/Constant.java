@@ -254,11 +254,13 @@ public class Constant {
 	/**
 	 * 宝沣服务器ip
 	 */
-	public static final String SERVICE_IP_SDBFXCLYXGS="nl.yz-cloud.com";
+	//public static final String SERVICE_IP_SDBFXCLYXGS="nl.yz-cloud.com";
+	public static final String SERVICE_IP_SDBFXCLYXGS="112.6.184.89";
 	/**
 	 * 宝沣服务器端口
 	 */
-	public static final int SERVICE_PORT_SDBFXCLYXGS=443;
+	//public static final int SERVICE_PORT_SDBFXCLYXGS=443;
+	public static final int SERVICE_PORT_SDBFXCLYXGS=90;
 	/**
 	 * 宝沣项目名称
 	 */
@@ -286,7 +288,8 @@ public class Constant {
 	/**
 	 * 宝沣密钥
 	 */
-	public static final String CLIENT_SECRET_SDBFXCLYXGS="6D993921";
+	//public static final String CLIENT_SECRET_SDBFXCLYXGS="6D993921";
+	public static final String CLIENT_SECRET_SDBFXCLYXGS="131BB83D";
 	/**
 	 * 宝沣数据库名
 	 */
