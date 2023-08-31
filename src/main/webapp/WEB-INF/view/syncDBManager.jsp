@@ -29,7 +29,7 @@ var sdwhFlag='${requestScope.sdwhFlag}';
 var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion+",apiFlag="+apiFlag);
-	//makeSync();
+	makeSync();
 	if(epVersion==version_1_3){
 		setInterval(function(){
 			insertLocationData();//因为是老版平台,就得每隔一段时间调用一次平台接口,把位置和报警数据先暂存到数据库里，再同步到省平台上
