@@ -363,7 +363,7 @@ public class EpV3_1Controller {
 				serverUrl=serverUrl.replaceAll(Constant.CLIENT_SECRET_STR, clientSecret);
 			}
 			
-			//System.out.println("serverUrl==="+serverUrl);
+			System.out.println("serverUrl==="+serverUrl);
 			URL url = new URL(serverUrl);
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			

@@ -39,8 +39,8 @@ public class ServerReceiver {
 	
 	private static final Logger log=LoggerFactory.getLogger(ServerReceiver.class);
 	public static final String MODULE_NAME="/serverReceiver";
-	private static final boolean IS_TEST=true;
-	//private static final boolean IS_TEST=false;
+	//private static final boolean IS_TEST=true;
+	private static final boolean IS_TEST=false;
 	
 	@Autowired
 	private PositionService positionService;
@@ -70,6 +70,8 @@ public class ServerReceiver {
 		//https://blog.csdn.net/sinat_31583645/article/details/116766214
 		//https://blog.csdn.net/lovekjl/article/details/108616353
 		//浏览器里查看推送情况的链接:http://localhost:15672/#/queues/%2F/tenant_msg_F4A1D30F_sc22050664
+		System.out.println("receiveMessage。。。");
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
         try {
@@ -122,7 +124,8 @@ public class ServerReceiver {
 				    public void handleDelivery(String consumerTag, Envelope envelope,AMQP.BasicProperties properties,byte[] body) throws IOException {
 					    //body:{"method":"position","params":{"absolute":true,"altitude":1.0,"areaId":10023,"beacons":"BTI2501FEA6(15000)","entityType":"staff","floor":1,"inDoor":1662096250425,"latitude":37.041073098658146,"locationTime":1666764909608,"longitude":119.57507922005624,"out":false,"rootAreaId":1,"silent":false,"speed":0.0,"stateTime":1666764894643,"tagId":"BTT38206876","volt":4100,"voltUnit":"mV","x":81.184,"y":176.867,"z":0.0}}
 					    String bodyJOStr = new String(body);
-					    System.out.println("bodyJOStr===" + bodyJOStr);
+					    System.out.println("handleDelivery...");
+					    //System.out.println("bodyJOStr===" + bodyJOStr);
 						com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
 						String method = bodyJO.getString("method");
 						if("position".equals(method)) {
