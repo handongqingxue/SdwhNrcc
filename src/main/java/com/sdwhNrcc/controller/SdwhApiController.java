@@ -73,6 +73,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=bfxclSyncDBRun
 		//润中精细化工同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBRun
+		//瑞海生物同步人员信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rhswSyncDBRun
 		
 		//省平台同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBManager
@@ -84,6 +86,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=bfxclSyncDBManager
 		//润中精细化工同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBManager
+		//瑞海生物同步人员位置、报警信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rhswSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
@@ -122,6 +126,9 @@ public class SdwhApiController {
 		else if("rzjxhSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
 		}
+		else if("rhswSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
+		}
 		else if("syncDBManager".equals(page)){
 			
 			String cityFlag = request.getParameter("cityFlag");
@@ -153,6 +160,9 @@ public class SdwhApiController {
 		}
 		else if("rzjxhSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
+		}
+		else if("rhswSyncDBManager".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		return url;
 	}
@@ -265,6 +275,7 @@ public class SdwhApiController {
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
+			case Constant.CYSRHSWKJYXGS:
 				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
@@ -352,6 +363,7 @@ public class SdwhApiController {
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
+			case Constant.CYSRHSWKJYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -576,6 +588,9 @@ public class SdwhApiController {
 			case Constant.SDBFXCLYXGS:
 				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
 				break;
+			case Constant.CYSRHSWKJYXGS:
+				companySocialCode=Constant.DATA_ID_CYSRHSWKJYXGS;
+				break;
 			}
 			ei.setCompany_social_code(companySocialCode);
 			String employeeType=null;
@@ -649,6 +664,9 @@ public class SdwhApiController {
 				break;
 			case Constant.SDBFXCLYXGS:
 				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
+				break;
+			case Constant.CYSRHSWKJYXGS:
+				companySocialCode=Constant.DATA_ID_CYSRHSWKJYXGS;
 				break;
 			}
 			el.setCompany_social_code(companySocialCode);
@@ -815,6 +833,11 @@ public class SdwhApiController {
 			areaCode=Constant.AREA_CODE_SDBFXCLYXGS;
 			dataId=Constant.DATA_ID_SDBFXCLYXGS;
 			break;
+		case Constant.CYSRHSWKJYXGS:
+			systemName=Constant.SYSTEM_NAME_CYSRHSWKJYXGS;
+			areaCode=Constant.AREA_CODE_CYSRHSWKJYXGS;
+			dataId=Constant.DATA_ID_CYSRHSWKJYXGS;
+			break;
 		case Constant.SDLTXDKJYXGS:
 			systemName=Constant.SYSTEM_NAME_SDLTXDKJYXGS;
 			areaCode=Constant.AREA_CODE_SDLTXDKJYXGS;
@@ -846,6 +869,9 @@ public class SdwhApiController {
 			break;
 		case Constant.WFRZJXHYXGS:
 			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
+			break;
+		case Constant.CYSRHSWKJYXGS:
+			databaseName=Constant.DATABASE_NAME_CYSRHSWKJYXGS;
 			break;
 		}
 		request.setAttribute("databaseName", databaseName);

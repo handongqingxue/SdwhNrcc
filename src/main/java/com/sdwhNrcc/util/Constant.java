@@ -337,6 +337,14 @@ public class Constant {
 	
 	//昌邑市瑞海生物科技有限公司start
 	/**
+	 * 瑞海服务器ip
+	 */
+	public static final String SERVICE_IP_CYSRHSWKJYXGS="192.168.124.154";
+	/**
+	 * 瑞海服务器端口
+	 */
+	public static final int SERVICE_PORT_CYSRHSWKJYXGS=80;
+	/**
 	 * 瑞海项目名称
 	 */
 	public static final String SYSTEM_NAME_CYSRHSWKJYXGS="人员定位";
@@ -361,6 +369,14 @@ public class Constant {
 	 * 瑞海密码
 	 */
 	public static final String PASSWORD_CYSRHSWKJYXGS="rhsw";
+	/**
+	 * 瑞海密钥
+	 */
+	public static final String CLIENT_SECRET_CYSRHSWKJYXGS="B962D6A9";
+	/**
+	 * 瑞海数据库名
+	 */
+	public static final String DATABASE_NAME_CYSRHSWKJYXGS="sdwh_nrcc_cysrhswkjyxgs";
 	//昌邑市瑞海生物科技有限公司end
 	
 	//山东蓝天消毒科技有限公司start

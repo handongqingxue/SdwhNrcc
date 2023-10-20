@@ -302,6 +302,12 @@ public class EpV3_1Controller {
 			tenantId=Constant.TENANT_ID_SDBFXCLYXGS;
 			databaseName=Constant.DATABASE_NAME_SDBFXCLYXGS;
 			break;
+		case Constant.CYSRHSWKJYXGS:
+			serviceIp=Constant.SERVICE_IP_CYSRHSWKJYXGS;
+			servicePort=Constant.SERVICE_PORT_CYSRHSWKJYXGS;
+			tenantId=Constant.TENANT_ID_CYSRHSWKJYXGS;
+			databaseName=Constant.DATABASE_NAME_CYSRHSWKJYXGS;
+			break;
 		}
 		request.setAttribute("serviceIp", serviceIp);
 		request.setAttribute("servicePort", servicePort);
