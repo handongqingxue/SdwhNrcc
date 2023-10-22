@@ -32,11 +32,13 @@ public class Constant {
 	/**
 	 * RabbitMq接收推送消息的用户名
 	 */
-	public static final String CONN_FACTORY_USERNAME="admin";
+	public static final String CONN_FACTORY_USERNAME1="admin";
+	public static final String CONN_FACTORY_USERNAME2="guest";
 	/**
 	 * RabbitMq接收推送消息的密码
 	 */
-	public static final String CONN_FACTORY_PASSWORD="admin";
+	public static final String CONN_FACTORY_PASSWORD1="admin";
+	public static final String CONN_FACTORY_PASSWORD2="guest";
 	
 	/**
 	 * 1.3版本的接口标识

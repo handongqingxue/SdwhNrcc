@@ -336,6 +336,10 @@ public class EpV3_1Controller {
 			tenantId=Constant.TENANT_ID_SDBFXCLYXGS;
 			clientSecret=Constant.CLIENT_SECRET_SDBFXCLYXGS;
 			break;
+		case Constant.CYSRHSWKJYXGS:
+			tenantId=Constant.TENANT_ID_CYSRHSWKJYXGS;
+			clientSecret=Constant.CLIENT_SECRET_CYSRHSWKJYXGS;
+			break;
 		}
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("clientSecret", clientSecret);

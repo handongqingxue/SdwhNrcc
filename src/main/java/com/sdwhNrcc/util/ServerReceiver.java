@@ -96,12 +96,14 @@ public class ServerReceiver {
         	else {//发布服务器后根据队列接收推送消息
         		System.out.println("获取推送信息。。。");
 				ConnectionFactory factory = new ConnectionFactory();
-	
+				
+				String connFactoryUsername = request.getAttribute("connFactoryUsername").toString();
+				String connFactoryPassword = request.getAttribute("connFactoryPassword").toString();
 				//factory.setHost("222.173.86.130");
 				factory.setHost(Constant.CONN_FACTORY_HOST);
 				factory.setPort(Constant.CONN_FACTORY_PORT);
-				factory.setUsername(Constant.CONN_FACTORY_USERNAME);
-				factory.setPassword(Constant.CONN_FACTORY_PASSWORD);
+				factory.setUsername(connFactoryUsername);
+				factory.setPassword(connFactoryPassword);
 	      
 	
 				// 2.创建连接
@@ -260,10 +262,26 @@ public class ServerReceiver {
 	}
 	
 	public void switchSystem(HttpServletRequest request) {
+		String connFactoryUsername=null;
+		String connFactoryPassword=null;
 		String tenantId=null;
 		String clientSecret=null;
 		String databaseName=null;
 		int systemFlag=Integer.valueOf(request.getParameter("systemFlag"));
+		switch (systemFlag) {
+		case Constant.WFPXHGYXGS:
+		case Constant.SDFLXCLKJYXGS:
+			connFactoryUsername=Constant.CONN_FACTORY_USERNAME2;
+			connFactoryPassword=Constant.CONN_FACTORY_PASSWORD2;
+			break;
+		default:
+			connFactoryUsername=Constant.CONN_FACTORY_USERNAME1;
+			connFactoryPassword=Constant.CONN_FACTORY_PASSWORD1;
+			break;
+		}
+		request.setAttribute("connFactoryUsername", connFactoryUsername);
+		request.setAttribute("connFactoryPassword", connFactoryPassword);
+		
 		switch (systemFlag) {
 		case Constant.WFPXHGYXGS:
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
