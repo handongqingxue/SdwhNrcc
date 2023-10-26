@@ -28,10 +28,11 @@ var lzqFlag='${requestScope.lzqFlag}';
 $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion);
 	if(epVersion==version_1_3){
-		//dataEmployeeInfo();
+		dataEmployeeInfo();
 	}
 	else if(epVersion==version_3_1){
-		insertStaffData();
+		//insertStaffData();
+		dataEmployeeInfo();
 	}
 });
 

@@ -11,10 +11,12 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -287,7 +289,8 @@ public class SdwhApiController {
 						//break;
 					EmployeeInfo ei=eiList.get(i);
 					JSONObject dataParamJO=new JSONObject();
-					dataParamJO.put("id", ei.getId());
+					//dataParamJO.put("id", ei.getId());
+					dataParamJO.put("id", UUID.randomUUID());//避免省平台那边出现主键冲突,每次上传人员信息id都不能相同
 					dataParamJO.put("post_id", ei.getPost_id());
 					dataParamJO.put("post_name", ei.getPost_name());
 					dataParamJO.put("depart_id", ei.getDepart_id());
@@ -303,6 +306,7 @@ public class SdwhApiController {
 				if(eiListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/info",request);
 					String status=resultJO.get("status").toString();
@@ -386,6 +390,7 @@ public class SdwhApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -575,7 +580,10 @@ public class SdwhApiController {
 			ei.setDepart_id(staff.getDeptId()+"");
 			ei.setDepart_name("未知");
 			ei.setName(staff.getName());
-			ei.setSex((staff.getSex()==1?0:1)+"");
+			Integer sex = staff.getSex();
+			if(sex==null)
+				sex=1;
+			ei.setSex((sex==1?0:1)+"");
 			ei.setCard_no(staff.getJobNumber());
 			String companySocialCode=null;
 			switch (systemFlag) {
@@ -615,6 +623,7 @@ public class SdwhApiController {
 	public List<EmployeeLocation> convertLocationToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Location> locationList=locationService.queryELList(databaseName);
+		Date date = new Date();
 		for (Location location : locationList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
@@ -626,7 +635,7 @@ public class SdwhApiController {
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(location.getFloor()+"");
 			el.setCard_no(location.getUserId());
-			el.setTime_stamp(DateUtil.convertLongToString(location.getLocationTime()));
+			el.setTime_stamp(DateUtil.getDate(date,null));
 			
 			Float speed = location.getSpeed();
 			String status=null;
@@ -652,6 +661,7 @@ public class SdwhApiController {
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> positionList=positionService.queryELList(databaseName);
+		Date date = new Date();
 		for (Position position : positionList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
@@ -672,7 +682,7 @@ public class SdwhApiController {
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
 			el.setCard_no(position.getJobNumber());
-			el.setTime_stamp(DateUtil.convertLongToString(position.getLocationTime()));
+			el.setTime_stamp(DateUtil.getDate(date,null));
 			
 			Float speed = position.getSpeed();
 			String status=null;

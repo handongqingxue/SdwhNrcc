@@ -117,7 +117,7 @@ public class Constant {
 	/**
 	 * 普鑫服务器ip
 	 */
-	public static final String SERVICE_IP_WFPXHGYXGS="222.173.86.130";
+	public static final String SERVICE_IP_WFPXHGYXGS="192.168.2.228";
 	/**
 	 * 普鑫服务器端口
 	 */
@@ -160,7 +160,7 @@ public class Constant {
 	/**
 	 * 福林服务器ip
 	 */
-	public static final String SERVICE_IP_SDFLXCLKJYXGS="222.173.86.130";
+	public static final String SERVICE_IP_SDFLXCLKJYXGS="192.168.2.228";
 	/**
 	 * 福林服务器端口
 	 */
@@ -353,7 +353,7 @@ public class Constant {
 	/**
 	 * 瑞海9位企业编码
 	 */
-	public static final String AREA_CODE_CYSRHSWKJYXGS="";
+	public static final String AREA_CODE_CYSRHSWKJYXGS="370710552";
 	/**
 	 * 瑞海统一社会信用代码
 	 */
@@ -389,11 +389,32 @@ public class Constant {
 	/**
 	 * 蓝天消毒9位企业编码
 	 */
-	public static final String AREA_CODE_SDLTXDKJYXGS="";
+	public static final String AREA_CODE_SDLTXDKJYXGS="370700430";
 	/**
 	 * 蓝天消毒统一社会信用代码
 	 */
-	public static final String DATA_ID_SDLTXDKJYXGS="";
+	public static final String DATA_ID_SDLTXDKJYXGS="91370786699662429";
+	
+	/**
+	 * 蓝天租户id
+	 */
+	public static final String TENANT_ID_SDLTXDKJYXGS="sc21090413";
+	/**
+	 * 蓝天用户id
+	 */
+	public static final String USER_ID_SDLTXDKJYXGS="ltxd";
+	/**
+	 * 蓝天密码
+	 */
+	public static final String PASSWORD_SDLTXDKJYXGS="ltxd";
+	/**
+	 * 蓝天密钥
+	 */
+	public static final String CLIENT_SECRET_SDLTXDKJYXGS="E9BA5D6C";
+	/**
+	 * 蓝天数据库名
+	 */
+	public static final String DATABASE_NAME_SDLTXDKJYXGS="ltxd_to_zy";
 	//山东蓝天消毒科技有限公司end
 	
 	
