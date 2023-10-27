@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sdwhNrcc.entity.sdwh.*;
+import com.sdwhNrcc.entity.sdwh.ApiLog;
 import com.sdwhNrcc.entity.v1_3.*;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.sdwh.*;
@@ -62,7 +63,7 @@ public class SdwhApiController {
 	@Autowired
 	private LoginUserService loginUserService;
 	@Autowired
-	private ApiLogService apiLogService;
+	private com.sdwhNrcc.service.sdwh.ApiLogServiceSdwh apiLogService;
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -321,22 +322,7 @@ public class SdwhApiController {
 				if(eiListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
-					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
 					
-					String testLogDirStr="D:/TestLog/";
-					File testLogDir = new File(testLogDirStr);
-					if(!testLogDir.exists())
-						testLogDir.mkdir();
-					File workOrderBRFile=new File(testLogDirStr+eiList.get(0).getCompany_social_code()+".txt");
-					workOrderBRFile.createNewFile();
-					
-					byte bytes[]=new byte[512];
-					bytes=bodyParamJO.toString().getBytes();
-					int b=bytes.length; //是字节的长度，不是字符串的长度
-					FileOutputStream fos=new FileOutputStream(workOrderBRFile);
-					fos.write(bytes,0,b);
-					fos.close();
-				
 					resultJO = postBody(bodyParamJO,"/data/employee/info",request);
 					String status=resultJO.get("status").toString();
 					if("ok".equals(status)) {
@@ -346,9 +332,12 @@ public class SdwhApiController {
 						System.out.println("code==="+code);
 						System.out.println("msg==="+msg);
 						System.out.println("data==="+data);
+						
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
+
+						addApiLog(createApiLogByParams("dataEmployeeInfo",bodyParamJO.toString(),status,code,msg,data,eiList.get(0).getCompany_social_code()));
 					}
 					else if("no".equals(status)) {//若登录信息失效，需重新登录
 						boolean success=reAuthLogin(request);
@@ -397,6 +386,7 @@ public class SdwhApiController {
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
 			case Constant.CYSRHSWKJYXGS:
+			case Constant.SDLTXDKJYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
 			}
@@ -419,7 +409,6 @@ public class SdwhApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
-					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -482,6 +471,8 @@ public class SdwhApiController {
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
+			case Constant.CYSRHSWKJYXGS:
+			case Constant.SDLTXDKJYXGS:
 				eaList = convertKeyWarningToEmployeeAlarm(systemFlag,databaseName);
 				break;
 			}
@@ -713,6 +704,9 @@ public class SdwhApiController {
 			case Constant.CYSRHSWKJYXGS:
 				companySocialCode=Constant.DATA_ID_CYSRHSWKJYXGS;
 				break;
+			case Constant.SDLTXDKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDLTXDKJYXGS;
+				break;
 			}
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
@@ -721,10 +715,15 @@ public class SdwhApiController {
 			
 			Float speed = position.getSpeed();
 			String status=null;
-			if(speed==0)
+			if(speed!=null) {
+				if(speed==0)
+					status=EmployeeLocation.SLEEP;
+				else
+					status=EmployeeLocation.SPORT;
+			}
+			else {
 				status=EmployeeLocation.SLEEP;
-			else
-				status=EmployeeLocation.SPORT;
+			}
 			el.setStatus(status);
 			
 			el.setLongitude(position.getLongitude()+"");
@@ -795,6 +794,12 @@ public class SdwhApiController {
 				break;
 			case Constant.SDBFXCLYXGS:
 				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
+				break;
+			case Constant.CYSRHSWKJYXGS:
+				companySocialCode=Constant.DATA_ID_CYSRHSWKJYXGS;
+				break;
+			case Constant.SDLTXDKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDLTXDKJYXGS;
 				break;
 			}
 			ea.setCompany_social_code(companySocialCode);

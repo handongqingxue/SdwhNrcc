@@ -44,6 +44,8 @@ public class EpV3_1Controller {
 	private DeptService deptService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ApiLogV3_1Service apiLogService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -356,11 +358,67 @@ public class EpV3_1Controller {
 		request.setAttribute("clientSecret", clientSecret);
 	}
 	
+	/**
+	 * 添加日志记录
+	 * @param al
+	 * @return
+	 */
+	@RequestMapping(value="/addApiLog")
+	@ResponseBody
+	public Map<String, Object> addApiLog(ApiLog al,String databaseName) {
+
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			int count=apiLogService.add(al,databaseName);
+			if(count>0) {
+				jsonMap.put("message", "ok");
+				jsonMap.put("info", "添加日志记录成功");
+			}
+			else {
+				jsonMap.put("message", "no");
+				jsonMap.put("info", "添加日志记录失败");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMap.put("message", "no");
+			jsonMap.put("info", "添加日志记录失败");
+		}
+		finally {
+			return jsonMap;
+		}
+	}
+	
+	/**
+	 * 根据参数创建日志记录对象
+	 * @param action
+	 * @param body
+	 * @param status
+	 * @param code
+	 * @param msg
+	 * @param data
+	 * @return
+	 */
+	public ApiLog createApiLogByParams(String action,String body,String status,String code,String msg,String data){
+		
+		ApiLog apiLog=new ApiLog();
+		apiLog.setAction(action);
+		apiLog.setBody(body);
+		apiLog.setStatus(status);
+		apiLog.setCode(code);
+		apiLog.setMsg(msg);
+		apiLog.setData(data);
+		
+		return apiLog;
+	}
+	
 	public JSONObject requestApi(String apiMethod, String params, JSONObject bodyParamJO, String requestMethod, HttpServletRequest request) {
 		
 		JSONObject resultJO = null;
+		switchService(request);
+		String databaseName = request.getAttribute("databaseName").toString();
 		try {
-			switchService(request);
 			
 			StringBuffer sbf = new StringBuffer(); 
 			String strRead = null; 
@@ -443,14 +501,20 @@ public class EpV3_1Controller {
 			if(result.contains("DOCTYPE")) {
 				resultJO = new JSONObject();
 				resultJO.put("status", "no");
+				
+				addApiLog(createApiLogByParams(apiMethod,bodyParamJO.toString(),"no","",result,""),databaseName);
 			}
 			else if(result.contains("error")) {
 				resultJO = new JSONObject(result);
 				resultJO.put("status", "no");
+				
+				addApiLog(createApiLogByParams(apiMethod,bodyParamJO.toString(),"no","",result,""),databaseName);
 			}
 			else {
 				resultJO = new JSONObject(result);
 				resultJO.put("status", "ok");
+
+				addApiLog(createApiLogByParams(serverUrl,bodyParamJO.toString(),"ok",resultJO.getString("code"),resultJO.getString("msg"),resultJO.getString("data")),databaseName);
 				
 				if(apiMethod.contains("oauth/token")) {
 					if(!checkTokenInSession(request)) {
@@ -467,6 +531,9 @@ public class EpV3_1Controller {
 			System.out.println("Exception.....");
 			resultJO = new JSONObject();
 			resultJO.put("status", "no");
+			
+			addApiLog(createApiLogByParams(apiMethod,bodyParamJO.toString(),"no","",e.getMessage(),""),databaseName);
+			
 			e.printStackTrace();
 		}
 		finally {

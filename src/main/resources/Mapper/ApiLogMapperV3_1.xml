@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.v3_1.ApiLogV3_1Mapper">
+	<insert id="add">
+		insert into ${databaseName}.api_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="apiLog.action!=null">
+				action,
+			</if>
+			<if test="apiLog.body!=null">
+				body,
+			</if>
+			<if test="apiLog.status!=null">
+				status,
+			</if>
+			<if test="apiLog.code!=null">
+				code,
+			</if>
+			<if test="apiLog.msg!=null">
+				msg,
+			</if>
+			<if test="apiLog.data!=null">
+				data,
+			</if>
+				time
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="apiLog.action!=null">
+				#{apiLog.action},
+			</if>
+			<if test="apiLog.body!=null">
+				#{apiLog.body},
+			</if>
+			<if test="apiLog.status!=null">
+				#{apiLog.status},
+			</if>
+			<if test="apiLog.code!=null">
+				#{apiLog.code},
+			</if>
+			<if test="apiLog.msg!=null">
+				#{apiLog.msg},
+			</if>
+			<if test="apiLog.data!=null">
+				#{apiLog.data},
+			</if>
+				now()
+		</trim>
+	</insert>
+</mapper>

@@ -8,10 +8,10 @@ import com.sdwhNrcc.entity.sdwh.*;
 import com.sdwhNrcc.service.sdwh.*;
 
 @Service
-public class ApiLogServiceImpl implements ApiLogService {
+public class ApiLogSdwhServiceImpl implements ApiLogServiceSdwh {
 	
 	@Autowired
-	private ApiLogMapper apiLogDao;
+	private ApiLogSdwhMapper apiLogDao;
 
 	@Override
 	public int add(ApiLog apiLog) {

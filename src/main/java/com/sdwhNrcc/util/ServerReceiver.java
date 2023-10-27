@@ -126,7 +126,7 @@ public class ServerReceiver {
 				    public void handleDelivery(String consumerTag, Envelope envelope,AMQP.BasicProperties properties,byte[] body) throws IOException {
 					    //body:{"method":"position","params":{"absolute":true,"altitude":1.0,"areaId":10023,"beacons":"BTI2501FEA6(15000)","entityType":"staff","floor":1,"inDoor":1662096250425,"latitude":37.041073098658146,"locationTime":1666764909608,"longitude":119.57507922005624,"out":false,"rootAreaId":1,"silent":false,"speed":0.0,"stateTime":1666764894643,"tagId":"BTT38206876","volt":4100,"voltUnit":"mV","x":81.184,"y":176.867,"z":0.0}}
 					    String bodyJOStr = new String(body);
-					    System.out.println("handleDelivery...");
+					    //System.out.println("handleDelivery...");
 					    //System.out.println("bodyJOStr===" + bodyJOStr);
 						com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(bodyJOStr);
 						String method = bodyJO.getString("method");
@@ -171,8 +171,12 @@ public class ServerReceiver {
 			Integer floor = paramsJO.getInteger("floor");
 			Long inDoor = paramsJO.getLong("inDoor");
 			Float latitude = paramsJO.getFloat("latitude");
+			if(latitude==null)
+				latitude=(float)0;
 			Integer locationTime = paramsJO.getInteger("locationTime");
 			Float longitude = paramsJO.getFloat("longitude");
+			if(longitude==null)
+				longitude=(float)0;
 			Boolean out = paramsJO.getBoolean("out");
 			Integer rootAreaId = paramsJO.getInteger("rootAreaId");
 			Boolean silent = paramsJO.getBoolean("silent");

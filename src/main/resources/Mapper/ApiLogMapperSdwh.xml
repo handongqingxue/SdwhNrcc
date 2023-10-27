@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sdwhNrcc.dao.sdwh.ApiLogMapper">
+<mapper namespace="com.sdwhNrcc.dao.sdwh.ApiLogSdwhMapper">
 	<insert id="add" parameterType="com.sdwhNrcc.entity.sdwh.ApiLog">
 		insert into api_log
 		<trim prefix="(" suffix=")" suffixOverrides=",">
