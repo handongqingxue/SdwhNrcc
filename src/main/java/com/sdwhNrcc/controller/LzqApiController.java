@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,6 +225,7 @@ public class LzqApiController {
 				if(eiListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/employee/info",request);
 					String status=resultJO.get("status").toString();
@@ -302,7 +304,7 @@ public class LzqApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
-					//System.out.println("bodyParamJO==="+bodyParamJO.toString());
+					System.out.println("bodyParamJO==="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -479,6 +481,7 @@ public class LzqApiController {
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> positionList=positionService.queryELList(databaseName);
+		Date date = new Date();
 		for (Position position : positionList) {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
@@ -490,7 +493,7 @@ public class LzqApiController {
 			el.setCompany_social_code(companySocialCode);
 			el.setFloor_no(position.getFloor()+"");
 			el.setCard_no(position.getJobNumber());
-			el.setTime_stamp(DateUtil.convertLongToString(position.getLocationTime()));
+			el.setTime_stamp(DateUtil.getDate(date,null));
 			
 			Float speed = position.getSpeed();
 			String status=null;

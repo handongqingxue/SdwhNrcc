@@ -308,6 +308,11 @@ public class ServerReceiver {
 			clientSecret=Constant.CLIENT_SECRET_CYSRHSWKJYXGS;
 			databaseName=Constant.DATABASE_NAME_CYSRHSWKJYXGS;
 			break;
+		case Constant.SDLTXDKJYXGS:
+			tenantId=Constant.TENANT_ID_SDLTXDKJYXGS;
+			clientSecret=Constant.CLIENT_SECRET_SDLTXDKJYXGS;
+			databaseName=Constant.DATABASE_NAME_SDLTXDKJYXGS;
+			break;
 		}
 		request.setAttribute("tenantId", tenantId);
 		request.setAttribute("clientSecret", clientSecret);

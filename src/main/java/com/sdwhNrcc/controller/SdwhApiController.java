@@ -1,6 +1,8 @@
 package com.sdwhNrcc.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,6 +79,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBRun
 		//瑞海生物同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rhswSyncDBRun
+		//蓝天消毒同步人员信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=ltxdSyncDBRun
 		
 		//省平台同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=syncDBManager
@@ -90,6 +94,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rzjxhSyncDBManager
 		//瑞海生物同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=rhswSyncDBManager
+		//蓝天消毒同步人员位置、报警信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=ltxdSyncDBManager
 		String url = null;
 		String page = request.getParameter("page");
 		if("testApi".equals(page)){
@@ -131,6 +137,9 @@ public class SdwhApiController {
 		else if("rhswSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
+		else if("ltxdSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.SDLTXDKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
+		}
 		else if("syncDBManager".equals(page)){
 			
 			String cityFlag = request.getParameter("cityFlag");
@@ -165,6 +174,9 @@ public class SdwhApiController {
 		}
 		else if("rhswSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
+		}
+		else if("ltxdSyncDBManager".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.SDLTXDKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		return url;
 	}
@@ -278,6 +290,7 @@ public class SdwhApiController {
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
 			case Constant.CYSRHSWKJYXGS:
+			case Constant.SDLTXDKJYXGS:
 				eiList = convertStaffToEmployeeInfo(systemFlag,databaseName);
 				break;
 			}
@@ -307,6 +320,20 @@ public class SdwhApiController {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
 					System.out.println("bodyParamJOStr="+bodyParamJO.toString());
+					
+					String testLogDirStr="D:/TestLog/";
+					File testLogDir = new File(testLogDirStr);
+					if(!testLogDir.exists())
+						testLogDir.mkdir();
+					File workOrderBRFile=new File(testLogDirStr+eiList.get(0).getCompany_social_code()+".txt");
+					workOrderBRFile.createNewFile();
+					
+					byte bytes[]=new byte[512];
+					bytes=bodyParamJO.toString().getBytes();
+					int b=bytes.length; //是字节的长度，不是字符串的长度
+					FileOutputStream fos=new FileOutputStream(workOrderBRFile);
+					fos.write(bytes,0,b);
+					fos.close();
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/info",request);
 					String status=resultJO.get("status").toString();
@@ -599,6 +626,9 @@ public class SdwhApiController {
 			case Constant.CYSRHSWKJYXGS:
 				companySocialCode=Constant.DATA_ID_CYSRHSWKJYXGS;
 				break;
+			case Constant.SDLTXDKJYXGS:
+				companySocialCode=Constant.DATA_ID_SDLTXDKJYXGS;
+				break;
 			}
 			ei.setCompany_social_code(companySocialCode);
 			String employeeType=null;
@@ -883,6 +913,9 @@ public class SdwhApiController {
 		case Constant.CYSRHSWKJYXGS:
 			databaseName=Constant.DATABASE_NAME_CYSRHSWKJYXGS;
 			break;
+		case Constant.SDLTXDKJYXGS:
+			databaseName=Constant.DATABASE_NAME_SDLTXDKJYXGS;
+			break;
 		}
 		request.setAttribute("databaseName", databaseName);
 	}
@@ -896,6 +929,7 @@ public class SdwhApiController {
 			String strRead = null; 
 			String serverUrl=ADDRESS_URL+path;
 			
+			System.out.println("serverUrl="+serverUrl);
 			URL url = new URL(serverUrl); 
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 			

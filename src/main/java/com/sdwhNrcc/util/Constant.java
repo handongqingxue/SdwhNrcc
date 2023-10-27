@@ -383,6 +383,14 @@ public class Constant {
 	
 	//山东蓝天消毒科技有限公司start
 	/**
+	 * 蓝天服务器ip
+	 */
+	public static final String SERVICE_IP_SDLTXDKJYXGS="192.168.1.17";
+	/**
+	 * 蓝天服务器端口
+	 */
+	public static final int SERVICE_PORT_SDLTXDKJYXGS=90;
+	/**
 	 * 蓝天消毒项目名称
 	 */
 	public static final String SYSTEM_NAME_SDLTXDKJYXGS="人员定位";
@@ -393,7 +401,7 @@ public class Constant {
 	/**
 	 * 蓝天消毒统一社会信用代码
 	 */
-	public static final String DATA_ID_SDLTXDKJYXGS="91370786699662429";
+	public static final String DATA_ID_SDLTXDKJYXGS="91370786699662429T";
 	
 	/**
 	 * 蓝天租户id
