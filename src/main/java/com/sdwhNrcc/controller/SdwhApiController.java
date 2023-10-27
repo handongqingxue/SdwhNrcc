@@ -61,6 +61,8 @@ public class SdwhApiController {
 	private StaffService staffService;
 	@Autowired
 	private LoginUserService loginUserService;
+	@Autowired
+	private ApiLogService apiLogService;
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -427,9 +429,12 @@ public class SdwhApiController {
 						String msg=resultJO.get("msg").toString();
 						String data = resultJO.getString("data");
 						System.out.println("data==="+data);
+						
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
+
+						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJO.toString(),status,code,msg,data,elList.get(0).getCompany_social_code()));
 					}
 					else {
 						boolean success=reAuthLogin(request);
@@ -918,6 +923,63 @@ public class SdwhApiController {
 			break;
 		}
 		request.setAttribute("databaseName", databaseName);
+	}
+	
+	/**
+	 * 添加日志记录
+	 * @param al
+	 * @return
+	 */
+	@RequestMapping(value="/addApiLog")
+	@ResponseBody
+	public Map<String, Object> addApiLog(ApiLog al) {
+
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			int count=apiLogService.add(al);
+			if(count>0) {
+				jsonMap.put("message", "ok");
+				jsonMap.put("info", "添加日志记录成功");
+			}
+			else {
+				jsonMap.put("message", "no");
+				jsonMap.put("info", "添加日志记录失败");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMap.put("message", "no");
+			jsonMap.put("info", "添加日志记录失败");
+		}
+		finally {
+			return jsonMap;
+		}
+	}
+	
+	/**
+	 * 根据参数创建日志记录对象
+	 * @param action
+	 * @param body
+	 * @param status
+	 * @param code
+	 * @param msg
+	 * @param data
+	 * @param company_social_code
+	 * @return
+	 */
+	public ApiLog createApiLogByParams(String action,String body,String status,String code,String msg,String data,String company_social_code){
+		
+		ApiLog apiLog=new ApiLog();
+		apiLog.setAction(action);
+		apiLog.setBody(body);
+		apiLog.setStatus(status);
+		apiLog.setCode(code);
+		apiLog.setMsg(msg);
+		apiLog.setData(data);
+		apiLog.setCompany_social_code(company_social_code);
+		
+		return apiLog;
 	}
 	
 	public JSONObject postBody(JSONObject bodyParamJO, String path, HttpServletRequest request) {
