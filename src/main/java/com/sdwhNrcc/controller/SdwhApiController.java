@@ -63,7 +63,8 @@ public class SdwhApiController {
 	@Autowired
 	private LoginUserService loginUserService;
 	@Autowired
-	private com.sdwhNrcc.service.sdwh.ApiLogServiceSdwh apiLogService;
+	private ApiLogServiceSdwh apiLogService;
+	private List<Map<String, Object>> tagPreLLList=new ArrayList<Map<String, Object>>();
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -422,6 +423,10 @@ public class SdwhApiController {
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
+						
+						for (EmployeeLocation el : elList) {
+							addTagPreLLInList(Float.valueOf(el.getLongitude()), Float.valueOf(el.getLatitude()), el.getTagId());
+						}
 
 						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJO.toString(),status,code,msg,data,elList.get(0).getCompany_social_code()));
 					}
@@ -686,7 +691,10 @@ public class SdwhApiController {
 	 */
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
-		List<Position> positionList=positionService.queryELList(databaseName);
+		List<Position> unCompPosList=positionService.queryELList(databaseName);
+		List<Position> positionList=compareWithPosPreLL(unCompPosList);
+		System.out.println("positionListSize="+positionList.size());
+		
 		Date date = new Date();
 		for (Position position : positionList) {
 			EmployeeLocation el=new EmployeeLocation();
@@ -726,8 +734,12 @@ public class SdwhApiController {
 			}
 			el.setStatus(status);
 			
-			el.setLongitude(position.getLongitude()+"");
-			el.setLatitude(position.getLatitude()+"");
+			Float longitude = position.getLongitude();
+			Float latitude = position.getLatitude();
+			el.setLongitude(longitude+"");
+			el.setLatitude(latitude+"");
+			el.setTagId(position.getTagId());
+			
 			elList.add(el);
 		}
 		return elList;
@@ -985,6 +997,94 @@ public class SdwhApiController {
 		apiLog.setCompany_social_code(company_social_code);
 		
 		return apiLog;
+	}
+	
+	/**
+	 * 添加上次标签经纬度到集合里
+	 * @param longitude
+	 * @param latitude
+	 * @param tagId
+	 */
+	private void addTagPreLLInList(Float longitude, Float latitude, String tagId) {
+		//System.out.println("addTagPreLLInList...."+tagId);
+		boolean exist=checkTagIfExistInPreLLList(tagId);
+		//System.out.println("exist==="+exist);
+		if(exist) {
+			for (Map<String, Object> tagPreLLMap : tagPreLLList) {
+				String preTagId = tagPreLLMap.get("tagId").toString();
+				if(tagId.equals(preTagId)) {
+					//System.out.println("longitude="+longitude+",latitude="+latitude);
+					tagPreLLMap.put("longitude", longitude);
+					tagPreLLMap.put("latitude", latitude);
+				}
+			}
+		}
+		else {
+			Map<String,Object> preLLMap=new HashMap<>();
+			preLLMap.put("tagId", tagId);
+			preLLMap.put("longitude", longitude);
+			preLLMap.put("latitude", latitude);
+			
+			tagPreLLList.add(preLLMap);
+		}
+	}
+	
+	private List<Position> compareWithPosPreLL(List<Position> unCompPosList) {
+		List<Position> positionList=new ArrayList<Position>();
+		for (Position unCompPos : unCompPosList) {
+			String tagId = unCompPos.getTagId();
+			float longitude = unCompPos.getLongitude();
+			float latitude = unCompPos.getLatitude();
+			String preLL = getTagPreLLByTagId(tagId);
+			String[] preLLArr = preLL.split(",");
+			float preLongitude = Float.valueOf(preLLArr[0]);
+			float preLatitude = Float.valueOf(preLLArr[1]);
+			//System.out.println("longitude="+longitude+",preLongitude="+preLongitude+",latitude="+latitude+",preLatitude="+preLatitude);
+			if(longitude!=preLongitude||latitude!=preLatitude) {
+				positionList.add(unCompPos);
+			}
+		}
+		return positionList;
+	}
+	
+	/**
+	 * 根据标签id获取标签上一次经纬度
+	 * @param tagId
+	 * @return
+	 */
+	private String getTagPreLLByTagId(String tagId) {
+		float longitude = 0;
+		float latitude = 0;
+		for (int i = 0; i < tagPreLLList.size(); i++) {
+			Map<String, Object> tagPreLLMap = tagPreLLList.get(i);
+			String preTagId = tagPreLLMap.get("tagId").toString();
+			float preLongitude = Float.valueOf(tagPreLLMap.get("longitude").toString());
+			float preLatitude = Float.valueOf(tagPreLLMap.get("latitude").toString());
+			if(tagId.equals(preTagId)) {
+				longitude=preLongitude;
+				latitude=preLatitude;
+				break;
+			}
+		}
+		//System.out.println("preLongitude="+longitude+",preLatitude="+latitude);
+		return longitude+","+latitude;
+	}
+	
+	/**
+	 * 检查标签是否存在于标签上一次经纬度的集合里
+	 * @param tagId
+	 * @return
+	 */
+	private boolean checkTagIfExistInPreLLList(String tagId) {
+		boolean exist=false;
+		for (Map<String, Object> tagPreLLMap : tagPreLLList) {
+			String preTagId = tagPreLLMap.get("tagId").toString();
+			if(tagId.equals(preTagId)) {
+				exist=true;
+				break;
+			}
+		}
+		return exist;
 	}
 	
 	public JSONObject postBody(JSONObject bodyParamJO, String path, HttpServletRequest request) {

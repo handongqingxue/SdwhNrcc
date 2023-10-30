@@ -211,6 +211,9 @@ public class ServerReceiver {
 			position.setX(x);
 			position.setY(y);
 			position.setZ(z);
+			
+			if("BTT34058043".equals(tagId))
+				System.out.println("longitude="+longitude+",latitude="+latitude);
 
 			positionService.add(position,databaseName);
 		} catch (Exception e) {

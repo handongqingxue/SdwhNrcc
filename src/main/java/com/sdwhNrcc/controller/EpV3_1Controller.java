@@ -514,8 +514,6 @@ public class EpV3_1Controller {
 				resultJO = new JSONObject(result);
 				resultJO.put("status", "ok");
 
-				addApiLog(createApiLogByParams(serverUrl,bodyParamJO.toString(),"ok",resultJO.getString("code"),resultJO.getString("msg"),resultJO.getString("data")),databaseName);
-				
 				if(apiMethod.contains("oauth/token")) {
 					if(!checkTokenInSession(request)) {
 						String access_token = resultJO.getString("access_token");

@@ -49,10 +49,17 @@ public class EmployeeLocation {
 	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
+	public String getTagId() {
+		return tagId;
+	}
+	public void setTagId(String tagId) {
+		this.tagId = tagId;
+	}
 	private String floor_no;
 	private String card_no;
 	private String time_stamp;
 	private String status;
 	private String longitude;
 	private String latitude;
+	private String tagId;
 }
