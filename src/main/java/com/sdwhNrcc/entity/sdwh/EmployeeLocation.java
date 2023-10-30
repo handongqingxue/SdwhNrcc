@@ -61,5 +61,5 @@ public class EmployeeLocation {
 	private String status;
 	private String longitude;
 	private String latitude;
-	private String tagId;
+	private String tagId;//标签id,报文之外另加的字段,用于存放上一次经纬度时用
 }

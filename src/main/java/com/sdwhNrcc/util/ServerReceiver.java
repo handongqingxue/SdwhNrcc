@@ -170,13 +170,13 @@ public class ServerReceiver {
 			String entityType = paramsJO.getString("entityType");
 			Integer floor = paramsJO.getInteger("floor");
 			Long inDoor = paramsJO.getLong("inDoor");
-			Float latitude = paramsJO.getFloat("latitude");
+			Double latitude = paramsJO.getDouble("latitude");
 			if(latitude==null)
-				latitude=(float)0;
+				latitude=(double)0;
 			Integer locationTime = paramsJO.getInteger("locationTime");
-			Float longitude = paramsJO.getFloat("longitude");
+			Double longitude = paramsJO.getDouble("longitude");
 			if(longitude==null)
-				longitude=(float)0;
+				longitude=(double)0;
 			Boolean out = paramsJO.getBoolean("out");
 			Integer rootAreaId = paramsJO.getInteger("rootAreaId");
 			Boolean silent = paramsJO.getBoolean("silent");
@@ -212,8 +212,8 @@ public class ServerReceiver {
 			position.setY(y);
 			position.setZ(z);
 			
-			if("BTT34058043".equals(tagId))
-				System.out.println("longitude="+longitude+",latitude="+latitude);
+			//if("BTT34058043".equals(tagId))
+				//System.out.println("longitude="+longitude+",latitude="+latitude);
 
 			positionService.add(position,databaseName);
 		} catch (Exception e) {

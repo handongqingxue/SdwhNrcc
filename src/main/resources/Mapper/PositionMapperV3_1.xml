@@ -216,6 +216,6 @@
 		select count(*) from ${databaseName}.position where tagId=#{tagId}
 	</select>
 	<select id="queryELList" resultType="com.sdwhNrcc.entity.v3_1.Position">
-		select p.*,s.jobNumber from ${databaseName}.position p left join ${databaseName}.staff s on p.tagId=s.tagId where s.jobNumber is not null
+		select p.*,s.`name` staffName ,s.jobNumber from ${databaseName}.position p left join ${databaseName}.staff s on p.tagId=s.tagId where s.jobNumber is not null
 	</select>
 </mapper>

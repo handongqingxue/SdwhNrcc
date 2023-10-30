@@ -425,7 +425,7 @@ public class SdwhApiController {
 						resultMap.put("data", data);
 						
 						for (EmployeeLocation el : elList) {
-							addTagPreLLInList(Float.valueOf(el.getLongitude()), Float.valueOf(el.getLatitude()), el.getTagId());
+							addTagPreLLInList(Double.valueOf(el.getLongitude()), Double.valueOf(el.getLatitude()), el.getTagId());
 						}
 
 						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJO.toString(),status,code,msg,data,elList.get(0).getCompany_social_code()));
@@ -692,7 +692,7 @@ public class SdwhApiController {
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> unCompPosList=positionService.queryELList(databaseName);
-		List<Position> positionList=compareWithPosPreLL(unCompPosList);
+		List<Position> positionList=compareWithTagPreLL(unCompPosList);
 		System.out.println("positionListSize="+positionList.size());
 		
 		Date date = new Date();
@@ -734,8 +734,8 @@ public class SdwhApiController {
 			}
 			el.setStatus(status);
 			
-			Float longitude = position.getLongitude();
-			Float latitude = position.getLatitude();
+			double longitude = position.getLongitude();
+			double latitude = position.getLatitude();
 			el.setLongitude(longitude+"");
 			el.setLatitude(latitude+"");
 			el.setTagId(position.getTagId());
@@ -1005,7 +1005,7 @@ public class SdwhApiController {
 	 * @param latitude
 	 * @param tagId
 	 */
-	private void addTagPreLLInList(Float longitude, Float latitude, String tagId) {
+	private void addTagPreLLInList(double longitude, double latitude, String tagId) {
 		//System.out.println("addTagPreLLInList...."+tagId);
 		boolean exist=checkTagIfExistInPreLLList(tagId);
 		//System.out.println("exist==="+exist);
@@ -1029,18 +1029,25 @@ public class SdwhApiController {
 		}
 	}
 	
-	private List<Position> compareWithPosPreLL(List<Position> unCompPosList) {
+	/**
+	 * 与标签上一个经纬度做对比
+	 * @param unCompPosList
+	 * @return
+	 */
+	private List<Position> compareWithTagPreLL(List<Position> unCompPosList) {
 		List<Position> positionList=new ArrayList<Position>();
 		for (Position unCompPos : unCompPosList) {
+			String staffName = unCompPos.getStaffName();
 			String tagId = unCompPos.getTagId();
-			float longitude = unCompPos.getLongitude();
-			float latitude = unCompPos.getLatitude();
+			double longitude = unCompPos.getLongitude();
+			double latitude = unCompPos.getLatitude();
 			String preLL = getTagPreLLByTagId(tagId);
 			String[] preLLArr = preLL.split(",");
-			float preLongitude = Float.valueOf(preLLArr[0]);
-			float preLatitude = Float.valueOf(preLLArr[1]);
-			//System.out.println("longitude="+longitude+",preLongitude="+preLongitude+",latitude="+latitude+",preLatitude="+preLatitude);
-			if(longitude!=preLongitude||latitude!=preLatitude) {
+			double preLongitude = Double.valueOf(preLLArr[0]);
+			double preLatitude = Double.valueOf(preLLArr[1]);
+			boolean changed=longitude!=preLongitude||latitude!=preLatitude;
+			if(changed) {
+				System.out.println("staffName="+staffName+",tagId="+tagId+",changed="+changed+",longitude="+longitude+",preLongitude="+preLongitude+",latitude="+latitude+",preLatitude="+preLatitude);
 				positionList.add(unCompPos);
 			}
 		}
@@ -1053,13 +1060,13 @@ public class SdwhApiController {
 	 * @return
 	 */
 	private String getTagPreLLByTagId(String tagId) {
-		float longitude = 0;
-		float latitude = 0;
+		double longitude = 0;
+		double latitude = 0;
 		for (int i = 0; i < tagPreLLList.size(); i++) {
 			Map<String, Object> tagPreLLMap = tagPreLLList.get(i);
 			String preTagId = tagPreLLMap.get("tagId").toString();
-			float preLongitude = Float.valueOf(tagPreLLMap.get("longitude").toString());
-			float preLatitude = Float.valueOf(tagPreLLMap.get("latitude").toString());
+			double preLongitude = Double.valueOf(tagPreLLMap.get("longitude").toString());
+			double preLatitude = Double.valueOf(tagPreLLMap.get("latitude").toString());
 			if(tagId.equals(preTagId)) {
 				longitude=preLongitude;
 				latitude=preLatitude;
