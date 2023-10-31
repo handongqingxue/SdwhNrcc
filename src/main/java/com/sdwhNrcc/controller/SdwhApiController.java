@@ -153,7 +153,7 @@ public class SdwhApiController {
 			
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
-			request.setAttribute("wfrzjxhyxgs", Constant.WFRZJXHYXGS);
+			request.setAttribute("wfrzjxhyxgs", Constant.WFRZJXHYXGS);//润中的定位信息每隔35s同步省平台一次
 			request.setAttribute("epVersion", epVersion);
 			request.setAttribute("apiFlag", apiFlag);
 			
