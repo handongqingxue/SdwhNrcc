@@ -17,9 +17,10 @@ var serverReceiverPath=path+"serverReceiver/";
 var syncDBManagerPath=path+"syncDBManager/";
 var epV1_3Path=path+"epV1_3/";
 var epV3_1Path=path+"epV3_1/";
-var interval="60000";
+var interval;
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
+var wfrzjxhyxgs='${requestScope.wfrzjxhyxgs}';
 var epFlag='${requestScope.systemFlag}';
 var epVersion='${requestScope.epVersion}';
 var apiFlag='${requestScope.apiFlag}';
@@ -31,6 +32,10 @@ $(function(){
 	console.log("cityFlag="+cityFlag+",systemFlag="+systemFlag+",epVersion="+epVersion+",apiFlag="+apiFlag);
 	makeSync();
 	if(epVersion==version_1_3){
+		if(systemFlag==wfrzjxhyxgs)
+			interval="35000";
+		else
+			interval="60000";
 		setInterval(function(){
 			insertLocationData();//因为是老版平台,就得每隔一段时间调用一次平台接口,把位置和报警数据先暂存到数据库里，再同步到省平台上
 			insertWarnRecordData();
@@ -38,6 +43,7 @@ $(function(){
 		},interval);
 	}
 	else if(epVersion==version_3_1){
+		interval="60000";
 		receiveMessage();//只有新版真源平台才需要对接这个推送，只要数据有变化就会收到推送消息
 		setInterval(function(){//每隔一段时间把人员位置和报警信息同步到省平台一次
 			dataEmployeeLocations();
@@ -49,7 +55,6 @@ $(function(){
 });
 
 function insertDeptData(){
-	alert(epFlag)
 	$.post(epV3_1Path+"insertDeptData",
 		{epFlag:epFlag},
 		function(data){

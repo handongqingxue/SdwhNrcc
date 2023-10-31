@@ -153,6 +153,7 @@ public class SdwhApiController {
 			
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
+			request.setAttribute("wfrzjxhyxgs", Constant.WFRZJXHYXGS);
 			request.setAttribute("epVersion", epVersion);
 			request.setAttribute("apiFlag", apiFlag);
 			
@@ -1085,10 +1086,13 @@ public class SdwhApiController {
 	private boolean checkTagIfExistInPreLLList(String tagId) {
 		boolean exist=false;
 		for (Map<String, Object> tagPreLLMap : tagPreLLList) {
-			String preTagId = tagPreLLMap.get("tagId").toString();
-			if(tagId.equals(preTagId)) {
-				exist=true;
-				break;
+			Object tagIdObj = tagPreLLMap.get("tagId");
+			if(tagIdObj!=null) {
+				String preTagId = tagIdObj.toString();
+				if(tagId.equals(preTagId)) {
+					exist=true;
+					break;
+				}
 			}
 		}
 		return exist;
