@@ -257,7 +257,8 @@ public class Constant {
 	 * 宝沣服务器ip
 	 */
 	//public static final String SERVICE_IP_SDBFXCLYXGS="nl.yz-cloud.com";
-	public static final String SERVICE_IP_SDBFXCLYXGS="112.6.184.89";
+	//public static final String SERVICE_IP_SDBFXCLYXGS="112.6.184.89";
+	public static final String SERVICE_IP_SDBFXCLYXGS="192.168.0.228";
 	/**
 	 * 宝沣服务器端口
 	 */

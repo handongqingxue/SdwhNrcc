@@ -87,16 +87,16 @@ public class Location {
 	public void setOut(Boolean out) {
 		this.out = out;
 	}
-	public Float getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	public Float getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 	public Float getAltitude() {
@@ -130,8 +130,8 @@ public class Location {
 	private Float speed;
 	private Integer floor;
 	private Boolean out;
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 	private Float altitude;
 	private String entityType;
 	private String entityName;

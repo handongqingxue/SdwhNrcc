@@ -693,7 +693,8 @@ public class SdwhApiController {
 	public List<EmployeeLocation> convertPositionToEmployeeLocation(int systemFlag,String databaseName) {
 		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
 		List<Position> unCompPosList=positionService.queryELList(databaseName);
-		List<Position> positionList=compareWithTagPreLL(unCompPosList);
+		//List<Position> positionList=compareWithTagPreLL(unCompPosList);
+		List<Position> positionList=unCompPosList;
 		System.out.println("positionListSize="+positionList.size());
 		
 		Date date = new Date();

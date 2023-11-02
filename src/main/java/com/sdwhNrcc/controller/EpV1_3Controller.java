@@ -688,66 +688,79 @@ public class EpV1_3Controller {
 	public Map<String, Object> insertLocationData(HttpServletRequest request) {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		switchEnterprise(request);
-		Map<String, Object> tsrMap = getTagStateMap(request);
-		String status = tsrMap.get("status").toString();
-		System.out.println("status==="+status);
-		if("ok".equals(status)) {
-			String databaseName = request.getAttribute("databaseName").toString();
-			List<Entity> entityList = entityService.queryList(databaseName);
-			com.alibaba.fastjson.JSONObject resultJO = (com.alibaba.fastjson.JSONObject)tsrMap.get("result");
-			for (Entity entity : entityList) {
-				String tagId = entity.getTagId();
-				com.alibaba.fastjson.JSONObject tagJO = (com.alibaba.fastjson.JSONObject)resultJO.get(tagId);
-				if(tagJO!=null) {
-					String tagJOId = tagJO.getString("tagId");
-					System.out.println("tagJOId="+tagJOId);
-					if(tagId.equals(tagJOId)) {
-						String deviceType = tagJO.getString("deviceType");
-						String uid = tagJO.getString("uid");
-						Integer rootAreaId = tagJO.getInteger("rootAreaId");
-						Integer areaId = tagJO.getInteger("areaId");
-						Long locationTime = tagJO.getLong("locationTime");
-						Long lostTime = tagJO.getLong("lostTime");
-						Float x = tagJO.getFloat("x");
-						Float y = tagJO.getFloat("y");
-						Float z = tagJO.getFloat("z");
-						Boolean absolute = tagJO.getBoolean("absolute");
-						Float speed = tagJO.getFloat("speed");
-						Integer floor = tagJO.getInteger("floor");
-						Boolean out = tagJO.getBoolean("out");
-						Float longitude = tagJO.getFloat("longitude");
-						Float latitude = tagJO.getFloat("latitude");
-						Float altitude = tagJO.getFloat("altitude");
-						
-						Location location = new Location();
-						location.setDeviceType(deviceType);
-						location.setUid(uid);
-						location.setRootAreaId(rootAreaId);
-						location.setAreaId(areaId);
-						location.setLocationTime(locationTime);
-						location.setLostTime(lostTime);
-						location.setX(x);
-						location.setY(y);
-						location.setZ(z);
-						location.setAbsolute(absolute);
-						location.setSpeed(speed);
-						location.setFloor(floor);
-						location.setOut(out);
-						location.setLongitude(longitude);
-						location.setLatitude(latitude);
-						location.setAltitude(altitude);
-						
-						locationService.add(location,databaseName);
+		try {
+			//Integer a = Integer.valueOf("aaaa");//为了测试，暂时加这行代码触发异常
+			
+			switchEnterprise(request);
+			Map<String, Object> tsrMap = getTagStateMap(request);
+			String status = tsrMap.get("status").toString();
+			System.out.println("status==="+status);
+			if("ok".equals(status)) {
+				String databaseName = request.getAttribute("databaseName").toString();
+				List<Entity> entityList = entityService.queryList(databaseName);
+				com.alibaba.fastjson.JSONObject resultJO = (com.alibaba.fastjson.JSONObject)tsrMap.get("result");
+				for (Entity entity : entityList) {
+					String tagId = entity.getTagId();
+					com.alibaba.fastjson.JSONObject tagJO = (com.alibaba.fastjson.JSONObject)resultJO.get(tagId);
+					if(tagJO!=null) {
+						String tagJOId = tagJO.getString("tagId");
+						System.out.println("tagJOId="+tagJOId);
+						if(tagId.equals(tagJOId)) {
+							String deviceType = tagJO.getString("deviceType");
+							String uid = tagJO.getString("uid");
+							Integer rootAreaId = tagJO.getInteger("rootAreaId");
+							Integer areaId = tagJO.getInteger("areaId");
+							Long locationTime = tagJO.getLong("locationTime");
+							Long lostTime = tagJO.getLong("lostTime");
+							Float x = tagJO.getFloat("x");
+							Float y = tagJO.getFloat("y");
+							Float z = tagJO.getFloat("z");
+							Boolean absolute = tagJO.getBoolean("absolute");
+							Float speed = tagJO.getFloat("speed");
+							Integer floor = tagJO.getInteger("floor");
+							Boolean out = tagJO.getBoolean("out");
+							Double longitude = tagJO.getDouble("longitude");
+							Double latitude = tagJO.getDouble("latitude");
+							Float altitude = tagJO.getFloat("altitude");
+							
+							Location location = new Location();
+							location.setDeviceType(deviceType);
+							location.setUid(uid);
+							location.setRootAreaId(rootAreaId);
+							location.setAreaId(areaId);
+							location.setLocationTime(locationTime);
+							location.setLostTime(lostTime);
+							location.setX(x);
+							location.setY(y);
+							location.setZ(z);
+							location.setAbsolute(absolute);
+							location.setSpeed(speed);
+							location.setFloor(floor);
+							location.setOut(out);
+							location.setLongitude(longitude);
+							location.setLatitude(latitude);
+							location.setAltitude(altitude);
+							
+							locationService.add(location,databaseName);
+						}
 					}
 				}
 			}
+			else {
+				boolean success=reLogin(request);
+				System.out.println("success==="+success);
+			}
+			resultMap.put("success", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			resultMap.put("success", false);
+			resultMap.put("message", e.getMessage());
+			//resultMap.put("message", "Connection refused: connect");
 		}
-		else {
-			boolean success=reLogin(request);
-			System.out.println("success==="+success);
+		finally {
+			return resultMap;
 		}
-		return resultMap;
 	}
 
 	@RequestMapping(value="/insertWarnRecordData")
@@ -872,6 +885,8 @@ public class EpV1_3Controller {
 		String serviceIp = request.getAttribute("serviceIp").toString();
 		String servicePort = request.getAttribute("servicePort").toString();
 		URL url = new URL(serverURL.replaceAll(Constant.SERVICE_IP_STR, serviceIp).replaceAll(Constant.SERVICE_PORT_STR, servicePort));
+		String path = url.getPath();
+		System.out.println("path==="+path);
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection(); 
 		
 		//connection.setInstanceFollowRedirects(false); 
@@ -927,17 +942,20 @@ public class EpV1_3Controller {
 		
 		connection.disconnect();
 		String result = sbf.toString();
-		//System.out.println("result==="+result);
+		System.out.println("result==="+result);
 		JSONObject resultJO = null;
 		if(result.contains("DOCTYPE")) {
+			System.out.println("11111111");
 			resultJO = new JSONObject();
 			resultJO.put("status", "no");
 		}
 		else if(result.contains("error")) {
+			System.out.println("22222222");
 			resultJO = new JSONObject(result);
 			resultJO.put("status", "no");
 		}
 		else {
+			System.out.println("333333333333");
 			resultJO = new JSONObject(result);
 			resultJO.put("status", "ok");
 		}
