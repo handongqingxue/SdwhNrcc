@@ -369,7 +369,12 @@ public class SdwhApiController {
 					}
 				}
 				else {
-					System.out.println("暂无人员位置信息可上传省平台");
+					String code="-1";
+					String data="暂无人员信息可上传省平台";
+					
+					resultMap.put("code", code);
+					resultMap.put("data", data);
+					System.out.println(data);
 				}
 			}
 		} catch (Exception e) {
