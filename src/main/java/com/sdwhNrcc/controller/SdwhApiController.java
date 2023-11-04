@@ -324,6 +324,7 @@ public class SdwhApiController {
 				if(eiListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					String bodyParamJOStr = bodyParamJO.toString();
 					
 					resultJO = postBody(bodyParamJO,"/data/employee/info",request);
 					String status=resultJO.get("status").toString();
@@ -339,11 +340,32 @@ public class SdwhApiController {
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
 
-						addApiLog(createApiLogByParams("dataEmployeeInfo",bodyParamJO.toString(),status,code,msg,data,eiList.get(0).getCompany_social_code()));
+						addApiLog(createApiLogByParams("dataEmployeeInfo",bodyParamJOStr,status,code,msg,data,eiList.get(0).getCompany_social_code()));
 					}
 					else if("no".equals(status)) {//若登录信息失效，需重新登录
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
+						
+						String code="-1";
+						String msg="请求失败";
+						String data="登录信息已过期，重新登录!";
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+						
+						addApiLog(createApiLogByParams("dataEmployeeInfo",bodyParamJOStr,status,code,msg,data,eiList.get(0).getCompany_social_code()));
+					}
+					else if("error".equals(status)) {//操作频繁
+						String code="-1";
+						String msg="请求失败";
+						String data=resultJO.get("data").toString();
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+						
+						addApiLog(createApiLogByParams("dataEmployeeInfo",bodyParamJOStr,status,code,msg,data,eiList.get(0).getCompany_social_code()));
 					}
 				}
 				else {
@@ -411,6 +433,7 @@ public class SdwhApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					String bodyParamJOStr = bodyParamJO.toString();
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -429,15 +452,41 @@ public class SdwhApiController {
 							addTagPreLLInList(Double.valueOf(el.getLongitude()), Double.valueOf(el.getLatitude()), el.getTagId());
 						}
 
-						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJO.toString(),status,code,msg,data,elList.get(0).getCompany_social_code()));
+						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJOStr,status,code,msg,data,elList.get(0).getCompany_social_code()));
 					}
-					else {
+					else if("no".equals(status)) {//若登录信息失效，需重新登录
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
+						
+						String code="-1";
+						String msg="请求失败";
+						String data="登录信息已过期，重新登录!";
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+						
+						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJOStr,status,code,msg,data,elList.get(0).getCompany_social_code()));
+					}
+					else if("error".equals(status)) {//操作频繁
+						String code="-1";
+						String msg="请求失败";
+						String data=resultJO.get("data").toString();
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+						
+						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJOStr,status,code,msg,data,elList.get(0).getCompany_social_code()));
 					}
 				}
 				else {
-					System.out.println("暂无人员位置信息可上传省平台");
+					String code="-1";
+					String data="暂无人员位置信息可上传省平台";
+					
+					resultMap.put("code", code);
+					resultMap.put("data", data);
+					System.out.println(data);
 				}
 			}
 		} catch (Exception e) {
@@ -510,6 +559,7 @@ public class SdwhApiController {
 				if(eaListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
+					String bodyParamJOStr = bodyParamJO.toString();
 					
 					resultJO = postBody(bodyParamJO,"/data/employee/alarm",request);
 					String status=resultJO.get("status").toString();
@@ -538,14 +588,39 @@ public class SdwhApiController {
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
 						resultMap.put("data", data);
+
+						addApiLog(createApiLogByParams("dataEmployeeAlarm",bodyParamJOStr,status,code,msg,data,eaList.get(0).getCompany_social_code()));
 					}
-					else {
+					else if("no".equals(status)) {//若登录信息失效，需重新登录
 						boolean success=reAuthLogin(request);
 						System.out.println("success==="+success);
+
+						String code="-1";
+						String msg="请求失败";
+						String data="登录信息已过期，重新登录!";
+						
+						addApiLog(createApiLogByParams("dataEmployeeAlarm",bodyParamJOStr,status,code,msg,data,eaList.get(0).getCompany_social_code()));
+					}
+					else if("error".equals(status)) {//操作频繁
+						String code="-1";
+						String msg="请求失败";
+						String data=resultJO.get("data").toString();
+						
+						resultMap.put("code", code);
+						resultMap.put("msg", msg);
+						resultMap.put("data", data);
+						
+						addApiLog(createApiLogByParams("dataEmployeeAlarm",bodyParamJOStr,status,code,msg,data,eaList.get(0).getCompany_social_code()));
 					}
 				}
 				else {
-					System.out.println("暂无报警信息可上传省平台");
+					String code="-1";
+					String data="暂无报警信息可上传省平台";
+					
+					resultMap.put("code", code);
+					resultMap.put("data", data);
+					
+					System.out.println(data);
 				}
 			}
 		} catch (Exception e) {
@@ -1189,7 +1264,7 @@ public class SdwhApiController {
 				else {//操作频繁，稍后再调用
 					resultJO = new JSONObject();
 					resultJO.put("status", "error");
-					resultJO.put("msg", result);
+					resultJO.put("data", result);
 				}
 			}
 		} catch (Exception e) {

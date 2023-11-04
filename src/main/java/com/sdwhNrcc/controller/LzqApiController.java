@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sdwhNrcc.entity.sdwh.*;
+import com.sdwhNrcc.entity.sdwh.ApiLog;
 import com.sdwhNrcc.entity.v1_3.WarnRecord;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.sdwh.*;
@@ -48,6 +49,8 @@ public class LzqApiController {
 	private LoginUserService loginUserService;
 	@Autowired
 	private StaffService staffService;
+	@Autowired
+	private ApiLogServiceSdwh apiLogService;
 
 	@RequestMapping(value="/goPage")
 	public String goPage(HttpServletRequest request) {
@@ -304,7 +307,6 @@ public class LzqApiController {
 				if(elListSize>0) {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
-					System.out.println("bodyParamJO==="+bodyParamJO.toString());
 				
 					resultJO = postBody(bodyParamJO,"/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -312,8 +314,12 @@ public class LzqApiController {
 						String code=resultJO.get("code").toString();
 						System.out.println("code==="+code);
 						String msg=resultJO.get("msg").toString();
+						
 						resultMap.put("code", code);
 						resultMap.put("msg", msg);
+
+
+						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJO.toString(),status,code,msg,elList.get(0).getCompany_social_code()));
 					}
 					else {
 						boolean success=reLoginDoLogin(request);
@@ -426,6 +432,61 @@ public class LzqApiController {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	/**
+	 * 添加日志记录
+	 * @param al
+	 * @return
+	 */
+	@RequestMapping(value="/addApiLog")
+	@ResponseBody
+	public Map<String, Object> addApiLog(ApiLog al) {
+
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			int count=apiLogService.add(al);
+			if(count>0) {
+				jsonMap.put("message", "ok");
+				jsonMap.put("info", "添加日志记录成功");
+			}
+			else {
+				jsonMap.put("message", "no");
+				jsonMap.put("info", "添加日志记录失败");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMap.put("message", "no");
+			jsonMap.put("info", "添加日志记录失败");
+		}
+		finally {
+			return jsonMap;
+		}
+	}
+	
+	/**
+	 * 根据参数创建日志记录对象
+	 * @param action
+	 * @param body
+	 * @param status
+	 * @param code
+	 * @param msg
+	 * @param company_social_code
+	 * @return
+	 */
+	public ApiLog createApiLogByParams(String action,String body,String status,String code,String msg,String company_social_code){
+		
+		ApiLog apiLog=new ApiLog();
+		apiLog.setAction(action);
+		apiLog.setBody(body);
+		apiLog.setStatus(status);
+		apiLog.setCode(code);
+		apiLog.setMsg(msg);
+		apiLog.setCompany_social_code(company_social_code);
+		
+		return apiLog;
 	}
 	
 	/**

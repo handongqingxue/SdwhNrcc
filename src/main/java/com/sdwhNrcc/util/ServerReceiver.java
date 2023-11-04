@@ -46,6 +46,8 @@ public class ServerReceiver {
 	private PositionService positionService;
 	@Autowired
 	private KeyWarningService keyWarningService;
+	@Autowired
+	private ApiLogV3_1Service apiLogService;
 	
 	/**
 	 * 这个接收推送消息的方法只能在和发送消息是同一个项目的情况下使用，现在咱项目接收的是真源项目那边发送的消息，这个方法暂时不用了
@@ -133,10 +135,12 @@ public class ServerReceiver {
 						if("position".equals(method)) {
 							JSONObject paramsJO = bodyJO.getJSONObject("params");
 							insertPositionData(paramsJO,databaseName);
+							addApiLog(createApiLogByParams(method,bodyJOStr,"ok"),databaseName);
 						}
 						else if("keyWarning".equals(method)) {
 							JSONObject paramsJO = bodyJO.getJSONObject("params");
 							insertKeyWarningData(paramsJO,databaseName);
+							addApiLog(createApiLogByParams(method,bodyJOStr,"ok"),databaseName);
 						}
 				    }
 				});
@@ -266,6 +270,55 @@ public class ServerReceiver {
 		finally {
 			return resultMap;
 		}
+	}
+	
+	/**
+	 * 添加日志记录
+	 * @param al
+	 * @return
+	 */
+	@RequestMapping(value="/addApiLog")
+	@ResponseBody
+	public Map<String, Object> addApiLog(ApiLog al,String databaseName) {
+
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		try {
+			int count=apiLogService.add(al,databaseName);
+			if(count>0) {
+				jsonMap.put("message", "ok");
+				jsonMap.put("info", "添加日志记录成功");
+			}
+			else {
+				jsonMap.put("message", "no");
+				jsonMap.put("info", "添加日志记录失败");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMap.put("message", "no");
+			jsonMap.put("info", "添加日志记录失败");
+		}
+		finally {
+			return jsonMap;
+		}
+	}
+	
+	/**
+	 * 根据参数创建日志记录对象
+	 * @param action
+	 * @param body
+	 * @param status
+	 * @return
+	 */
+	public ApiLog createApiLogByParams(String action,String body,String status){
+		
+		ApiLog apiLog=new ApiLog();
+		apiLog.setAction(action);
+		apiLog.setBody(body);
+		apiLog.setStatus(status);
+		
+		return apiLog;
 	}
 	
 	public void switchSystem(HttpServletRequest request) {
