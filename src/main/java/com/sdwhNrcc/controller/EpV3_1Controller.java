@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.sdwhNrcc.entity.udp.*;
 import com.sdwhNrcc.entity.v3_1.*;
+import com.sdwhNrcc.service.v1_3.LocationService;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
 
@@ -46,6 +50,8 @@ public class EpV3_1Controller {
 	private StaffService staffService;
 	@Autowired
 	private ApiLogV3_1Service apiLogService;
+	@Autowired
+	private LocationService locationService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -273,6 +279,79 @@ public class EpV3_1Controller {
 		}
 	}
 	
+	@RequestMapping(value="/receiveUDPData")
+	@ResponseBody
+	public Map<String, Object> receiveUDPData(HttpServletRequest request) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+	        //创建接收端socket
+	        DatagramSocket socket = new DatagramSocket(10003);
+	        System.out.println("待接收数据...");
+	        //接收数据报
+	        byte[] buffer = new byte[1024];
+	        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+			socket.receive(packet);
+	        //将接收到的数据转换成String类型
+	        String message = new String(packet.getData(), 0, packet.getLength());
+	        //输出接收到的数据
+	        System.out.println("Received message: " + message);
+	        //关闭socket
+	        socket.close();
+	        
+	        String content = message.split(",")[3];
+	        com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(content);
+    		String method = bodyJO.getString("method");
+    		if("Location".equals(method)) {
+    			com.alibaba.fastjson.JSONObject paramsJO = bodyJO.getJSONObject("params");
+    			insertLocationUDPData(paramsJO,Constant.DATABASE_NAME_SDXJYJXHXPYXGS);
+    		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+
+	@RequestMapping(value="/insertLocationUDPData")
+	@ResponseBody
+	public Map<String, Object> insertLocationUDPData(com.alibaba.fastjson.JSONObject paramsJO,String databaseName) {
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			String userId=paramsJO.getString("userId");
+			Integer floor = paramsJO.getInteger("floor");
+			Double speed = paramsJO.getDouble("speed");
+			Double latitude = paramsJO.getDouble("latitude");
+			if(latitude==null)
+				latitude=(double)0;
+			Double longitude = paramsJO.getDouble("longitude");
+			if(longitude==null)
+				longitude=(double)0;
+			
+			LocationUDP locationUDP = new LocationUDP();
+			locationUDP.setUserId(userId);
+			locationUDP.setFloor(floor);
+			locationUDP.setSpeed(speed);
+			locationUDP.setLatitude(latitude);
+			locationUDP.setLongitude(longitude);
+			
+			//if("BTT34058043".equals(tagId))
+				//System.out.println("longitude="+longitude+",latitude="+latitude);
+
+			//locationService.add(locationUDP,databaseName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return resultMap;
+		}
+	}
+	
 	public void switchService(HttpServletRequest request) {
 		String serviceIp=null;
 		int servicePort=0;
@@ -291,6 +370,12 @@ public class EpV3_1Controller {
 			servicePort=Constant.SERVICE_PORT_SDFLXCLKJYXGS;
 			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.SDXJYJXHXPYXGS:
+			serviceIp=Constant.SERVICE_IP_SDXJYJXHXPYXGS;
+			servicePort=Constant.SERVICE_PORT_SDXJYJXHXPYXGS;
+			tenantId=Constant.TENANT_ID_SDXJYJXHXPYXGS;
+			databaseName=Constant.DATABASE_NAME_SDXJYJXHXPYXGS;
 			break;
 		case Constant.ZBXQHGYXGS:
 			serviceIp=Constant.SERVICE_IP_ZBXQHGYXGS;
@@ -336,6 +421,10 @@ public class EpV3_1Controller {
 		case Constant.SDFLXCLKJYXGS:
 			tenantId=Constant.TENANT_ID_SDFLXCLKJYXGS;
 			clientSecret=Constant.CLIENT_SECRET_SDFLXCLKJYXGS;
+			break;
+		case Constant.SDXJYJXHXPYXGS:
+			tenantId=Constant.TENANT_ID_SDXJYJXHXPYXGS;
+			clientSecret=Constant.CLIENT_SECRET_SDXJYJXHXPYXGS;
 			break;
 		case Constant.ZBXQHGYXGS:
 			tenantId=Constant.TENANT_ID_ZBXQHGYXGS;

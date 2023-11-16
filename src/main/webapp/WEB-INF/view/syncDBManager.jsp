@@ -21,6 +21,7 @@ var interval;
 var cityFlag='${requestScope.cityFlag}';
 var systemFlag='${requestScope.systemFlag}';
 var wfrzjxhyxgs='${requestScope.wfrzjxhyxgs}';
+var sdxjyjxhxpyxgs='${requestScope.sdxjyjxhxpyxgs}';
 var epFlag='${requestScope.systemFlag}';
 var epVersion='${requestScope.epVersion}';
 var apiFlag='${requestScope.apiFlag}';
@@ -127,12 +128,26 @@ function insertWarnRecordData(){
 }
 
 function receiveMessage(){
-	$.post(serverReceiverPath+"receiveMessage",
-		{systemFlag:systemFlag},
-		function(){
-		
-		}
-	,"json");
+	if(systemFlag==sdxjyjxhxpyxgs){
+		var url=epV3_1Path+"receiveUDPData";
+		setInterval(function(){
+			$.post(url,
+				{systemFlag:systemFlag},
+				function(){
+				
+				}
+			,"json");
+		},"3000");
+	}
+	else{
+		var url=serverReceiverPath+"receiveMessage";
+		$.post(url,
+			{systemFlag:systemFlag},
+			function(){
+			
+			}
+		,"json");
+	}
 }
 </script>
 <title>Insert title here</title>

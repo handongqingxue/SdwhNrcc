@@ -77,6 +77,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBRun
 		//福林新材料同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBRun
+		//新家园新材料同步人员信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=xjyjxhxpSyncDBRun
 		//宝沣新材料同步人员信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=bfxclSyncDBRun
 		//润中精细化工同步人员信息页面
@@ -92,6 +94,8 @@ public class SdwhApiController {
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=pxhgSyncDBManager
 		//福林新材料同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=flxclSyncDBManager
+		//新家园新材料同步人员位置、报警信息页面
+		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=xjyjxhxpSyncDBManager
 		//宝沣新材料同步人员位置、报警信息页面
 		//http://localhost:8080/SdwhNrcc/sdwhApi/goPage?page=bfxclSyncDBManager
 		//润中精细化工同步人员位置、报警信息页面
@@ -132,6 +136,9 @@ public class SdwhApiController {
 		else if("flxclSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
+		else if("xjyjxhxpSyncDBRun".equals(page)){
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.SDXJYJXHXPYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
+		}
 		else if("bfxclSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.TAI_AN+"&systemFlag="+Constant.SDBFXCLYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
@@ -154,6 +161,7 @@ public class SdwhApiController {
 			request.setAttribute("cityFlag", cityFlag);
 			request.setAttribute("systemFlag", systemFlag);
 			request.setAttribute("wfrzjxhyxgs", Constant.WFRZJXHYXGS);//润中的定位信息每隔35s同步省平台一次
+			request.setAttribute("sdxjyjxhxpyxgs", Constant.SDXJYJXHXPYXGS);
 			request.setAttribute("epVersion", epVersion);
 			request.setAttribute("apiFlag", apiFlag);
 			
@@ -170,6 +178,9 @@ public class SdwhApiController {
 		}
 		else if("flxclSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.HE_ZE+"&systemFlag="+Constant.SDFLXCLKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
+		}
+		else if("xjyjxhxpSyncDBManager".equals(page)){
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.SDXJYJXHXPYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("bfxclSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.TAI_AN+"&systemFlag="+Constant.SDBFXCLYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
@@ -293,6 +304,7 @@ public class SdwhApiController {
 				break;
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
+			case Constant.SDXJYJXHXPYXGS:
 			case Constant.SDBFXCLYXGS:
 			case Constant.CYSRHSWKJYXGS:
 			case Constant.SDLTXDKJYXGS:
@@ -702,6 +714,9 @@ public class SdwhApiController {
 			case Constant.SDFLXCLKJYXGS:
 				companySocialCode=Constant.DATA_ID_SDFLXCLKJYXGS;
 				break;
+			case Constant.SDXJYJXHXPYXGS:
+				companySocialCode=Constant.DATA_ID_SDXJYJXHXPYXGS;
+				break;
 			case Constant.SDBFXCLYXGS:
 				companySocialCode=Constant.DATA_ID_SDBFXCLYXGS;
 				break;
@@ -972,6 +987,11 @@ public class SdwhApiController {
 			areaCode=Constant.AREA_CODE_SDFLXCLKJYXGS;
 			dataId=Constant.DATA_ID_SDFLXCLKJYXGS;
 			break;
+		case Constant.SDXJYJXHXPYXGS:
+			systemName=Constant.SYSTEM_NAME_SDXJYJXHXPYXGS;
+			areaCode=Constant.AREA_CODE_SDXJYJXHXPYXGS;
+			dataId=Constant.DATA_ID_SDXJYJXHXPYXGS;
+			break;
 		case Constant.SDBFXCLYXGS:
 			systemName=Constant.SYSTEM_NAME_SDBFXCLYXGS;
 			areaCode=Constant.AREA_CODE_SDBFXCLYXGS;
@@ -1007,6 +1027,9 @@ public class SdwhApiController {
 			break;
 		case Constant.SDFLXCLKJYXGS:
 			databaseName=Constant.DATABASE_NAME_SDFLXCLKJYXGS;
+			break;
+		case Constant.SDXJYJXHXPYXGS:
+			databaseName=Constant.DATABASE_NAME_SDXJYJXHXPYXGS;
 			break;
 		case Constant.SDBFXCLYXGS:
 			databaseName=Constant.DATABASE_NAME_SDBFXCLYXGS;

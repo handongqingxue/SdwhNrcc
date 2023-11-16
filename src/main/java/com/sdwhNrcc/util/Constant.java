@@ -78,6 +78,10 @@ public class Constant {
 	 * 山东蓝天消毒科技有限公司
 	 */
 	public static final int SDLTXDKJYXGS=7;
+	/**
+	 * 山东新家园精细化学品有限公司
+	 */
+	public static final int SDXJYJXHXPYXGS=8;
 	
 	
 	//潍坊地区登录账号start
@@ -198,6 +202,50 @@ public class Constant {
 	 */
 	public static final String DATABASE_NAME_SDFLXCLKJYXGS="sdwh_nrcc_sdflxclkjyxgs";
 	//山东福林新材料科技有限公司(菏泽)end
+	
+	//山东新家园精细化学品有限公司start
+	/**
+	 * 新家园服务器ip
+	 */
+	public static final String SERVICE_IP_SDXJYJXHXPYXGS="222.173.86.130";
+	//public static final String SERVICE_IP_SDXJYJXHXPYXGS="192.168.2.228";
+	/**
+	 * 新家园服务器端口
+	 */
+	public static final int SERVICE_PORT_SDXJYJXHXPYXGS=90;
+	/**
+	 * 新家园项目名称
+	 */
+	public static final String SYSTEM_NAME_SDXJYJXHXPYXGS="信息化建设";
+	/**
+	 * 新家园9位企业编码
+	 */
+	public static final String AREA_CODE_SDXJYJXHXPYXGS="370710282";
+	/**
+	 * 新家园统一社会信用代码
+	 */
+	public static final String DATA_ID_SDXJYJXHXPYXGS="913707865543528846";
+	/**
+	 * 新家园租户id
+	 */
+	public static final String TENANT_ID_SDXJYJXHXPYXGS="sc21080411";
+	/**
+	 * 新家园用户id
+	 */
+	public static final String USER_ID_SDXJYJXHXPYXGS="GUEST";
+	/**
+	 * 新家园密码
+	 */
+	public static final String PASSWORD_SDXJYJXHXPYXGS="123456";
+	/**
+	 * 新家园密钥
+	 */
+	public static final String CLIENT_SECRET_SDXJYJXHXPYXGS="AFD86FB5";
+	/**
+	 * 新家园数据库名
+	 */
+	public static final String DATABASE_NAME_SDXJYJXHXPYXGS="sdwh_nrcc_sdxjyjxhxpyxgs";
+	//山东新家园精细化学品有限公司end
 	
 	//淄博鑫乾化工有限公司start
 	/**
