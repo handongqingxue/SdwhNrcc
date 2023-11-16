@@ -207,8 +207,8 @@ public class Constant {
 	/**
 	 * 新家园服务器ip
 	 */
-	public static final String SERVICE_IP_SDXJYJXHXPYXGS="222.173.86.130";
-	//public static final String SERVICE_IP_SDXJYJXHXPYXGS="192.168.2.228";
+	//public static final String SERVICE_IP_SDXJYJXHXPYXGS="222.173.86.130";
+	public static final String SERVICE_IP_SDXJYJXHXPYXGS="192.168.2.228";
 	/**
 	 * 新家园服务器端口
 	 */

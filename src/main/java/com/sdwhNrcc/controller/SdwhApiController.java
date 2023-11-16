@@ -34,9 +34,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sdwhNrcc.entity.sdwh.*;
 import com.sdwhNrcc.entity.sdwh.ApiLog;
+import com.sdwhNrcc.entity.udp.*;
 import com.sdwhNrcc.entity.v1_3.*;
 import com.sdwhNrcc.entity.v3_1.*;
 import com.sdwhNrcc.service.sdwh.*;
+import com.sdwhNrcc.service.udp.*;
 import com.sdwhNrcc.service.v1_3.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.*;
@@ -54,6 +56,8 @@ public class SdwhApiController {
 	private LocationService locationService;
 	@Autowired
 	private PositionService positionService;
+	@Autowired
+	private LocationUDPService locationUDPService;
 	@Autowired
 	private WarnRecordService warnRecordService;
 	@Autowired
@@ -430,6 +434,9 @@ public class SdwhApiController {
 			case Constant.SDLTXDKJYXGS:
 				elList = convertPositionToEmployeeLocation(systemFlag,databaseName);
 				break;
+			case Constant.SDXJYJXHXPYXGS:
+				elList = convertLocationUDPToEmployeeLocation(systemFlag);
+				break;
 			}
 			
 			if(elList!=null) {
@@ -739,6 +746,38 @@ public class SdwhApiController {
 			eiList.add(ei);
 		}
 		return eiList;
+	}
+	
+	public List<EmployeeLocation> convertLocationUDPToEmployeeLocation(int systemFlag) {
+		List<EmployeeLocation> elList=new ArrayList<EmployeeLocation>();
+		List<LocationUDP> locationUDPList=locationUDPService.queryELList();
+		Date date = new Date();
+		for (LocationUDP locationUDP : locationUDPList) {
+			EmployeeLocation el=new EmployeeLocation();
+			String companySocialCode=null;
+			switch (systemFlag) {
+			case Constant.SDXJYJXHXPYXGS:
+				companySocialCode=Constant.DATA_ID_SDXJYJXHXPYXGS;
+				break;
+			}
+			el.setCompany_social_code(companySocialCode);
+			el.setFloor_no(locationUDP.getFloor()+"");
+			el.setCard_no(locationUDP.getJobNumber());
+			el.setTime_stamp(DateUtil.getDate(date,null));
+			
+			Double speed = locationUDP.getSpeed();
+			String status=null;
+			if(speed==0)
+				status=EmployeeLocation.SLEEP;
+			else
+				status=EmployeeLocation.SPORT;
+			el.setStatus(status);
+			
+			el.setLongitude(locationUDP.getLongitude()+"");
+			el.setLatitude(locationUDP.getLatitude()+"");
+			elList.add(el);
+		}
+		return elList;
 	}
 	
 	/**

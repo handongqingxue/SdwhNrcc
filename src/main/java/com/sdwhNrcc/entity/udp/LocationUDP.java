@@ -45,10 +45,17 @@ public class LocationUDP {
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
+	public String getJobNumber() {
+		return jobNumber;
+	}
+	public void setJobNumber(String jobNumber) {
+		this.jobNumber = jobNumber;
+	}
 	private Integer floor;
 	private String userId;
 	private Double speed;
 	private Double longitude;
 	private Double latitude;
 	private String tenantId;
+	private String jobNumber;
 }

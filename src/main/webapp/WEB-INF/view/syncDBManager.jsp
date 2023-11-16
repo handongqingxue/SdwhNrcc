@@ -137,7 +137,7 @@ function receiveMessage(){
 				
 				}
 			,"json");
-		},"3000");
+		},"10000");
 	}
 	else{
 		var url=serverReceiverPath+"receiveMessage";

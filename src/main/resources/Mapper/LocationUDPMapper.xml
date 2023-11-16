@@ -2,8 +2,82 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sdwhNrcc.dao.v3_1.LocationUDPMapper">
+<mapper namespace="com.sdwhNrcc.dao.udp.LocationUDPMapper">
+ 	<insert id="add">
+ 		insert into location_udp
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="locationUDP.uid!=null">
+ 				uid,
+ 			</if>
+ 			<if test="locationUDP.floor!=null">
+ 				floor,
+ 			</if>
+ 			<if test="locationUDP.userId!=null">
+ 				userId,
+ 			</if>
+ 			<if test="locationUDP.speed!=null">
+ 				speed,
+ 			</if>
+ 			<if test="locationUDP.longitude!=null">
+ 				longitude,
+ 			</if>
+ 			<if test="locationUDP.latitude!=null">
+ 				latitude,
+ 			</if>
+ 			<if test="locationUDP.tenantId!=null">
+ 				tenantId,
+ 			</if>
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="locationUDP.uid!=null">
+ 				#{locationUDP.uid},
+ 			</if>
+ 			<if test="locationUDP.floor!=null">
+ 				#{locationUDP.floor},
+ 			</if>
+ 			<if test="locationUDP.userId!=null">
+ 				#{locationUDP.userId},
+ 			</if>
+ 			<if test="locationUDP.speed!=null">
+ 				#{locationUDP.speed},
+ 			</if>
+ 			<if test="locationUDP.longitude!=null">
+ 				#{locationUDP.longitude},
+ 			</if>
+ 			<if test="locationUDP.latitude!=null">
+ 				#{locationUDP.latitude},
+ 			</if>
+ 			<if test="locationUDP.tenantId!=null">
+ 				#{locationUDP.tenantId},
+ 			</if>
+ 		</trim>
+ 	</insert>
+	<update id="edit">
+		update location_udp set
+		<trim suffixOverrides=",">
+			<if test="locationUDP.floor!=null">
+				floor=#{locationUDP.floor},
+			</if>
+			<if test="locationUDP.userId!=null">
+				userId=#{locationUDP.userId},
+			</if>
+			<if test="locationUDP.speed!=null">
+				speed=#{locationUDP.speed},
+			</if>
+			<if test="locationUDP.longitude!=null">
+				longitude=#{locationUDP.longitude},
+			</if>
+			<if test="locationUDP.latitude!=null">
+				latitude=#{locationUDP.latitude},
+			</if>
+		</trim>
+		where uid=#{locationUDP.uid} and tenantId=#{locationUDP.tenantId}
+	</update>
 	<select id="getCountByUid" resultType="java.lang.Integer">
-		select count(*) from ${databaseName}.location where uid=#{uid} and tenantId=#{tenantId}
+		select count(*) from location_udp where uid=#{uid} and tenantId=#{tenantId}
+	</select>
+	<select id="queryELList" resultType="com.sdwhNrcc.entity.udp.LocationUDP">
+		select l.*,s.`name` staffName ,s.jobNumber from location_udp l left join sdwh_nrcc_sdxjyjxhxpyxgs.staff s on l.uid=s.tagId where s.jobNumber is not null
 	</select>
 </mapper>

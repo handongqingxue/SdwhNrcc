@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.sdwhNrcc.entity.udp.*;
 import com.sdwhNrcc.entity.v3_1.*;
-import com.sdwhNrcc.service.v1_3.LocationService;
+import com.sdwhNrcc.service.udp.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
 
@@ -51,7 +51,7 @@ public class EpV3_1Controller {
 	@Autowired
 	private ApiLogV3_1Service apiLogService;
 	@Autowired
-	private LocationService locationService;
+	private LocationUDPService locationUDPService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -216,6 +216,8 @@ public class EpV3_1Controller {
 			JSONObject bodyParamJO=new JSONObject();
 			bodyParamJO.put("type", 1);
 			bodyParamJO.put("orgId", 100);
+			bodyParamJO.put("pageNum", 1);
+			bodyParamJO.put("pageSize", 100);
 			
 			String apiMethod="api/staff/dataList";
 			String params="";
@@ -299,9 +301,14 @@ public class EpV3_1Controller {
 	        //¹Ø±Õsocket
 	        socket.close();
 	        
-	        String content = message.split(",")[3];
+	        int methodStartLoc = message.indexOf(",{\"method\"");
+	        int methodEndLoc = message.lastIndexOf(",");
+	        String content = message.substring(methodStartLoc+1, methodEndLoc);
+    		System.out.println("content="+content);
 	        com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(content);
     		String method = bodyJO.getString("method");
+    		System.out.println("method="+method);
+    		System.out.println("true="+"Location".equals(method));
     		if("Location".equals(method)) {
     			com.alibaba.fastjson.JSONObject paramsJO = bodyJO.getJSONObject("params");
     			insertLocationUDPData(paramsJO,Constant.DATABASE_NAME_SDXJYJXHXPYXGS);
@@ -319,10 +326,14 @@ public class EpV3_1Controller {
 	@ResponseBody
 	public Map<String, Object> insertLocationUDPData(com.alibaba.fastjson.JSONObject paramsJO,String databaseName) {
 
+		System.out.println("insertLocationUDPData..........");
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
+			String uid=paramsJO.getString("uid");
 			String userId=paramsJO.getString("userId");
+			String tenantId=paramsJO.getString("tenantId");
 			Integer floor = paramsJO.getInteger("floor");
 			Double speed = paramsJO.getDouble("speed");
 			Double latitude = paramsJO.getDouble("latitude");
@@ -333,16 +344,18 @@ public class EpV3_1Controller {
 				longitude=(double)0;
 			
 			LocationUDP locationUDP = new LocationUDP();
+			locationUDP.setUid(uid);
 			locationUDP.setUserId(userId);
 			locationUDP.setFloor(floor);
 			locationUDP.setSpeed(speed);
 			locationUDP.setLatitude(latitude);
 			locationUDP.setLongitude(longitude);
+			locationUDP.setTenantId(tenantId);
 			
 			//if("BTT34058043".equals(tagId))
 				//System.out.println("longitude="+longitude+",latitude="+latitude);
 
-			//locationService.add(locationUDP,databaseName);
+			locationUDPService.add(locationUDP);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
