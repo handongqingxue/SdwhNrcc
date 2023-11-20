@@ -14,6 +14,7 @@ var path='<%=basePath %>';
 var sdwhApiPath=path+"sdwhApi/";
 var lzqApiPath=path+"lzqApi/";
 var serverReceiverPath=path+"serverReceiver/";
+var udpReceiverPath=path+"udpReceiver/";
 var syncDBManagerPath=path+"syncDBManager/";
 var epV1_3Path=path+"epV1_3/";
 var epV3_1Path=path+"epV3_1/";
@@ -128,26 +129,19 @@ function insertWarnRecordData(){
 }
 
 function receiveMessage(){
+	var url;
 	if(systemFlag==sdxjyjxhxpyxgs){
-		var url=epV3_1Path+"receiveUDPData";
-		setInterval(function(){
-			$.post(url,
-				{systemFlag:systemFlag},
-				function(){
-				
-				}
-			,"json");
-		},"10000");
+		url=udpReceiverPath+"receiveData";
 	}
 	else{
-		var url=serverReceiverPath+"receiveMessage";
-		$.post(url,
-			{systemFlag:systemFlag},
-			function(){
-			
-			}
-		,"json");
+		url=serverReceiverPath+"receiveMessage";
 	}
+	$.post(url,
+		{systemFlag:systemFlag},
+		function(){
+		
+		}
+	,"json");
 }
 </script>
 <title>Insert title here</title>

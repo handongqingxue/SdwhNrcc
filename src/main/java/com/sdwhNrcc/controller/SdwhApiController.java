@@ -473,7 +473,7 @@ public class SdwhApiController {
 						resultMap.put("data", data);
 						
 						for (EmployeeLocation el : elList) {
-							addTagPreLLInList(Double.valueOf(el.getLongitude()), Double.valueOf(el.getLatitude()), el.getTagId());
+							//addTagPreLLInList(Double.valueOf(el.getLongitude()), Double.valueOf(el.getLatitude()), el.getTagId());
 						}
 
 						addApiLog(createApiLogByParams("dataEmployeeLocations",bodyParamJOStr,status,code,msg,data,elList.get(0).getCompany_social_code()));

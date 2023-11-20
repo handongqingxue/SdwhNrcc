@@ -29,11 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.sdwhNrcc.entity.udp.*;
 import com.sdwhNrcc.entity.v3_1.*;
-import com.sdwhNrcc.service.udp.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
+import com.sdwhNrcc.util.UDPReceiver;
 
 @Controller
 @RequestMapping(EpV3_1Controller.MODULE_NAME)
@@ -50,8 +49,6 @@ public class EpV3_1Controller {
 	private StaffService staffService;
 	@Autowired
 	private ApiLogV3_1Service apiLogService;
-	@Autowired
-	private LocationUDPService locationUDPService;
 
 	@RequestMapping(value="/goTestEp")
 	public String goTestEp(HttpServletRequest request) {
@@ -272,90 +269,6 @@ public class EpV3_1Controller {
 					resultMap=insertStaffData(request);
 				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			return resultMap;
-		}
-	}
-	
-	@RequestMapping(value="/receiveUDPData")
-	@ResponseBody
-	public Map<String, Object> receiveUDPData(HttpServletRequest request) {
-
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		try {
-	        //创建接收端socket
-	        DatagramSocket socket = new DatagramSocket(10003);
-	        System.out.println("待接收数据...");
-	        //接收数据报
-	        byte[] buffer = new byte[1024];
-	        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-			socket.receive(packet);
-	        //将接收到的数据转换成String类型
-	        String message = new String(packet.getData(), 0, packet.getLength());
-	        //输出接收到的数据
-	        System.out.println("Received message: " + message);
-	        //关闭socket
-	        socket.close();
-	        
-	        int methodStartLoc = message.indexOf(",{\"method\"");
-	        int methodEndLoc = message.lastIndexOf(",");
-	        String content = message.substring(methodStartLoc+1, methodEndLoc);
-    		System.out.println("content="+content);
-	        com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(content);
-    		String method = bodyJO.getString("method");
-    		System.out.println("method="+method);
-    		System.out.println("true="+"Location".equals(method));
-    		if("Location".equals(method)) {
-    			com.alibaba.fastjson.JSONObject paramsJO = bodyJO.getJSONObject("params");
-    			insertLocationUDPData(paramsJO,Constant.DATABASE_NAME_SDXJYJXHXPYXGS);
-    		}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			return resultMap;
-		}
-	}
-
-	@RequestMapping(value="/insertLocationUDPData")
-	@ResponseBody
-	public Map<String, Object> insertLocationUDPData(com.alibaba.fastjson.JSONObject paramsJO,String databaseName) {
-
-		System.out.println("insertLocationUDPData..........");
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		
-		try {
-			String uid=paramsJO.getString("uid");
-			String userId=paramsJO.getString("userId");
-			String tenantId=paramsJO.getString("tenantId");
-			Integer floor = paramsJO.getInteger("floor");
-			Double speed = paramsJO.getDouble("speed");
-			Double latitude = paramsJO.getDouble("latitude");
-			if(latitude==null)
-				latitude=(double)0;
-			Double longitude = paramsJO.getDouble("longitude");
-			if(longitude==null)
-				longitude=(double)0;
-			
-			LocationUDP locationUDP = new LocationUDP();
-			locationUDP.setUid(uid);
-			locationUDP.setUserId(userId);
-			locationUDP.setFloor(floor);
-			locationUDP.setSpeed(speed);
-			locationUDP.setLatitude(latitude);
-			locationUDP.setLongitude(longitude);
-			locationUDP.setTenantId(tenantId);
-			
-			//if("BTT34058043".equals(tagId))
-				//System.out.println("longitude="+longitude+",latitude="+latitude);
-
-			locationUDPService.add(locationUDP);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
