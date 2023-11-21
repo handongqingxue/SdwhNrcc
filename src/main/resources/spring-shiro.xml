@@ -30,6 +30,7 @@
 				/epV3_1/*=anon
 				/syncDBManager/*=anon
 				/serverReceiver/*=anon
+				/udpReceiver/*=anon
 				/resource/**=anon
 				/**=authc
 			</value>
