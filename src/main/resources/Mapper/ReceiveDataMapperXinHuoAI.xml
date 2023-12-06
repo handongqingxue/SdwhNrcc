@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdwhNrcc.dao.xinHuoAI.ReceiveDataMapper">
+ 	<insert id="add">
+ 		insert into ${databaseName}.receive_data
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="receiveData.channelNo!=null">
+ 				channelNo,
+ 			</if>
+ 			<if test="receiveData.signTime!=null">
+ 				signTime,
+ 			</if>
+ 			<if test="receiveData.count!=null">
+ 				count,
+ 			</if>
+ 			<if test="receiveData.typeName!=null">
+ 				typeName,
+ 			</if>
+ 			<if test="receiveData.type!=null">
+ 				type,
+ 			</if>
+ 			<if test="receiveData.deviceName!=null">
+ 				deviceName,
+ 			</if>
+ 			<if test="receiveData.deviceId!=null">
+ 				deviceId,
+ 			</if>
+ 			<if test="receiveData.messagerType!=null">
+ 				messagerType,
+ 			</if>
+ 			<if test="receiveData.rtspUrl!=null">
+ 				rtspUrl,
+ 			</if>
+ 			<if test="receiveData.enterCode!=null">
+ 				enterCode,
+ 			</if>
+ 			<if test="receiveData.GBID!=null">
+ 				GBID,
+ 			</if>
+ 			<if test="receiveData.boxName!=null">
+ 				boxName,
+ 			</if>
+ 			<if test="receiveData.enterName!=null">
+ 				enterName,
+ 			</if>
+ 			<if test="receiveData.signAvatar!=null">
+ 				signAvatar,
+ 			</if>
+ 				sync
+ 		</trim>
+ 		values
+ 		<trim prefix="(" suffix=")" suffixOverrides=",">
+ 			<if test="receiveData.channelNo!=null">
+ 				#{receiveData.channelNo},
+ 			</if>
+ 			<if test="receiveData.signTime!=null">
+ 				#{receiveData.signTime},
+ 			</if>
+ 			<if test="receiveData.count!=null">
+ 				#{receiveData.count},
+ 			</if>
+ 			<if test="receiveData.typeName!=null">
+ 				#{receiveData.typeName},
+ 			</if>
+ 			<if test="receiveData.type!=null">
+ 				#{receiveData.type},
+ 			</if>
+ 			<if test="receiveData.deviceName!=null">
+ 				#{receiveData.deviceName},
+ 			</if>
+ 			<if test="receiveData.deviceId!=null">
+ 				#{receiveData.deviceId},
+ 			</if>
+ 			<if test="receiveData.messagerType!=null">
+ 				#{receiveData.messagerType},
+ 			</if>
+ 			<if test="receiveData.rtspUrl!=null">
+ 				#{receiveData.rtspUrl},
+ 			</if>
+ 			<if test="receiveData.enterCode!=null">
+ 				#{receiveData.enterCode},
+ 			</if>
+ 			<if test="receiveData.GBID!=null">
+ 				#{receiveData.GBID},
+ 			</if>
+ 			<if test="receiveData.boxName!=null">
+ 				#{receiveData.boxName},
+ 			</if>
+ 			<if test="receiveData.enterName!=null">
+ 				#{receiveData.enterName},
+ 			</if>
+ 			<if test="receiveData.signAvatar!=null">
+ 				#{receiveData.signAvatar},
+ 			</if>
+ 				0
+ 		</trim>
+ 	</insert>
+</mapper>

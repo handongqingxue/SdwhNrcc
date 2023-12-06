@@ -28,6 +28,7 @@
 				/lzqApi/*=anon
 				/epV1_3/*=anon
 				/epV3_1/*=anon
+				/xinHuoAI/*=anon
 				/syncDBManager/*=anon
 				/serverReceiver/*=anon
 				/udpReceiver/*=anon
