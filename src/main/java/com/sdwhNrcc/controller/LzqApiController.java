@@ -1,11 +1,15 @@
 package com.sdwhNrcc.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sdwhNrcc.entity.sdwh.*;
 import com.sdwhNrcc.entity.sdwh.ApiLog;
@@ -32,7 +37,27 @@ import com.sdwhNrcc.service.sdwh.*;
 import com.sdwhNrcc.service.v3_1.*;
 import com.sdwhNrcc.util.Constant;
 import com.sdwhNrcc.util.DateUtil;
+import com.sdwhNrcc.util.FileUtil;
 import com.sdwhNrcc.util.StringUtil;
+
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;  
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;  
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;  
+import org.apache.http.util.EntityUtils;
 
 @Controller
 @RequestMapping(LzqApiController.MODULE_NAME)
@@ -434,6 +459,28 @@ public class LzqApiController {
 		}
 	}
 	
+	@RequestMapping(value="/dataVideoAlarm")
+	@ResponseBody
+	public Map<String, Object> dataVideoAlarm(HttpServletRequest request) {
+		System.out.println("dataVideoAlarm...");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("companyCode", "370310421");
+		paramMap.put("alarmId", "2023120516190001");
+		paramMap.put("alarmType", "5");
+		paramMap.put("alarmDate", "2023-12-07 10:20:01");
+		paramMap.put("alarmAction", "start");
+		paramMap.put("deviceCode", "37031042101320000002");
+		paramMap.put("channelCode", "9297896bdf184a82919071218c2b3acc");
+		String imagePath="D:/resource/SdwhNrcc/signAvatar/output.jpg";
+		MultipartFile alarmImage = FileUtil.createMultipartFileByPath(imagePath);
+		//bodyParamJO.put("alarmImage", alarmImage);
+		//bodyParamJO.put("alarmImage", new File(imagePath));
+		doPostFormData("http://218.201.121.116:18009/data/video/alarm","alarmImage",alarmImage,paramMap);
+		return resultMap;
+	}
+	
 	/**
 	 * 添加日志记录
 	 * @param al
@@ -627,7 +674,8 @@ public class LzqApiController {
 	public void switchCity(HttpServletRequest request) {
 		String username=null;
 		String password=null;
-		int cityFlag = Integer.valueOf(request.getAttribute("cityFlag").toString());
+		//int cityFlag = Integer.valueOf(request.getAttribute("cityFlag").toString());
+		int cityFlag = 3;
 		switch (cityFlag) {
 		case Constant.ZI_BO:
 			int systemFlag = Integer.valueOf(request.getParameter("systemFlag"));
@@ -719,13 +767,14 @@ public class LzqApiController {
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.connect(); 
 			
-			
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(),"UTF-8"); 
 			//body参数放这里
 			String bodyParamStr = bodyParamJO.toString();
 			//System.out.println("bodyParamStr==="+bodyParamStr);
 			writer.write(bodyParamStr);
 			writer.flush();
+			
+			
 			InputStream is = connection.getInputStream(); 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8")); 
 			while ((strRead = reader.readLine()) != null) { 
@@ -771,6 +820,70 @@ public class LzqApiController {
 		finally {
 			return resultJO;
 		}
+	}
+
+	/**
+	 * 以post方式调用第三方接口,以form-data 形式  发送 MultipartFile 文件数据
+	 *
+	 * @param url           post请求url
+	 * @param fileParamName 文件参数名称
+	 * @param multipartFile 文件
+	 * @param paramMap      表单里其他参数
+	 * @return 响应结果
+	 */
+	public com.alibaba.fastjson.JSONObject doPostFormData(String url, String fileParamName, MultipartFile multipartFile, Map<String, Object> paramMap) {
+	    //https://blog.csdn.net/weixin_43744563/article/details/129615367
+		// 创建Http实例
+	    CloseableHttpClient httpClient = HttpClients.createDefault();
+	    com.alibaba.fastjson.JSONObject jsonResult = null;
+	    // 创建HttpPost实例
+	    HttpPost httpPost = new HttpPost(url);
+	    // 请求参数配置
+	    RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(60000)
+	            .setConnectionRequestTimeout(10000).build();
+	    httpPost.setConfig(requestConfig);
+	    httpPost.setHeader("Content-Type", "multipart/form-data");
+	    httpPost.setHeader("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDE5MjkxNDEsImV4cCI6MTcwMTkzMDk0MSwiVXNlcklkIjoiZjQ3YjA4NTktYmJlNi0xMWVjLTg3ODYtZjRlZTA4MTEwMzcxIiwiVXNlck5hbWUiOiLmt4TljZrpkavkub7ljJblt6XmnInpmZDlhazlj7giLCJBY2NvdW50Ijoi5reE5Y2a6ZGr5Lm-5YyW5bel5pyJ6ZmQ5YWs5Y-4In0.Wa6FJy664q9G5MEwx9eq0MCaUGCG_8Gz0BakJ1xfoUk");
+	    try {
+	        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+	        builder.setCharset(StandardCharsets.UTF_8);
+	        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+	        String fileName = multipartFile.getOriginalFilename();
+	        // 文件流
+	        builder.addBinaryBody(fileParamName, multipartFile.getInputStream(), ContentType.MULTIPART_FORM_DATA, fileName);
+	        //表单中其他参数
+	        for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
+	            builder.addPart(entry.getKey(), new StringBody((String) entry.getValue(), ContentType.create("text/plain", Consts.UTF_8)));
+	        }
+	        HttpEntity entity = builder.build();
+	        httpPost.setEntity(entity);
+	        // 执行提交
+	        HttpResponse response = httpClient.execute(httpPost);
+	        int statusCode = response.getStatusLine().getStatusCode();
+	        System.out.println("statusCode="+statusCode);
+	        if (statusCode == HttpStatus.SC_OK) {
+	            // 返回
+	            String s = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+	            System.out.println("s==="+s);
+	            
+	            jsonResult = com.alibaba.fastjson.JSONObject.parseObject(s);
+	            return jsonResult;
+
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.println("调用HttpPost失败！" + e.toString());
+	    } finally {
+	        if (httpClient != null) {
+	            try {
+	                httpClient.close();
+	            } catch (IOException e) {
+	            	System.out.println("关闭HttpPost连接失败！");
+	            }
+	        }
+	    }
+	    return null;
 	}
 	
 	/**
