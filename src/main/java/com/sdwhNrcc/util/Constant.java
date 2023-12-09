@@ -351,11 +351,11 @@ public class Constant {
 	/**
 	 * 润中服务器ip
 	 */
-	public static final String SERVICE_IP_WFRZJXHYXGS="124.70.38.226";
+	public static final String SERVICE_IP_WFRZJXHYXGS="10.30.108.157";
 	/**
 	 * 润中服务器端口
 	 */
-	public static final int SERVICE_PORT_WFRZJXHYXGS=8081;
+	public static final int SERVICE_PORT_WFRZJXHYXGS=90;
 	/**
 	 * 润中项目名称
 	 */
@@ -375,11 +375,11 @@ public class Constant {
 	/**
 	 * 润中用户id
 	 */
-	public static final String USER_ID_WFRZJXHYXGS="test";
+	public static final String USER_ID_WFRZJXHYXGS="GUEST";
 	/**
 	 * 润中密码
 	 */
-	public static final String PASSWORD_WFRZJXHYXGS="test";
+	public static final String PASSWORD_WFRZJXHYXGS="123456";
 	/**
 	 * 润中数据库名
 	 */

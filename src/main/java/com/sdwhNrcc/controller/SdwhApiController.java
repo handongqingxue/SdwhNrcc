@@ -147,7 +147,7 @@ public class SdwhApiController {
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.TAI_AN+"&systemFlag="+Constant.SDBFXCLYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rzjxhSyncDBRun".equals(page)){
-			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
+			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rhswSyncDBRun".equals(page)){
 			url="redirect:goPage?page=syncDBRun&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
@@ -190,7 +190,7 @@ public class SdwhApiController {
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.TAI_AN+"&systemFlag="+Constant.SDBFXCLYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rzjxhSyncDBManager".equals(page)){
-			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_1_3+"&apiFlag="+Constant.SDWH;
+			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.WFRZJXHYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
 		}
 		else if("rhswSyncDBManager".equals(page)){
 			url="redirect:goPage?page=syncDBManager&cityFlag="+Constant.WEI_FANG+"&systemFlag="+Constant.CYSRHSWKJYXGS+"&epVersion="+Constant.VERSION_3_1+"&apiFlag="+Constant.SDWH;
@@ -424,9 +424,12 @@ public class SdwhApiController {
 			String databaseName = request.getAttribute("databaseName").toString();
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
+			/*
 			case Constant.WFRZJXHYXGS:
 				elList = convertLocationToEmployeeLocation(systemFlag,databaseName);
 				break;
+				*/
+			case Constant.WFRZJXHYXGS:
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:
@@ -544,9 +547,12 @@ public class SdwhApiController {
 			String databaseName = request.getAttribute("databaseName").toString();
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
+			/*
 			case Constant.WFRZJXHYXGS:
 				eaList = convertWarnRecordToEmployeeAlarm(systemFlag,databaseName);
 				break;
+				*/
+			case Constant.WFRZJXHYXGS:
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDBFXCLYXGS:

@@ -285,6 +285,12 @@ public class EpV3_1Controller {
 		String databaseName=null;
 		int epFlag=Integer.valueOf(request.getAttribute("epFlag").toString());
 		switch (epFlag) {
+		case Constant.WFRZJXHYXGS:
+			serviceIp=Constant.SERVICE_IP_WFRZJXHYXGS;
+			servicePort=Constant.SERVICE_PORT_WFRZJXHYXGS;
+			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
+			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
+			break;
 		case Constant.WFPXHGYXGS:
 			serviceIp=Constant.SERVICE_IP_WFPXHGYXGS;
 			servicePort=Constant.SERVICE_PORT_WFPXHGYXGS;
