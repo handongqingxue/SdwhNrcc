@@ -346,6 +346,10 @@ public class EpV3_1Controller {
 		String clientSecret=null;
 		int epFlag=Integer.valueOf(request.getAttribute("epFlag").toString());
 		switch (epFlag) {
+		case Constant.WFRZJXHYXGS:
+			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
+			clientSecret=Constant.CLIENT_SECRET_WFRZJXHYXGS;
+			break;
 		case Constant.WFPXHGYXGS:
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			clientSecret=Constant.CLIENT_SECRET_WFPXHGYXGS;

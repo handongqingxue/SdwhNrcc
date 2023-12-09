@@ -343,6 +343,11 @@ public class ServerReceiver {
 		request.setAttribute("connFactoryPassword", connFactoryPassword);
 		
 		switch (systemFlag) {
+		case Constant.WFRZJXHYXGS:
+			tenantId=Constant.TENANT_ID_WFRZJXHYXGS;
+			clientSecret=Constant.CLIENT_SECRET_WFRZJXHYXGS;
+			databaseName=Constant.DATABASE_NAME_WFRZJXHYXGS;
+			break;
 		case Constant.WFPXHGYXGS:
 			tenantId=Constant.TENANT_ID_WFPXHGYXGS;
 			clientSecret=Constant.CLIENT_SECRET_WFPXHGYXGS;

@@ -381,6 +381,10 @@ public class Constant {
 	 */
 	public static final String PASSWORD_WFRZJXHYXGS="123456";
 	/**
+	 * 润中密钥
+	 */
+	public static final String CLIENT_SECRET_WFRZJXHYXGS="AC8DC795";
+	/**
 	 * 润中数据库名
 	 */
 	public static final String DATABASE_NAME_WFRZJXHYXGS="sdwh_nrcc_wfrzjxhyxgs";
