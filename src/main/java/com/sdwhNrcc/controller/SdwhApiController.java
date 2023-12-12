@@ -303,9 +303,12 @@ public class SdwhApiController {
 			String databaseName = request.getAttribute("databaseName").toString();
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
+			/*
 			case Constant.WFRZJXHYXGS:
 				eiList = convertEntityToEmployeeInfo(systemFlag,databaseName);
 				break;
+			*/
+			case Constant.WFRZJXHYXGS:
 			case Constant.WFPXHGYXGS:
 			case Constant.SDFLXCLKJYXGS:
 			case Constant.SDXJYJXHXPYXGS:
@@ -461,6 +464,7 @@ public class SdwhApiController {
 					JSONObject bodyParamJO=switchSystem(systemFlag);
 					bodyParamJO.put("data", dataParamJA);
 					String bodyParamJOStr = bodyParamJO.toString();
+					System.out.println("bodyParamJOStr==="+bodyParamJOStr);
 				
 					resultJO = postBody(bodyParamJO,"/data/employee/locations",request);
 					String status=resultJO.get("status").toString();
@@ -548,7 +552,7 @@ public class SdwhApiController {
 			int systemFlag = Integer.valueOf(request.getAttribute("systemFlag").toString());
 			switch (systemFlag) {
 			/*
-			case Constant.WFRZJXHYXGS:
+			case Constant.WFRZJXHYXGS://这是润中老版系统，往后不用了，改用新版的
 				eaList = convertWarnRecordToEmployeeAlarm(systemFlag,databaseName);
 				break;
 				*/
@@ -842,6 +846,9 @@ public class SdwhApiController {
 			EmployeeLocation el=new EmployeeLocation();
 			String companySocialCode=null;
 			switch (systemFlag) {
+			case Constant.WFRZJXHYXGS:
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
@@ -940,6 +947,9 @@ public class SdwhApiController {
 			
 			String companySocialCode=null;
 			switch (systemFlag) {
+			case Constant.WFRZJXHYXGS://润中定位系统也用新版了
+				companySocialCode=Constant.DATA_ID_WFRZJXHYXGS;
+				break;
 			case Constant.WFPXHGYXGS:
 				companySocialCode=Constant.DATA_ID_WFPXHGYXGS;
 				break;
