@@ -116,6 +116,17 @@ public class Constant {
 	 */
 	public static final String PASSWORD_TAI_AN="Rnh5ajIwMjAh";
 	//泰安地区登录账号end
+
+	//淄博地区登录账号start
+	/**
+	 * 淄博地区用户名
+	 */
+	public static final String USERNAME_ZI_BO="zibo_report_data";
+	/**
+	 * 淄博地区密码(加密后的)
+	 */
+	public static final String PASSWORD_ZI_BO="Rnh5ajIwMjAh";
+	//淄博地区登录账号end
 	
 	//潍坊普鑫化工有限公司start
 	/**
