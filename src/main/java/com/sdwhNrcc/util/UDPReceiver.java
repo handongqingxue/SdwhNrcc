@@ -34,7 +34,7 @@ public class UDPReceiver {
         	//创建接收端socket
 			DatagramSocket socket = new DatagramSocket(10003);
 	        while(true) {
-		        System.out.println("待接收数据...");
+		        //System.out.println("待接收数据...");
 		        //接收数据报
 		        byte[] buffer = new byte[1024];
 		        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -42,7 +42,7 @@ public class UDPReceiver {
 		        //将接收到的数据转换成String类型
 				String message = new String(packet.getData(), 0, packet.getLength());
 		        //输出接收到的数据
-		        System.out.println("Received message: " + message);
+		        //System.out.println("Received message: " + message);
 		        
 		        int methodStartLoc = message.indexOf(",{\"method\"");
 		        int methodEndLoc = message.lastIndexOf(",");
@@ -50,8 +50,7 @@ public class UDPReceiver {
 	    		System.out.println("content="+content);
 		        com.alibaba.fastjson.JSONObject bodyJO = JSON.parseObject(content);
 	    		String method = bodyJO.getString("method");
-	    		System.out.println("method="+method);
-	    		System.out.println("true="+"Location".equals(method));
+	    		//System.out.println("method="+method);
 	    		if("Location".equals(method)) {
 	    			com.alibaba.fastjson.JSONObject paramsJO = bodyJO.getJSONObject("params");
 	    			insertLocationData(paramsJO,Constant.DATABASE_NAME_SDXJYJXHXPYXGS);
@@ -72,7 +71,7 @@ public class UDPReceiver {
 	@ResponseBody
 	public Map<String, Object> insertLocationData(com.alibaba.fastjson.JSONObject paramsJO,String databaseName) {
 
-		System.out.println("insertLocationData..........");
+		//System.out.println("insertLocationData..........");
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
