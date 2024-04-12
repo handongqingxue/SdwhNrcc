@@ -4,14 +4,13 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sdwhNrcc.entity.sdwh.*;
 
-public interface LoginUserMapper {
+public interface LoginUserCxSdMapper {
 
-	int add(LoginUser lu);
+	int add(LoginUserCxSd lucs);
 
-	int edit(LoginUser lu);
+	int edit(LoginUserCxSd lucs);
 
 	String getTokenByUsername(@Param("username")String username);
 
 	int getCountByUsername(@Param("username")String username);
-
 }

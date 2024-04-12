@@ -26,6 +26,7 @@
 			<value>
 				/sdwhApi/*=anon
 				/lzqApi/*=anon
+				/cxSdxzaApi/*=anon
 				/epV1_3/*=anon
 				/epV3_1/*=anon
 				/xinHuoAI/*=anon

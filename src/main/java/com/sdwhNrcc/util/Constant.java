@@ -8,6 +8,8 @@ public class Constant {
 	public static final String SERVICE_IP_LZQ="218.201.121.116";
 	public static final int SERVICE_PORT_LZQ=18009;
 	
+	public static final String SERVICE_IP_CX_SDXZA="cx.sdxza.net.cn/de";
+	
 	public static final int SDWH=1;
 	public static final int LZQ=2;
 	
@@ -15,6 +17,8 @@ public class Constant {
 	public static final int HE_ZE=2;
 	public static final int ZI_BO=3;
 	public static final int TAI_AN=4;
+	
+	public static final int FU_LIN=1;
 	
 	public static final String SERVICE_IP_STR="serviceIp";
 	public static final String SERVICE_PORT_STR="servicePort";
@@ -390,7 +394,7 @@ public class Constant {
 	/**
 	 * 润中密码
 	 */
-	public static final String PASSWORD_WFRZJXHYXGS="123456";
+	public static final String PASSWORD_WFRZJXHYXGS="rz6666677777/";
 	/**
 	 * 润中密钥
 	 */
@@ -489,7 +493,15 @@ public class Constant {
 	public static final String DATABASE_NAME_SDLTXDKJYXGS="ltxd_to_zy";
 	//山东蓝天消毒科技有限公司end
 	
-	
+
+	/**
+	 * 福林用户名(曹县区平台)
+	 */
+	public static final String USERNAME_FU_LIN_SDXZA="fulinXCL";
+	/**
+	 * 福林密码(曹县区平台加密后的)
+	 */
+	public static final String PASSWORD_FU_LIN_SDXZA="ejl4Nm04YjQ=";
 	
 	
 }
